@@ -1,0 +1,25 @@
+{
+  "name": "@securekit/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "echo \"(todo)\""
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.6.3"
+  }
+}

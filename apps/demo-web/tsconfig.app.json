@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "node16",
+    "moduleResolution": "node16",
+    "baseUrl": ".",
+    "paths": {
+      "@securekit/core": ["../../packages/core/dist/index.d.ts"],
+      "@securekit/web-sdk": ["../../packages/web-sdk/dist/index.d.ts"]
+    },
+    "types": ["vite/client", "react", "react-dom"],
+    "noEmit": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

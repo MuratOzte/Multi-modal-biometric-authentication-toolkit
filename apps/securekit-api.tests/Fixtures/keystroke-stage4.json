@@ -1,0 +1,5702 @@
+[
+  {
+    "name": "metrics-0",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3300,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2400,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2391,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2300,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2274,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2200,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2157,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2100,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2040,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2000,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2033,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1900,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1916,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1800,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1799,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1700,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1682,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1600,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1565,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1500,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1448,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1400,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1331,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1300,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1324,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1200,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1207,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1100,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1090,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1000,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 973,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 900,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 856,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 800,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 739,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 700,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 732,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 600,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 615,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 500,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 498,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 400,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 381,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 300,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 264,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 200,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 147,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 100,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 30,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedCharsPerSec": 6.061,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 3300,
+      "startDelayMs": 100,
+      "interWordPauseMeanMs": 56.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 56.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 0,
+      "similarityScore": 1,
+      "decision": "allow",
+      "reasons": [],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-1",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3612,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2712,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2691,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2599,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2561,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2486,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2431,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2373,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2301,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2260,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2281,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2147,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2151,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2034,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2021,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1921,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1891,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1808,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1761,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1695,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1631,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1582,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1501,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1469,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1481,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1356,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1351,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1243,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1221,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1130,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1091,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1017,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 961,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 904,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 831,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 791,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 811,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 678,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 681,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 565,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 551,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 452,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 421,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 339,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 291,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 226,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 161,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 113,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 31,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 81.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 82,
+      "flightMeanMs": 45.053,
+      "flightStdMs": 23.361,
+      "flightMedianMs": 47,
+      "ddMeanMs": 113,
+      "ddStdMs": 0,
+      "ddMedianMs": 113,
+      "udMeanMs": 45.053,
+      "udStdMs": 23.361,
+      "udMedianMs": 47,
+      "uuMeanMs": 120,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 130,
+      "typingSpeedCharsPerSec": 5.537,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 3612,
+      "startDelayMs": 113,
+      "interWordPauseMeanMs": 68.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 68.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 81.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 82,
+      "flightMeanMs": 45.053,
+      "flightStdMs": 23.361,
+      "flightMedianMs": 47,
+      "digraphCount": 24,
+      "ddMeanMs": 113,
+      "ddStdMs": 0,
+      "ddMedianMs": 113,
+      "udMeanMs": 45.053,
+      "udStdMs": 23.361,
+      "udMedianMs": 47,
+      "uuMeanMs": 120,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 130,
+      "typingSpeedMean": 5.537,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 113,
+      "startDelayStd": 0,
+      "interWordPauseMean": 68.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 0.722,
+      "similarityScore": 0.522,
+      "decision": "step_up",
+      "reasons": [
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-2",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3924,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3024,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2991,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2898,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2848,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2772,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2705,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2646,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2562,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2520,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2529,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2394,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2386,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2268,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2243,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2142,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2100,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2016,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1957,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1890,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1814,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1764,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1671,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1638,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1638,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1512,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1495,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1386,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1352,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1260,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1209,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1134,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1066,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1008,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 923,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 882,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 890,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 756,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 747,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 630,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 604,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 504,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 461,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 378,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 318,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 252,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 175,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 126,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 32,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 82.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 83,
+      "flightMeanMs": 50.35,
+      "flightStdMs": 25.319,
+      "flightMedianMs": 50.5,
+      "ddMeanMs": 126,
+      "ddStdMs": 0,
+      "ddMedianMs": 126,
+      "udMeanMs": 50.35,
+      "udStdMs": 25.319,
+      "udMedianMs": 50.5,
+      "uuMeanMs": 133,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 143,
+      "typingSpeedCharsPerSec": 5.097,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 3924,
+      "startDelayMs": 126,
+      "interWordPauseMeanMs": 80.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 80.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 82.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 83,
+      "flightMeanMs": 50.35,
+      "flightStdMs": 25.319,
+      "flightMedianMs": 50.5,
+      "digraphCount": 24,
+      "ddMeanMs": 126,
+      "ddStdMs": 0,
+      "ddMedianMs": 126,
+      "udMeanMs": 50.35,
+      "udStdMs": 25.319,
+      "udMedianMs": 50.5,
+      "uuMeanMs": 133,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 143,
+      "typingSpeedMean": 5.097,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 126,
+      "startDelayStd": 0,
+      "interWordPauseMean": 80.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 1.377,
+      "similarityScore": 0.29,
+      "decision": "deny",
+      "reasons": [
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-3",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4236,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3336,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3291,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3197,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3135,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3058,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2979,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2919,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2823,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2780,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2777,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2641,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2621,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2502,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2465,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2363,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2309,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2224,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2153,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2085,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1997,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1946,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1841,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1807,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1795,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1668,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1639,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1529,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1483,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1390,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1327,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1251,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1171,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1112,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1015,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 973,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 969,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 834,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 813,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 695,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 657,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 556,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 501,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 417,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 345,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 278,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 189,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 139,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 33,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 83.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 84,
+      "flightMeanMs": 57.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 58.5,
+      "ddMeanMs": 139,
+      "ddStdMs": 0,
+      "ddMedianMs": 139,
+      "udMeanMs": 57.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 58.5,
+      "uuMeanMs": 146,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 156,
+      "typingSpeedCharsPerSec": 4.721,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 4236,
+      "startDelayMs": 139,
+      "interWordPauseMeanMs": 92.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 92.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 83.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 84,
+      "flightMeanMs": 57.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 58.5,
+      "digraphCount": 24,
+      "ddMeanMs": 139,
+      "ddStdMs": 0,
+      "ddMedianMs": 139,
+      "udMeanMs": 57.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 58.5,
+      "uuMeanMs": 146,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 156,
+      "typingSpeedMean": 4.721,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 139,
+      "startDelayStd": 0,
+      "interWordPauseMean": 92.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 2.014,
+      "similarityScore": 0.163,
+      "decision": "deny",
+      "reasons": [
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-4",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4548,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3648,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3591,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3496,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3422,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3344,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3253,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3192,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3084,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3040,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3025,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2888,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2856,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2736,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2687,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2584,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2518,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2432,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2349,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2280,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2180,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2128,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2011,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1976,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1952,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1824,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1783,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1672,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1614,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1520,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1445,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1368,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1276,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1216,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1107,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1064,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1048,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 912,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 879,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 760,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 710,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 608,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 541,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 456,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 372,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 304,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 203,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 152,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 34,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 84.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 85,
+      "flightMeanMs": 69.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 70.5,
+      "ddMeanMs": 152,
+      "ddStdMs": 0,
+      "ddMedianMs": 152,
+      "udMeanMs": 69.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 70.5,
+      "uuMeanMs": 159,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 169,
+      "typingSpeedCharsPerSec": 4.398,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 4548,
+      "startDelayMs": 152,
+      "interWordPauseMeanMs": 104.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 104.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 84.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 85,
+      "flightMeanMs": 69.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 70.5,
+      "digraphCount": 24,
+      "ddMeanMs": 152,
+      "ddStdMs": 0,
+      "ddMedianMs": 152,
+      "udMeanMs": 69.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 70.5,
+      "uuMeanMs": 159,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 169,
+      "typingSpeedMean": 4.398,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 152,
+      "startDelayStd": 0,
+      "interWordPauseMean": 104.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 2.659,
+      "similarityScore": 0.091,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-5",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4860,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3960,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3891,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3795,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3709,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3630,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3527,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3465,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3345,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3300,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3273,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3135,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 3091,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2970,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2909,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2805,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2727,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2640,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2545,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2475,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2363,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2310,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2181,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2145,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2109,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1980,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1927,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1815,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1745,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1650,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1563,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1485,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1381,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1320,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1199,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1155,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1127,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 990,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 945,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 825,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 763,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 660,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 581,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 495,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 399,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 330,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 217,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 165,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 35,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 85.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 86,
+      "flightMeanMs": 81.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 82.5,
+      "ddMeanMs": 165,
+      "ddStdMs": 0,
+      "ddMedianMs": 165,
+      "udMeanMs": 81.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 82.5,
+      "uuMeanMs": 172,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 182,
+      "typingSpeedCharsPerSec": 4.115,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 4860,
+      "startDelayMs": 165,
+      "interWordPauseMeanMs": 116.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 116.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 85.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 86,
+      "flightMeanMs": 81.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 82.5,
+      "digraphCount": 24,
+      "ddMeanMs": 165,
+      "ddStdMs": 0,
+      "ddMedianMs": 165,
+      "udMeanMs": 81.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 82.5,
+      "uuMeanMs": 172,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 182,
+      "typingSpeedMean": 4.115,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 165,
+      "startDelayStd": 0,
+      "interWordPauseMean": 116.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 3.293,
+      "similarityScore": 0.052,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-6",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5172,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4272,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4191,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4094,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3996,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3916,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3801,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3738,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3606,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3560,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3521,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3382,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 3326,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 3204,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3131,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3026,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2936,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2848,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2741,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2670,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2546,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2492,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2351,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2314,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2266,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2136,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2071,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1958,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1876,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1780,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1681,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1602,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1486,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1424,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1291,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1246,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1206,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1068,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1011,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 890,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 816,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 712,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 621,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 534,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 426,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 356,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 231,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 178,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 36,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 86.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 87,
+      "flightMeanMs": 93.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 94.5,
+      "ddMeanMs": 178,
+      "ddStdMs": 0,
+      "ddMedianMs": 178,
+      "udMeanMs": 93.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 94.5,
+      "uuMeanMs": 185,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 195,
+      "typingSpeedCharsPerSec": 3.867,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 5172,
+      "startDelayMs": 178,
+      "interWordPauseMeanMs": 128.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 128.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 86.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 87,
+      "flightMeanMs": 93.409,
+      "flightStdMs": 28.781,
+      "flightMedianMs": 94.5,
+      "digraphCount": 24,
+      "ddMeanMs": 178,
+      "ddStdMs": 0,
+      "ddMedianMs": 178,
+      "udMeanMs": 93.409,
+      "udStdMs": 28.781,
+      "udMedianMs": 94.5,
+      "uuMeanMs": 185,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 195,
+      "typingSpeedMean": 3.867,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 178,
+      "startDelayStd": 0,
+      "interWordPauseMean": 128.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 3.917,
+      "similarityScore": 0.029,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-7",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5484,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4584,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4491,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4393,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4283,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4202,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 4075,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 4011,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3867,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3820,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3659,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3629,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 3561,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 3438,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3353,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3247,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3145,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3056,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2937,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2865,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2729,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2674,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2521,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2483,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2423,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2292,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2215,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2101,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2007,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1910,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1799,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1719,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1591,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1528,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1383,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1337,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1285,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1146,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1077,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 955,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 869,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 764,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 661,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 573,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 453,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 382,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 245,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 191,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 37,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 83.478,
+      "holdStdMs": 29.841,
+      "holdMedianMs": 81,
+      "flightMeanMs": 110.045,
+      "flightStdMs": 28.009,
+      "flightMedianMs": 110.5,
+      "ddMeanMs": 191,
+      "ddStdMs": 0,
+      "ddMedianMs": 191,
+      "udMeanMs": 110.045,
+      "udStdMs": 28.009,
+      "udMedianMs": 110.5,
+      "uuMeanMs": 198,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 208,
+      "typingSpeedCharsPerSec": 3.647,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 5484,
+      "startDelayMs": 191,
+      "interWordPauseMeanMs": 140.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 140.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 83.478,
+      "holdStdMs": 29.841,
+      "holdMedianMs": 81,
+      "flightMeanMs": 110.045,
+      "flightStdMs": 28.009,
+      "flightMedianMs": 110.5,
+      "digraphCount": 24,
+      "ddMeanMs": 191,
+      "ddStdMs": 0,
+      "ddMedianMs": 191,
+      "udMeanMs": 110.045,
+      "udStdMs": 28.009,
+      "udMedianMs": 110.5,
+      "uuMeanMs": 198,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 208,
+      "typingSpeedMean": 3.647,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 191,
+      "startDelayStd": 0,
+      "interWordPauseMean": 140.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 4.57,
+      "similarityScore": 0.016,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-8",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5796,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4896,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4791,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4692,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4570,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4488,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 4349,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 4284,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4128,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4080,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3907,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3876,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 3796,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 3672,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3575,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3468,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3354,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3264,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3133,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3060,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 2912,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 2856,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2691,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2652,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2580,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2448,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2359,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2244,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2138,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2040,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 1917,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1836,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1696,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1632,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1475,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1428,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1254,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1224,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1143,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1020,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 922,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 816,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 701,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 612,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 480,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 408,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 259,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 204,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 38,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 79.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 81,
+      "flightMeanMs": 126.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 127,
+      "ddMeanMs": 204,
+      "ddStdMs": 0,
+      "ddMedianMs": 204,
+      "udMeanMs": 126.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 127,
+      "uuMeanMs": 211,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 221,
+      "typingSpeedCharsPerSec": 3.451,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 5796,
+      "startDelayMs": 204,
+      "interWordPauseMeanMs": 152.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 152.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 79.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 81,
+      "flightMeanMs": 126.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 127,
+      "digraphCount": 24,
+      "ddMeanMs": 204,
+      "ddStdMs": 0,
+      "ddMedianMs": 204,
+      "udMeanMs": 126.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 127,
+      "uuMeanMs": 211,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 221,
+      "typingSpeedMean": 3.451,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 204,
+      "startDelayStd": 0,
+      "interWordPauseMean": 152.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 5.221,
+      "similarityScore": 0.009,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-9",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 6108,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5208,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5091,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4991,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4857,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4774,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 4623,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 4557,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4389,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4340,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4155,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4123,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 4031,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 3906,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3797,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3689,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3563,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3472,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3329,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3255,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3095,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3038,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2861,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2821,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2737,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2604,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2503,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2387,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2269,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2170,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2035,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 1953,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1801,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1736,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1567,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1519,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1333,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1302,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1209,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1085,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 975,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 868,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 741,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 651,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 507,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 434,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 273,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 217,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 39,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 80.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 82,
+      "flightMeanMs": 138.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 139,
+      "ddMeanMs": 217,
+      "ddStdMs": 0,
+      "ddMedianMs": 217,
+      "udMeanMs": 138.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 139,
+      "uuMeanMs": 224,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 234,
+      "typingSpeedCharsPerSec": 3.274,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 6108,
+      "startDelayMs": 217,
+      "interWordPauseMeanMs": 164.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 164.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 82,
+      "flightMeanMs": 138.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 139,
+      "digraphCount": 24,
+      "ddMeanMs": 217,
+      "ddStdMs": 0,
+      "ddMedianMs": 217,
+      "udMeanMs": 138.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 139,
+      "uuMeanMs": 224,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 234,
+      "typingSpeedMean": 3.274,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 217,
+      "startDelayStd": 0,
+      "interWordPauseMean": 164.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 5.83,
+      "similarityScore": 0.005,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-10",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 6420,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5520,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5391,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5290,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5144,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5060,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 4897,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 4830,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4650,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4600,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4403,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4370,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 4266,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 4140,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4019,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3910,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3772,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3680,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3525,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3450,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3278,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3220,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3031,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2990,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2894,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2760,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2647,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2530,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2400,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2300,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2153,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2070,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1906,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1840,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1659,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1610,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1412,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1380,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1275,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1150,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1028,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 920,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 781,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 690,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 534,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 460,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 287,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 230,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 40,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": true
+    },
+    "metrics": {
+      "holdMeanMs": 81.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 83,
+      "flightMeanMs": 150.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 151,
+      "ddMeanMs": 230,
+      "ddStdMs": 0,
+      "ddMedianMs": 230,
+      "udMeanMs": 150.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 151,
+      "uuMeanMs": 237,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 247,
+      "typingSpeedCharsPerSec": 3.115,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 6420,
+      "startDelayMs": 230,
+      "interWordPauseMeanMs": 176.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 176.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED",
+      "IME_COMPOSITION_DETECTED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 81.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 83,
+      "flightMeanMs": 150.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 151,
+      "digraphCount": 24,
+      "ddMeanMs": 230,
+      "ddStdMs": 0,
+      "ddMedianMs": 230,
+      "udMeanMs": 150.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 151,
+      "uuMeanMs": 237,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 247,
+      "typingSpeedMean": 3.115,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 230,
+      "startDelayStd": 0,
+      "interWordPauseMean": 176.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 6.435,
+      "similarityScore": 0.003,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  },
+  {
+    "name": "metrics-11",
+    "sample": {
+      "events": [
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 6732,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5832,
+          "expectedIndex": 24
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5691,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5589,
+          "expectedIndex": 23
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 5431,
+          "expectedIndex": 22
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 5346,
+          "expectedIndex": 22
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 5171,
+          "expectedIndex": 21
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 5103,
+          "expectedIndex": 21
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4911,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4860,
+          "expectedIndex": 20
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4651,
+          "expectedIndex": 19
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4617,
+          "expectedIndex": 19
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 4501,
+          "expectedIndex": 18
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 4374,
+          "expectedIndex": 18
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 4241,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 4131,
+          "expectedIndex": 17
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3981,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3888,
+          "expectedIndex": 16
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3721,
+          "expectedIndex": 15
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3645,
+          "expectedIndex": 15
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 3461,
+          "expectedIndex": 14
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 3402,
+          "expectedIndex": 14
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3201,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 3159,
+          "expectedIndex": 13
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 3051,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2916,
+          "expectedIndex": 12
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2791,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2673,
+          "expectedIndex": 11
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2531,
+          "expectedIndex": 10
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 2430,
+          "expectedIndex": 10
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "up",
+          "t": 2271,
+          "expectedIndex": 9
+        },
+        {
+          "key": "Backspace",
+          "code": "Backspace",
+          "type": "down",
+          "t": 2187,
+          "expectedIndex": 9
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 2011,
+          "expectedIndex": 8
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1944,
+          "expectedIndex": 8
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 1751,
+          "expectedIndex": 7
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 1701,
+          "expectedIndex": 7
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1491,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1458,
+          "expectedIndex": 6
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1341,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 1215,
+          "expectedIndex": 5
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 1081,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 972,
+          "expectedIndex": 4
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 821,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 729,
+          "expectedIndex": 3
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 561,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 486,
+          "expectedIndex": 2
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "up",
+          "t": 301,
+          "expectedIndex": 1
+        },
+        {
+          "key": "a",
+          "code": "KeyA",
+          "type": "down",
+          "t": 243,
+          "expectedIndex": 1
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "up",
+          "t": 41,
+          "expectedIndex": 0
+        },
+        {
+          "key": " ",
+          "code": "Space",
+          "type": "down",
+          "t": 0,
+          "expectedIndex": 0
+        }
+      ],
+      "typedLength": 20,
+      "errorCount": 2,
+      "backspaceCount": 3,
+      "imeCompositionUsed": false
+    },
+    "metrics": {
+      "holdMeanMs": 82.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 84,
+      "flightMeanMs": 162.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 163,
+      "ddMeanMs": 243,
+      "ddStdMs": 0,
+      "ddMedianMs": 243,
+      "udMeanMs": 162.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 163,
+      "uuMeanMs": 250,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 260,
+      "typingSpeedCharsPerSec": 2.971,
+      "errorRate": 0.1,
+      "backspaceRate": 0.15,
+      "digraphCount": 24,
+      "keystrokeCount": 25,
+      "eventCount": 50,
+      "durationMs": 6732,
+      "startDelayMs": 243,
+      "interWordPauseMeanMs": 188.5,
+      "interWordPauseStdMs": 10.062,
+      "interWordPauseMedianMs": 188.5,
+      "interWordPauseCount": 4,
+      "longPauseRate": 0,
+      "correctionBurstRate": 0.1
+    },
+    "reasons": [
+      "OUTLIER_TRIMMED"
+    ],
+    "profile": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 82.739,
+      "holdStdMs": 29.298,
+      "holdMedianMs": 84,
+      "flightMeanMs": 162.636,
+      "flightStdMs": 27.706,
+      "flightMedianMs": 163,
+      "digraphCount": 24,
+      "ddMeanMs": 243,
+      "ddStdMs": 0,
+      "ddMedianMs": 243,
+      "udMeanMs": 162.636,
+      "udStdMs": 27.706,
+      "udMedianMs": 163,
+      "uuMeanMs": 250,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 260,
+      "typingSpeedMean": 2.971,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 243,
+      "startDelayStd": 0,
+      "interWordPauseMean": 188.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "baseline": {
+      "userId": "fixture",
+      "createdAt": "2026-10-07T09:00:00.000Z",
+      "updatedAt": "2026-10-07T09:00:00.000Z",
+      "sampleCount": 25,
+      "sampleRoundCount": 1,
+      "holdMeanMs": 80.957,
+      "holdStdMs": 30.256,
+      "holdMedianMs": 81,
+      "flightMeanMs": 35.278,
+      "flightStdMs": 21.954,
+      "flightMedianMs": 35.5,
+      "digraphCount": 24,
+      "ddMeanMs": 100,
+      "ddStdMs": 0,
+      "ddMedianMs": 100,
+      "udMeanMs": 35.278,
+      "udStdMs": 21.954,
+      "udMedianMs": 35.5,
+      "uuMeanMs": 107,
+      "uuStdMs": 31.623,
+      "uuMedianMs": 117,
+      "typingSpeedMean": 6.061,
+      "typingSpeedStd": 0,
+      "errorRateMean": 0.1,
+      "backspaceRateMean": 0.15,
+      "startDelayMean": 100,
+      "startDelayStd": 0,
+      "interWordPauseMean": 56.5,
+      "interWordPauseStd": 10.062,
+      "longPauseRateMean": 0,
+      "correctionBurstRateMean": 0.1
+    },
+    "scored": {
+      "distance": 7.037,
+      "similarityScore": 0.002,
+      "decision": "deny",
+      "reasons": [
+        "HIGH_DISTANCE",
+        "LOW_SIMILARITY"
+      ],
+      "thresholds": {
+        "allowThreshold": 0.77,
+        "stepUpThreshold": 0.56,
+        "denyThreshold": 0.36
+      }
+    }
+  }
+]

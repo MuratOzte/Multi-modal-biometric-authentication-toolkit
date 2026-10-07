@@ -1,0 +1,3 @@
+requests
+python-dotenv
+tzdata; sys_platform == "win32"

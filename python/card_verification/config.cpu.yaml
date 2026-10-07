@@ -1,0 +1,15 @@
+ocr:
+  enabled: true
+  lang: tr
+  device: cpu
+  fallback_device: cpu
+  ocr_version: PP-OCRv5
+  use_textline_orientation: true
+  suppress_logs: true
+
+visual:
+  clip:
+    enabled: true
+    model: ViT-B-32
+    pretrained: laion2b_s34b_b79k
+    device: auto

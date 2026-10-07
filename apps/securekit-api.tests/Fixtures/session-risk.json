@@ -1,0 +1,17 @@
+[
+  {"name":"empty", "signals":{}, "policy":{}, "riskScore":0, "decision":"allow"},
+  {"name":"clean", "signals":{"network":{"ok":true,"score":95,"flags":{},"reasons":[]},"location":{"ok":true,"countryCode":" tr ","allowed":false,"reasons":["COUNTRY_NOT_ALLOWED"]}},"policy":{"allowedCountries":["TR","US"]},"riskScore":4,"decision":"allow"},
+  {"name":"risky", "signals":{"network":{"ok":true,"score":20,"flags":{"vpn":true,"proxy":true,"tor":true,"relay":true,"hosting":true,"suspicious":true},"reasons":["VPN","TOR","DRIFT_HIGH"]},"location":{"ok":true,"countryCode":"RU","allowed":false,"reasons":["COUNTRY_NOT_ALLOWED"]}},"policy":{"allowedCountries":["TR"]},"riskScore":84,"decision":"step-up"},
+  {"name":"deny", "signals":{"network":{"ok":true,"score":0,"flags":{},"reasons":[]},"location":{"ok":true,"countryCode":"RU","allowed":false,"reasons":[]}},"policy":{"allowedCountries":["TR"]},"riskScore":98,"decision":"deny"},
+  {"name":"vpnFailure", "signals":{"network":{"ok":true,"score":95,"flags":{"vpn":true},"reasons":[]}},"policy":{"treatVpnAsFailure":true},"riskScore":85,"decision":"deny"},
+  {"name":"fractionalTrust", "signals":{"network":{"ok":true,"score":0.95,"flags":{},"reasons":[]}},"policy":{},"riskScore":4,"decision":"allow"},
+  {"name":"minimumTrust", "signals":{"network":{"ok":true,"score":20,"flags":{},"reasons":[]}},"policy":{"minNetworkScore":0.7},"riskScore":81,"decision":"step-up"},
+  {"name":"voiceDeny", "signals":{"voice":{"decision":"deny","similarityScore":0.1,"reasons":["LOW_SIMILARITY"]}},"policy":{"voice":{"enabled":true}},"riskScore":0,"decision":"deny"},
+  {"name":"voiceStepUp", "signals":{"voice":{"decision":"step_up","similarityScore":0.55,"reasons":["VOICE_STEP_UP"]}},"policy":{"voice":{"enabled":true}},"riskScore":0,"decision":"step-up"},
+  {"name":"voiceDisabled", "signals":{"voice":{"decision":"deny","similarityScore":0.1,"reasons":["LOW_SIMILARITY"]}},"policy":{},"riskScore":0,"decision":"allow"},
+  {"name":"stepFallback", "signals":{"network":{"ok":true,"score":20,"flags":{},"reasons":[]}},"policy":{"stepUpSteps":["network","location"]},"riskScore":56,"decision":"step-up"},
+  {"name":"stepOrder", "signals":{"network":{"ok":true,"score":20,"flags":{},"reasons":[]}},"policy":{"stepUpSteps":["face","voice","passkey"]},"riskScore":56,"decision":"step-up"},
+  {"name":"allowBoundary", "signals":{"network":{"ok":true,"score":50,"flags":{},"reasons":[]}},"policy":{"allowMaxRisk":35},"riskScore":35,"decision":"allow"},
+  {"name":"denyBoundary", "signals":{"network":{"ok":true,"score":50,"flags":{},"reasons":[]}},"policy":{"allowMaxRisk":30,"denyMinRisk":35},"riskScore":35,"decision":"deny"},
+  {"name":"countryIgnoredWithoutList", "signals":{"location":{"ok":true,"countryCode":null,"allowed":false,"reasons":["COUNTRY_NOT_ALLOWED","UNKNOWN"]}},"policy":{},"riskScore":0,"decision":"allow"}
+]

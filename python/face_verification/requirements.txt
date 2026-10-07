@@ -1,0 +1,12 @@
+# For CUDA, install matching CUDA-enabled PyTorch wheels before this file.
+# Example for the existing pinned torch family:
+# python -m pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu121
+
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+
+facenet-pytorch==2.5.3
+
+Pillow==10.2.0
+numpy==1.26.4

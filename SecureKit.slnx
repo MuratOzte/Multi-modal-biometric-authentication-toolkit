@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/apps/" />
+  <Folder Name="/apps/securekit-api.tests/">
+    <Project Path="apps/securekit-api.tests/SecureKit.Api.Tests.csproj" />
+  </Folder>
+  <Folder Name="/apps/securekit-api/">
+    <Project Path="apps/securekit-api/SecureKit.Api.csproj" />
+  </Folder>
+</Solution>

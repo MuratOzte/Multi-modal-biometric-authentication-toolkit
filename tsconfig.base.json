@@ -1,0 +1,17 @@
+﻿{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": false,
+    "baseUrl": ".",
+    "paths": {
+      "@securekit/core": ["packages/core/src"],
+      "@securekit/web-sdk": ["packages/web-sdk/src"],
+      "@securekit/node-auth": ["packages/node-auth/src"]
+    }
+  }
+}

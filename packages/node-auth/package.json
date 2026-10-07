@@ -1,0 +1,36 @@
+{
+  "name": "@securekit/node-auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsup src/server.ts --format esm",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:aspnet-stage1": "tsx scripts/stage-one-parity.ts",
+    "test:aspnet-stage2": "tsx scripts/stage-two-parity.ts",
+    "test:aspnet-stage3": "tsx scripts/stage-three-parity.ts",
+    "test:aspnet-stage4": "tsx scripts/stage-four-parity.ts",
+    "test:aspnet-stage5": "tsx scripts/stage-five-parity.ts",
+    "test:aspnet-stage6": "tsx scripts/stage-six-parity.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.2",
+    "@securekit/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/multer": "^1.4.13",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.4",
+    "tsup": "^8.2.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

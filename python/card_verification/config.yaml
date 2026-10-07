@@ -1,0 +1,36 @@
+preprocess:
+  output_width: 856
+  output_height: 540
+  detection_max_side: 1200
+  target_aspect: 1.586
+  min_area_fraction: 0.025
+  max_area_fraction: 0.92
+
+ocr:
+  enabled: true
+  lang: tr
+  device: gpu:0
+  fallback_device: cpu
+  ocr_version: PP-OCRv5
+  use_textline_orientation: true
+  suppress_logs: true
+
+visual:
+  clip:
+    enabled: true
+    model: ViT-B-32
+    pretrained: laion2b_s34b_b79k
+    device: auto
+
+scoring:
+  content_weight: 0.65
+  visual_weight: 0.35
+  same_content_min: 80
+  same_visual_min: 50
+  same_overall_min: 75
+  strong_content_min: 94
+  strong_content_visual_min: 5
+  strong_content_overall_floor: 85
+  different_overall_max: 60
+  digit_conflict_max_similarity: 85
+  name_conflict_max_similarity: 58

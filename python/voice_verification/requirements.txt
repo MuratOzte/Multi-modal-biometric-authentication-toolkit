@@ -1,0 +1,7 @@
+# Install CUDA-enabled torch/torchaudio first from the official PyTorch selector.
+# Example only; pick the command that matches your Python/CUDA platform:
+# python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu128
+speechbrain==1.1.0
+openai-whisper==20250625
+imageio-ffmpeg>=0.5,<1
+numpy>=1.26,<3

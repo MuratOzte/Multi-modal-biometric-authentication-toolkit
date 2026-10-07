@@ -1,0 +1,10 @@
+numpy>=1.26
+opencv-contrib-python>=4.10
+Pillow>=10.0
+PyYAML>=6.0
+rapidfuzz>=3.0
+scikit-image>=0.22
+paddleocr[all]>=3.0
+torch>=2.0
+torchvision>=0.15
+open_clip_torch>=2.24

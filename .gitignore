@@ -1,0 +1,49 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+bin/
+obj/
+TestResults/
+.vs/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python environments, caches and downloaded models
+venv/
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+pretrained_models/
+
+# Local user records, biometric profiles and reference images
+users.json
+users.json.tmp-*
+.securekit/
+.data/
+python/face_verification/images/
+python/card_verification/images/
+python/card_verification/runs/
+packages/node-auth/python/card_verification/images/
+
+# Editor reports, logs and OS files
+.vscode/
+.idea/
+.VSCodeCounter/
+.codex-run/
+.run-logs/
+*.log
+.DS_Store
+Thumbs.db
+
+# Publishable source archives
+securekit-github.zip
