@@ -82,7 +82,7 @@ test("different speaker requires correct transcript and deny, while wrong text r
 test("manifest resolves local paths and rejects reuse of the reference as a positive probe", async () => {
   const directory = await mkdtemp(path.join(tmpdir(), "securekit-manifest-test-"));
   try {
-    for (const name of ["reference.jpg", "same.jpg", "different.jpg"]) await writeFile(path.join(directory, name), "local test bytes");
+    for (const name of ["reference.jpg", "same.jpg", "different.jpg"]) await writeFile(path.join(directory, name), name);
     const manifest = { card: { reference: { file: "reference.jpg" }, sameCard: { file: "same.jpg" }, differentCard: { file: "different.jpg" } } };
     const file = path.join(directory, "manifest.json");
     await writeFile(file, JSON.stringify(manifest));
@@ -92,6 +92,24 @@ test("manifest resolves local paths and rejects reuse of the reference as a posi
     await assert.rejects(loadManifest(file), /CARD_DISTINCT_SAMPLES_REQUIRED/);
     await writeFile(file, "{}");
     await assert.rejects(loadManifest(file), /MANIFEST_MODULE_REQUIRED/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test("renamed copies cannot count as distinct face, card or voice samples", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "securekit-copy-test-"));
+  try {
+    const file = path.join(directory, "manifest.json");
+    for (const module of ["face", "card", "voice"]) {
+      const names = Array.from({ length: module === "voice" ? 5 : 3 }, (_, index) => `${index}.${module === "voice" ? "wav" : "jpg"}`);
+      for (const name of names) await writeFile(path.join(directory, name), "identical local bytes");
+      const samples = names.map(name => ({ file: name, text: "read text" }));
+      const section = module === "voice" ? { enrollment: samples.slice(0, 3), sameSpeaker: samples[3], differentSpeaker: samples[4], wrongText: "another text" }
+        : { reference: samples[0], [module === "face" ? "samePerson" : "sameCard"]: samples[1], [module === "face" ? "differentPerson" : "differentCard"]: samples[2] };
+      await writeFile(file, JSON.stringify({ [module]: section }));
+      await assert.rejects(loadManifest(file), new RegExp(`${module.toUpperCase()}_DISTINCT_SAMPLES_REQUIRED`));
+      for (const name of names) await writeFile(path.join(directory, name), name);
+      assert.deepEqual(Object.keys(await loadManifest(file)), [module]);
+    }
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 

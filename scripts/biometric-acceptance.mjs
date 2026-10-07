@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { once } from "node:events";
 import { readFile, stat, mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -26,23 +27,28 @@ export async function loadManifest(file) {
     if (kind === "audio") requireValue(typeof value.text === "string" && value.text.trim().length > 0, "SAMPLE_TEXT_REQUIRED");
     return { file: filename, mime, text: value.text };
   };
+  const requireDistinct = async (samples, code) => {
+    requireValue(new Set(samples.map(v => v.file)).size === samples.length, code);
+    const hashes = await Promise.all(samples.map(async value => createHash("sha256").update(await readFile(value.file)).digest("hex")));
+    requireValue(new Set(hashes).size === samples.length, code);
+  };
   const result = {};
   if (manifest.face) {
     result.face = Object.fromEntries(await Promise.all(["reference", "samePerson", "differentPerson"].map(async key => [key, await sample(manifest.face[key], "image")])));
-    requireValue(new Set(Object.values(result.face).map(v => v.file)).size === 3, "FACE_DISTINCT_SAMPLES_REQUIRED");
+    await requireDistinct(Object.values(result.face), "FACE_DISTINCT_SAMPLES_REQUIRED");
   }
   if (manifest.voice) {
     const voice = manifest.voice;
     requireValue(Array.isArray(voice.enrollment) && voice.enrollment.length === 3, "VOICE_THREE_SAMPLES_REQUIRED");
     result.voice = { enrollment: await Promise.all(voice.enrollment.map(v => sample(v, "audio"))),
       sameSpeaker: await sample(voice.sameSpeaker, "audio"), differentSpeaker: await sample(voice.differentSpeaker, "audio") };
-    requireValue(new Set([...result.voice.enrollment, result.voice.sameSpeaker, result.voice.differentSpeaker].map(v => v.file)).size === 5, "VOICE_DISTINCT_SAMPLES_REQUIRED");
+    await requireDistinct([...result.voice.enrollment, result.voice.sameSpeaker, result.voice.differentSpeaker], "VOICE_DISTINCT_SAMPLES_REQUIRED");
     requireValue(typeof voice.wrongText === "string" && voice.wrongText.trim().length > 0 && voice.wrongText.trim() !== result.voice.sameSpeaker.text.trim(), "VOICE_WRONG_TEXT_REQUIRED");
     result.voice.wrongText = voice.wrongText;
   }
   if (manifest.card) {
     result.card = Object.fromEntries(await Promise.all(["reference", "sameCard", "differentCard"].map(async key => [key, await sample(manifest.card[key], "image")])));
-    requireValue(new Set(Object.values(result.card).map(v => v.file)).size === 3, "CARD_DISTINCT_SAMPLES_REQUIRED");
+    await requireDistinct(Object.values(result.card), "CARD_DISTINCT_SAMPLES_REQUIRED");
   }
   return result;
 }
