@@ -14,4 +14,26 @@ Repo kökünden `pnpm dev:landing` ile başlatın (`http://localhost:5174`).
 - Hareket duraklatma tüm animasyonları kapsar; `prefers-reduced-motion` desteklenir.
 - Inter çevrimiçi yüklenir; erişilemezse sistem fontuna geçilir.
 
-Bu uygulama tanıtım kapsamındadır. Documentation ve yayınlama ayrı çalışmalardır.
+## Resource Wiki
+
+Tanıtım sitesinin menüsünden veya `http://localhost:5174/#/wiki/1-overview`
+adresinden açılır. DeepWiki'nin 7 Ekim 2026 tarihli, `7b9cbda5` commitine
+dayanan 27 sayfalık İngilizce içeriği yerel HTML olarak sunulur. Kaynak dosya
+ve satır bağlantıları korunur. Sayfalar ve 43 görünür SVG diyagramı dış
+servise ihtiyaç duymadan yüklenir. Kaynak DeepWiki'de çizilemeyen diyagramlar
+aktarılmaz; bu arşiv otomatik olarak güncellenmez.
+
+- Solda hiyerarşik konu ağacı, sağda sayfa içindekiler; mobilde açılır menüler.
+- Tam metin arama, `Ctrl/Cmd+K`, doğrudan sayfa/bölüm bağlantıları, önceki/sonraki sayfa.
+- Diyagramlar tıklama veya klavye ile açılır; yakınlaştırma ve Escape ile kapatma.
+- Wiki kodu ayrı yüklenir; ana sayfanın ilk yüklemesine içerik arşivi eklenmez.
+- Hash rotaları statik hosting üzerinde ayrıca sunucu yönlendirmesi gerektirmez.
+
+`pnpm --filter landing-web test:wiki` sayfa bütünlüğünü, iç bağlantıları,
+bölüm hedeflerini, diyagramları ve kod örneklerinin satırlarını denetler.
+Arşiv yenilemek için tarayıcıdan alınan `{title,url,html,text,headings}`
+alanlarına sahip sayfa dizisini `python scripts/import-resource-wiki.py capture.json`
+ile işleyin. Script yalnızca izin verilen HTML/SVG öğelerini aktarır;
+DeepWiki arayüz kodunu, sohbet alanını veya üçüncü taraf scriptlerini içermez.
+
+Yayınlama ayrı bir çalışmadır.

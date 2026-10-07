@@ -84,6 +84,14 @@ Hareketler hero'daki düğmeyle duraklatılabilir ve sistemin azaltılmış hare
 tercihi desteklenir. Mevcut Playground ve kayıt/giriş demosu kendi adreslerinde
 çalışmaya devam eder.
 
+Menüdeki **Kaynak Wiki** ve ana sayfanın kaynaklar bölümünden projenin teknik
+wiki'sine ulaşabilirsiniz: `http://localhost:5174/#/wiki/1-overview`.
+DeepWiki'nin 7 Ekim 2026 arşivinden aktarılan 27 sayfa; tam metin arama,
+kaynak dosya referansları, sayfa içindekiler ve büyütülebilen 43 teknik
+diyagram içerir. Wiki statik dosyalarla çalışır ve API bağlantısı gerektirmez.
+İçerik arşivi otomatik güncellenmez; ayrıntılar
+[tanıtım sitesi yönergesinde](apps/landing-web/README.md#resource-wiki) bulunur.
+
 ### Ortam değişkenleri
 
 `packages/node-auth/.env.example` API değişkenlerini, `apps/demo-web/.env.example` ise web değişkenlerini gösterir. API `.env` dosyasını otomatik yüklemez; değişkenleri API'yi başlattığınız terminalde tanımlayın. Vite için örnek dosyayı kopyalayabilirsiniz:
