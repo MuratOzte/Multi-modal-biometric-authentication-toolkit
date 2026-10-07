@@ -506,3 +506,10 @@ Sonraki adım hazırlığı: gerçek ses/kart örnekleri için
 aynı/farklı kart HTTP kontrolleri ayrı geçici C# depolarında çalışır.
 Örnek manifest ve çalıştırma sırası kabul yönergesindedir. Araç testleri
 geçti; gerçek örneklerle kalite ve manuel donanım kabulü halen bekliyor.
+
+Sonraki kabul hazırlığı genişletildi: manifest artık aynı/farklı kişi yüz
+kontrollerini de çalıştırır; yüz depoları ve üretim işçisi izole edilir.
+Üç modülde yeniden adlandırılmış aynı dosya kopyaları içerik hash'iyle
+reddedilir. Kamera/mikrofon ve tam oturum kontrolleri için
+`docs/biometric-manual-acceptance.example.md` yerel kayıt şablonu hazırdır.
+Gerçek örneklerin kalite ve manuel donanım kabulü henüz tamamlanmadı.

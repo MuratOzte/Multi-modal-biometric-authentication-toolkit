@@ -223,7 +223,7 @@ pnpm test:aspnet-demo
 # Gerçek biyometrik kabul öncesi Python import/CUDA/FFmpeg kontrolü
 pnpm test:biometric-preflight
 
-# Yerel izinli ses/kart örnekleriyle gerçek C# HTTP kabulü (manifest gerekir)
+# Yerel izinli yüz/ses/kart örnekleriyle gerçek C# HTTP kabulü (manifest gerekir)
 pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
 # Kabul aracının kontrolleri; model ağırlıkları gerektirmez
 pnpm test:biometric-tools

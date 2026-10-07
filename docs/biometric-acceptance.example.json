@@ -1,4 +1,9 @@
 {
+  "face": {
+    "reference": { "file": "samples/face-reference.jpg" },
+    "samePerson": { "file": "samples/face-new-capture.jpg" },
+    "differentPerson": { "file": "samples/different-person.jpg" }
+  },
   "voice": {
     "enrollment": [
       { "file": "samples/enroll-1.wav", "text": "Bugün hava güzel ve açık." },

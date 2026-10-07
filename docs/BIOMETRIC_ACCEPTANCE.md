@@ -53,11 +53,11 @@ Remove-Item Env:SECUREKIT_FACE_REAL_IMAGE
 Bu test aynı görselle sözleşme/model entegrasyonunu kontrol eder; farklı
 kişi, ışık koşulları veya gerçek kamera kalitesinin kabulü ayrıca gerekir.
 
-## Gerçek ses/kart HTTP kabul aracı
+## Gerçek yüz/ses/kart HTTP kabul aracı
 
 Sonraki kabul adımı için `scripts/biometric-acceptance.mjs` hazırdır.
 Araç gerçek C# API'yi boş, geçici depolarla ve rastgele bir yerel portta
-başlatır; üretim ses/kart Python işçilerini kullanır. Çalışan demo'ya veya
+başlatır; üretim yüz/ses/kart Python işçilerini kullanır. Çalışan demo'ya veya
 mevcut kullanıcı/referans depolarına bağlanmaz. API kapanınca kendi geçici
 deposunu siler. Model ağırlıkları ilk kullanımda indirilebilir ve model
 önbellekleri kalır. Kamera/mikrofon testini bu araç yerine geçirmez.
@@ -72,6 +72,7 @@ Copy-Item docs/biometric-acceptance.example.json .run-logs/acceptance/manifest.j
 node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json --check
 
 dotnet build SecureKit.slnx
+$env:FACE_PYTHON_BIN=(Resolve-Path .venv-face/Scripts/python.exe).Path
 $env:VOICE_PYTHON_BIN=(Resolve-Path .venv-voice/Scripts/python.exe).Path
 # Kart çalıştırıcısını kendi kurulu ortamınıza göre seçin; örneğin:
 $env:CARD_PYTHON_BIN="py -3.11"
@@ -80,7 +81,7 @@ pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
 node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json
 ```
 
-Manifestten `voice` veya `card` bölümünü kaldırarak tek modülü çalıştırabilirsiniz.
+Manifestten `face`, `voice` veya `card` bölümlerini kaldırarak seçilen modülleri çalıştırabilirsiniz.
 Dosya yolları manifestin dizinine göre çözülür. `--check` yalnızca dosyaların
 varlığını, türünü, boyutunu ve metin alanlarını kontrol eder; model çalıştırmaz.
 Desteklenen ses uzantıları wav/webm/mp3/m4a/ogg, görseller jpg/jpeg/png/webp'dir.
@@ -88,11 +89,21 @@ Ses sınırı 12 MiB, görsel sınırı 5 MiB'dir; API'deki daha düşük yükle
 ayrıca geçerlidir. İşçi süreleri için `VOICE_PYTHON_TIMEOUT_MS` ve
 `CARD_PYTHON_TIMEOUT_MS` geçerlidir; aracın HTTP istek sınırı 660 saniyedir.
 
+Yüz için referans, aynı kişinin yeni çekimi ve başka bir izinli kişinin çekimi
+gerekir. Referans enrollment sonrası profil üzerinden seçilir; doğrulama eşiği
+mevcut API ayarından alınır. Pozitif ve negatif kontroller başarılı model
+yanıtı ve sonlu skor gerektirir; yüz bulunamaması negatif kabulü geçirmez.
+Referanslar ve geçici yüz dosyaları da izole depoda tutulup temizlenir.
+
 Ses için aynı kişiden üç ayrı enrollment kaydı ve yeni bir olumlu kayıt,
 başka bir izinli kişiden bir olumsuz kayıt gerekir. Her istekte yeni challenge
 oluşturulur; kayıt metni manifestten alınır. Yanlış metin kontrolünde olumlu
 kayıt farklı bir challenge metniyle tekrar gönderilir. Ayrı dosyalar gereklidir;
 dosya adlarını değiştirerek aynı kaydı çoğaltmak kabul örneği sayılmaz.
+Her modülde dosya içeriklerinin SHA-256 değerleri bellekte karşılaştırılır;
+aynı içeriğe sahip kopyalar `--check` sırasında reddedilir. Hash değerleri
+rapora yazılmaz. Bu kontrol farklı çekimlerin kişi/kart kimliğini doğrulamaz;
+doğru örnek seçimi manuel kabulün parçasıdır.
 Enrollment hedefi üç örnektir; diğer eşikler mevcut API ayarlarından alınır
 ve test tarafından gevşetilmez. Doğrulama sırasında profil güncellenmez.
 
@@ -116,6 +127,20 @@ kabulünü tamamlamaz.
 
 Gerçek Python ortamlarını ayarlayıp `pnpm dev` ile `auth.html` açın.
 Sonuçları aşağıdaki sırayla yerel bir kayıt üzerinde geçti/kaldı olarak tutun.
+Hazır [manuel kayıt şablonunu](biometric-manual-acceptance.example.md) kullanın:
+
+```powershell
+New-Item -ItemType Directory -Force .run-logs/acceptance | Out-Null
+# Mevcut yerel kaydı değiştirmeden ilk kopyayı oluşturun.
+if (!(Test-Path .run-logs/acceptance/manual.md)) {
+  Copy-Item docs/biometric-manual-acceptance.example.md .run-logs/acceptance/manual.md
+}
+git rev-parse HEAD
+```
+
+Şablon, aynı/farklı kişi ve kart kontrollerini ve kamera/mikrofon izin reddini
+ayrı satırlarda tutar; tarih, commit, tarayıcı, cihaz ve model alanları içerir.
+Tüm alanlar başlangıçta `bekliyor` durumundadır.
 
 | Kontrol | Beklenen sonuç |
 | --- | --- |
