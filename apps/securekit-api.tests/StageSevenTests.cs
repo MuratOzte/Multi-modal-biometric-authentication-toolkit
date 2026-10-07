@@ -113,7 +113,8 @@ public sealed class StageSevenTests
     {
         using var f = new Factory(); f.References(); f.Settings["CARD_PYTHON_BIN"] = Path.Combine(f.Root, "missing-python"); using var client = f.CreateClient();
         await Send(client, Form(text: new string('x', 129)), 413);
-        var result = await Send(client, Form(), 503); Assert.Equal("PYTHON_RUNTIME_UNAVAILABLE", result["error"]!["code"]!.GetValue<string>()); f.Clean();
+        var result = await Send(client, Form(), 503); Assert.Equal("PYTHON_RUNTIME_UNAVAILABLE", result["error"]!["code"]!.GetValue<string>());
+        Assert.False(result["error"]!.AsObject().ContainsKey("details")); f.Clean();
     }
     [Fact]
     public async Task MissingAndUnknownReferencesReturn404()

@@ -24,7 +24,7 @@ public sealed class CardPython(CardOptions options, ILogger<CardPython> logger) 
         foreach (var command in commands)
         {
             try { return await RunOnce(input, command, token); }
-            catch (Win32Exception ex) { last = new CardFailure("PYTHON_RUNTIME_UNAVAILABLE", "Python runtime is not available for card verification.", 503, ex.Message); }
+            catch (Win32Exception) { last = new CardFailure("PYTHON_RUNTIME_UNAVAILABLE", "Python runtime is not available for card verification.", 503); }
             catch (CardFailure ex) when (ex.Code == "PYTHON_DEPENDENCY_MISSING") { last = ex; }
         }
         if (last?.Code == "PYTHON_DEPENDENCY_MISSING") throw new CardFailure("PYTHON_PROCESS_ERROR", last.Message, 502, last.Details);

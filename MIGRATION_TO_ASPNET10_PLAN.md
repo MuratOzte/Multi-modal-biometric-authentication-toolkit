@@ -382,6 +382,48 @@ pnpm --filter @securekit/node-auth test:aspnet-stage6
 
 ## Aşama 7 — Kart doğrulama
 
+**Durum (7 Ekim 2026): Uygulandı.** Üç endpoint C# Controllers API'ye
+taşındı. JPEG/PNG/WebP multipart sözleşmesi, 5 MiB varsayılan yükleme sınırı,
+kullanıcı kimliği trim/lowercase normalizasyonu ve MIME tabanlı uzantılar
+korunur. Referans listesi görselleri sıralar ve dosya adlarını etiketlere
+dönüştürür. Kullanıcı referansı genel `referenceId` seçiminden önceliklidir.
+Referans yenileme önceki yönetilen dosyayı siler; diğer biyometrik profil
+alanları korunur. Enrollment işlemleri süreç içinde sıralanır.
+
+Mevcut `python/card_verification/main.py --worker` JSON-lines protokolü
+kullanılır. C# her istekte worker başlatır, `ready` sonrasında isteği gönderir
+ve sonucu aldığında kapatır. Varsayılan timeout 300 saniyedir; stdout/stderr
+ayrı ayrı 1 MiB ile sınırlanır. Timeout, iptal ve çıktı limitinde süreç ağacı
+kapatılır; Windows launcher alt süreçleri Job Object ile yönetilir. Geçici
+dosyalar tüm sonuçlarda temizlenir. Python yanıtında skor aralıkları, kararlar,
+OCR alanları ve isteğe bağlı CLIP alanları doğrulanır; `documentNo` varsayılanı
+boş metindir. Negatif karşılaştırmalar HTTP 200 olarak korunur.
+
+Doğrulama: solution 0 hata/0 uyarıyla derlendi; 239 C# testi (31 yeni kart
+testi), 60 canlı Node/C# HTTP karşılaştırması, eşleşen kalıcı profil JSON'ları,
+Node'da 102 ve SDK'da 36 test ve Node TypeScript kontrolü geçti. İsteğe bağlı
+sabit metin Python entegrasyonu atlandı. Kart karşılaştırmaları model
+gerektirmeyen Python protokol fixture'ı kullanır; gerçek PaddleOCR/OpenCLIP
+modelleri çalıştırılmadı. Başarılı/negatif sonuçlar, seçili/kullanıcı referansı,
+referans yenileme, hatalı upload/JSON/şema, bağımlılık/çalıştırıcı yokluğu,
+fazla stdout/stderr, timeout, iptal ve alt süreç sonlandırma test edilir.
+
+`CARD_PYTHON_BIN`, `CARD_PYTHON_TIMEOUT_MS`, `CARD_UPLOAD_MAX_BYTES`,
+`CARD_MATCH_THRESHOLD` ve `CARD_PYTHON_SCRIPT_PATH` desteklenir. Genel referans
+kökü `Card:ReferenceDirectory`, kullanıcı kökü `Card:UserReferenceDirectory`,
+geçici kök `Card:TempRoot`, ek Python argümanları `Card:PythonArgs` ile ayarlanır.
+Depolanan referans yolları izinli köklerle ve çözümlenmiş sembolik bağlantı
+hedefleriyle sınırlandırılır; bu C# koruması eski Node rotasında yoktur.
+Eski harici kullanıcı referansları için `Card:AllowedReferenceRoots` ayarlayın.
+Node ve C# aynı depolara eşzamanlı yazmamalıdır. Kalıcı Node worker'ına göre
+sıcak isteklerde model yükleme gecikmesi daha yüksektir.
+
+```powershell
+dotnet build SecureKit.slnx
+dotnet test SecureKit.slnx
+pnpm --filter @securekit/node-auth test:aspnet-stage7
+```
+
 ### Taşınacak endpoint'ler
 
 - `GET /card/references`
@@ -417,6 +459,6 @@ pnpm --filter @securekit/node-auth test:aspnet-stage6
 
 ## Başlama sırası
 
-**Aşama 0–6 tamamlandı.** Sıradaki kodlama görevi **Aşama 7 —
-Kart doğrulama**dır. Sonraki aşamalara ilgili test kapıları
+**Aşama 0–7 tamamlandı.** Sıradaki kodlama görevi **Aşama 8 —
+Paralel doğrulama ve kesintisiz geçiş**tir. Sonraki aşamalara ilgili test kapıları
 geçildikten sonra sırayla devam edilir.

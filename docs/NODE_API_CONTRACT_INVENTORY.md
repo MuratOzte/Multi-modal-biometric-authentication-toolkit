@@ -215,6 +215,16 @@ opsiyonel `documentNo`, `cardNo`, `validThru`; `quality` alanları
 `ocrErrorReference`. `visualDetails` alanları `activeMethod=clip`, `clipScore`,
 `clipCosine`, `clipAvailable`, `clipModel`, `clipDevice`, `clipError`.
 
+Kart yanıtında `cardVerificationByClipOld` da bulunur (nesne veya null).
+`userId`, `referenceId` alanına göre önceliklidir; kullanıcı kimliği trim/lowercase
+ile normalize edilir. Kart enrollment rıza veya challenge gerektirmez.
+İşçi `ready` sonrasında JSON-lines isteği alır; varsayılan timeout 300 saniyedir.
+Çalıştırıcı yokluğu `503 PYTHON_RUNTIME_UNAVAILABLE`, timeout `504 PYTHON_TIMEOUT`,
+bozuk JSON/şema `502 PYTHON_OUTPUT_INVALID`, işlem ve OCR bağımlılık hataları
+`502 PYTHON_PROCESS_ERROR` döner. Geçerli negatif eşleşme sonucu HTTP 200'dür.
+Bridge `fields.probe/reference.documentNo` eksikse boş metin ekler ve
+worker-only `id` / `durationMs` alanlarını yanıt sözleşmesine dahil etmez.
+
 ## Sonraki aşamalarda karşılaştırma
 
 `apps/securekit-api.tests/Support/ContractAssert.cs` durum kodu, JSON content type,

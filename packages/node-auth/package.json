@@ -13,7 +13,8 @@
     "test:aspnet-stage3": "tsx scripts/stage-three-parity.ts",
     "test:aspnet-stage4": "tsx scripts/stage-four-parity.ts",
     "test:aspnet-stage5": "tsx scripts/stage-five-parity.ts",
-    "test:aspnet-stage6": "tsx scripts/stage-six-parity.ts"
+    "test:aspnet-stage6": "tsx scripts/stage-six-parity.ts",
+    "test:aspnet-stage7": "tsx scripts/stage-seven-parity.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -25,7 +25,7 @@ for line in sys.stdin:
     if mode == "exit":
         sys.exit(2)
     references = sorted(p for p in pathlib.Path(request["referenceDir"]).iterdir()
-                        if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))
+                        if p.is_file() and p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))
     fields = {"name": "Test", "studentNo": "123", "cardNo": "456", "validThru": "2027"}
     score = {"different": .2, "uncertain": .6}.get(mode, .95)
     decision = mode if mode in ("different", "uncertain") else "same"

@@ -167,7 +167,7 @@ Yüz, ses ve kart dosyaları ilgili endpoint'lere `multipart/form-data` ile gön
 
 ## Geliştirme ve test
 
-### ASP.NET Core 10 geçişi — Aşama 0–6
+### ASP.NET Core 10 geçişi — Aşama 0–7
 
 .NET **10 SDK** gerekir. `global.json` kararlı 10.0 SDK feature band'lerini
 kabul eder. Yeni API Controllers tabanlıdır; `GET /health`,
@@ -181,7 +181,8 @@ kabul eder. Yeni API Controllers tabanlıdır; `GET /health`,
 `GET /api/securekit/keystroke/status`, `POST /api/securekit/keystroke/enroll`
 ve `POST /api/securekit/keystroke/verify`, `POST /enroll/face/reference`,
 `POST /verify/face`, `POST /verify/face-sliding`, `POST /enroll/voice` ve
-`POST /verify/voice` uygulanmıştır. Geçiş sırası
+`POST /verify/voice`, `GET /card/references`, `POST /enroll/card/reference`
+ve `POST /verify/card` uygulanmıştır. Geçiş sırası
 [geçiş planında](MIGRATION_TO_ASPNET10_PLAN.md), mevcut Node endpoint'lerinin
 istek/yanıt ve hata sözleşmeleri [envanterde](docs/NODE_API_CONTRACT_INVENTORY.md)
 yer alır.
@@ -203,6 +204,7 @@ pnpm --filter @securekit/node-auth test:aspnet-stage3
 pnpm --filter @securekit/node-auth test:aspnet-stage4
 pnpm --filter @securekit/node-auth test:aspnet-stage5
 pnpm --filter @securekit/node-auth test:aspnet-stage6
+pnpm --filter @securekit/node-auth test:aspnet-stage7
 
 dotnet run --project apps/securekit-api
 Invoke-RestMethod http://localhost:3002/health
@@ -252,9 +254,9 @@ pnpm --filter demo-web dev
 
 Bu aşamada kayıt/rıza, giriş/oturum başlangıcı, ağ/konum ve klavye kontrolü çalışır.
 Yerel ağ testi için C# API terminalinde `$env:MOCK_IP_CHECK="1"` ayarlayın.
-Yüz ve ses endpoint'leri de taşındı. Kart endpoint'leri Aşama 7'de taşınacaktır; tam giriş
-akışı için demo'nun mevcut Node hedefini kullanmaya devam edin. React arayüzü,
-web SDK ve Python modülleri bu aşamada değiştirilmedi.
+Yüz, ses ve kart endpoint'leri de taşındı. Tam demo akışının C# hedefiyle kabul
+kontrolü ve varsayılan hedef değişikliği Aşama 8'de yapılacaktır. React arayüzü,
+web SDK ve üretim Python modülleri bu aşamada değiştirilmedi.
 
 C# IP sorgusu `PYTHON_CMD` / `IpCheck:PythonCommand` ile çalıştırıcı,
 `VPNAPI_KEY` / `IpCheck:ApiKey` ile anahtar,
@@ -308,6 +310,26 @@ olarak tutulur. C# her istekte yeni worker başlatır; model yükleme süresi No
 kalıcı worker'ına göre daha uzundur. İlk model indirmesinde timeout artırılabilir.
 `test:aspnet-stage6` gerçek model gerektirmeyen protokol fixture'ı ile sözleşme,
 profil dosyası ve geçici dosya temizliğini doğrular.
+
+C# kart rotaları mevcut PaddleOCR/OpenCLIP JSON-lines işçisini kullanır.
+`CARD_PYTHON_BIN`, `CARD_PYTHON_TIMEOUT_MS`, `CARD_UPLOAD_MAX_BYTES` ve
+`CARD_MATCH_THRESHOLD` Node ile ortak ayarlardır; varsayılan timeout 300 saniye,
+dosya sınırı 5 MiB ve eşik 0.7'dir. `CARD_PYTHON_SCRIPT_PATH` / `Card:ScriptPath`
+özel worker yolu, `Card:PythonArgs` ek çalıştırıcı argümanlarıdır.
+`Card:ReferenceDirectory` genel kart görsellerinin kökünü (varsayılan
+`python/card_verification/images`), `Card:UserReferenceDirectory` kullanıcı
+referanslarını (varsayılan `apps/securekit-api/.securekit/card-references`),
+`Card:TempRoot` geçici dosya kökünü ayarlar. Mevcut Node kullanıcı referanslarını
+okumak için depo kökünü aynı ayarlayın veya `Card:AllowedReferenceRoots:0` ile
+ek izinli kök tanımlayın. İki API aynı depolara eşzamanlı yazmamalıdır.
+Kullanıcı referansı `userId` ile seçilir ve `referenceId` alanından önceliklidir;
+ikisi yoksa genel dizindeki kartlar karşılaştırılır. Rıza/challenge kontrolü
+kart rotalarında mevcut Node sözleşmesindeki gibi uygulanmaz.
+C# her istekte yeni worker açar; model yükleme süresi kalıcı Node worker'ından
+uzundur. stdout/stderr ayrı ayrı 1 MiB ile sınırlıdır; timeout ve iptal süreç
+ağacını kapatır, geçici görseller tüm sonuçlarda temizlenir.
+`test:aspnet-stage7` gerçek OCR/CLIP modeli gerektirmeyen protokol fixture'ıyla
+HTTP sözleşmesini, referans yenilemeyi ve kalıcı profil biçimini karşılaştırır.
 
 Yapılandırma `apps/securekit-api/appsettings.json`, isteğe bağlı
 `appsettings.Development.json`, environment variables ve Development'ta
