@@ -520,3 +520,9 @@ aynı işlemi yapar. Komut örnek dizinini, manifesti ve manuel kaydı oluşturu
 tekrar çalıştırıldığında mevcut seçimleri, gözlemleri ve örnekleri korur.
 Sonraki işlem ayrı izinli çekimleri eklemek, manifestte okunan metinleri
 güncellemek ve `--check` sonrasında gerçek model/donanım kabulünü çalıştırmaktır.
+
+Modül bazında örnek hazırlığı `pnpm status:biometric-acceptance` ile
+kontrol edilebilir. Yüz, ses ve kart ayrı değerlendirilir; eksik dosya veya
+kopya örnek diğer modüllerin sonucunu gizlemez. Kısmi manifestte seçilmeyen
+modüller açıkça gösterilir. Bu komut gerçek model/donanım kabulü yapmaz;
+sonraki adım izinli yeni çekimleri ekleyip gerçek kabulü tamamlamaktır.

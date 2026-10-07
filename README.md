@@ -226,6 +226,9 @@ pnpm test:biometric-preflight
 # Yerel örnek dizini, manifest ve manuel kayıt; mevcut dosyaları korur
 pnpm prepare:biometric-acceptance
 
+# Her modülün yerel örnek hazırlığını ayrı gösterir; model çalıştırmaz
+pnpm status:biometric-acceptance
+
 # Yerel izinli yüz/ses/kart örnekleriyle gerçek C# HTTP kabulü (manifest gerekir)
 pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
 # Kabul aracının kontrolleri; model ağırlıkları gerektirmez

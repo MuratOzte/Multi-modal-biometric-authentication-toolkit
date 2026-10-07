@@ -90,6 +90,35 @@ başarılı olarak işaretlemez. Manifestteki örnek metinleri gerçekten okunan
 metinlerle eşleştirin; hazırlıktan sonra `--check` kontrolünü çalıştırın.
 
 Manifestten `face`, `voice` veya `card` bölümlerini kaldırarak seçilen modülleri çalıştırabilirsiniz.
+
+Hazırlık durumunu her modül için ayrı görmek için:
+
+```powershell
+pnpm status:biometric-acceptance
+# pnpm olmadan; varsayılan manifest .run-logs/acceptance/manifest.json
+node scripts/biometric-acceptance-status.mjs
+# Özel manifest ve makine tarafından okunabilir çıktı
+node scripts/biometric-acceptance-status.mjs .run-logs/acceptance/manifest.json --json
+```
+
+Bu komut model, Python ortamı, API veya kamera/mikrofon başlatmaz. Kabul
+aracıyla aynı dosya türü, boyut, metin ve içerik kopyası kontrollerini kullanır;
+bir modüldeki hata diğer modüllerin durumunu gizlemez. `ready` yalnızca
+örnek dosyalarının kontrolü geçtiğini belirtir; dosyaların çözümlenebilirliği,
+kişi/kart kimliği ve model kalitesi gerçek kabulde doğrulanmalıdır.
+`blocked` durumunda sabit hata kodu gösterilir; yollar, kayıt metinleri ve
+dosya içerikleri çıktıya yazılmaz. Her modülün ilk hatası gösterilir;
+düzeltmeden sonra komutu yeniden çalıştırın.
+
+Manifestte bulunmayan modüller `not-selected` olarak görünür. Çıkış kodu,
+seçilen tüm modüllerin örnekleri hazırsa 0, aksi halde 1'dir. JSON çıktısındaki
+`samplesReady` seçilen modüllere, `allModulesSamplesReady` üç modülün tamamına
+aittir. `manifest: valid` yalnızca seçilen bölüm içeren JSON'un okunabildiğini
+belirtir; örnek hataları modül satırlarında gösterilir. Gerçek model ve
+donanım kabulü bu komutta her zaman `pending` kalır; önceki kabul raporları
+okunmaz veya değiştirilmez. Hazır örneklerden sonra ortam ön kontrolünü,
+gerçek HTTP kabul aracını ve manuel kayıt tablosunu tamamlayın.
+
 Dosya yolları manifestin dizinine göre çözülür. `--check` yalnızca dosyaların
 varlığını, türünü, boyutunu ve metin alanlarını kontrol eder; model çalıştırmaz.
 Desteklenen ses uzantıları wav/webm/mp3/m4a/ogg, görseller jpg/jpeg/png/webp'dir.
