@@ -513,3 +513,10 @@ kontrollerini de çalıştırır; yüz depoları ve üretim işçisi izole edili
 reddedilir. Kamera/mikrofon ve tam oturum kontrolleri için
 `docs/biometric-manual-acceptance.example.md` yerel kayıt şablonu hazırdır.
 Gerçek örneklerin kalite ve manuel donanım kabulü henüz tamamlanmadı.
+
+Yerel kabul çalışma alanı `pnpm prepare:biometric-acceptance` komutuyla
+hazırlanabilir; pnpm olmadan `node scripts/biometric-acceptance-prepare.mjs`
+aynı işlemi yapar. Komut örnek dizinini, manifesti ve manuel kaydı oluşturur;
+tekrar çalıştırıldığında mevcut seçimleri, gözlemleri ve örnekleri korur.
+Sonraki işlem ayrı izinli çekimleri eklemek, manifestte okunan metinleri
+güncellemek ve `--check` sonrasında gerçek model/donanım kabulünü çalıştırmaktır.

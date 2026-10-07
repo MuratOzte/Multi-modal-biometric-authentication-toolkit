@@ -65,8 +65,9 @@ deposunu siler. Model ağırlıkları ilk kullanımda indirilebilir ve model
 Yerel manifesti ve izinli örnekleri git'in yok saydığı dizinde hazırlayın:
 
 ```powershell
-New-Item -ItemType Directory -Force .run-logs/acceptance/samples | Out-Null
-Copy-Item docs/biometric-acceptance.example.json .run-logs/acceptance/manifest.json
+pnpm prepare:biometric-acceptance
+# pnpm kullanılamıyorsa:
+node scripts/biometric-acceptance-prepare.mjs
 # Örnekleri .run-logs/acceptance/samples altına koyun.
 # Manifestteki text değerleri kayıtlarda gerçekten okunan metinler olmalıdır.
 node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json --check
@@ -80,6 +81,13 @@ pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
 # pnpm kullanılamıyorsa:
 node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json
 ```
+
+Hazırlık komutu `samples` dizinini, örnek `manifest.json` dosyasını ve
+`manual.md` kontrol kaydını oluşturur. Tekrar çalıştırılabilir; mevcut
+manifesti, manuel gözlemleri ve örnekleri değiştirmez. Eksik şablon dosyasını
+yeniden oluşturur. Bu adım örnek üretmez, model çalıştırmaz veya kabulü
+başarılı olarak işaretlemez. Manifestteki örnek metinleri gerçekten okunan
+metinlerle eşleştirin; hazırlıktan sonra `--check` kontrolünü çalıştırın.
 
 Manifestten `face`, `voice` veya `card` bölümlerini kaldırarak seçilen modülleri çalıştırabilirsiniz.
 Dosya yolları manifestin dizinine göre çözülür. `--check` yalnızca dosyaların
@@ -130,11 +138,9 @@ Sonuçları aşağıdaki sırayla yerel bir kayıt üzerinde geçti/kaldı olara
 Hazır [manuel kayıt şablonunu](biometric-manual-acceptance.example.md) kullanın:
 
 ```powershell
-New-Item -ItemType Directory -Force .run-logs/acceptance | Out-Null
-# Mevcut yerel kaydı değiştirmeden ilk kopyayı oluşturun.
-if (!(Test-Path .run-logs/acceptance/manual.md)) {
-  Copy-Item docs/biometric-manual-acceptance.example.md .run-logs/acceptance/manual.md
-}
+pnpm prepare:biometric-acceptance
+# Mevcut yerel kaydı korur; pnpm olmadan aynı işlem:
+node scripts/biometric-acceptance-prepare.mjs
 git rev-parse HEAD
 ```
 
