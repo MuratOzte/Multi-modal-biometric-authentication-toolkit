@@ -10,7 +10,8 @@
     "dev": "pnpm --parallel --filter @securekit/node-auth --filter demo-web dev",
     "lint": "echo \"(todo)\"",
     "typecheck": "pnpm -r --if-present typecheck",
-    "test": "pnpm -r --filter @securekit/node-auth --filter @securekit/web-sdk test"
+    "test": "pnpm -r --filter @securekit/node-auth --filter @securekit/web-sdk test",
+    "test:aspnet-parity": "dotnet build SecureKit.slnx && node scripts/aspnet-parity.mjs"
   },
   "devDependencies": {
     "typescript": "^5.6.3",
