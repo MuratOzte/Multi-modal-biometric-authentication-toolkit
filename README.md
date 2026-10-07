@@ -220,6 +220,9 @@ pnpm test:aspnet-parity
 # Gerçek Vite proxy + web SDK; geçici depolar ve model gerektirmeyen fixture'lar
 pnpm test:aspnet-demo
 
+# Gerçek biyometrik kabul öncesi Python import/CUDA/FFmpeg kontrolü
+pnpm test:biometric-preflight
+
 dotnet run --project apps/securekit-api
 Invoke-RestMethod http://localhost:3002/health
 ```
@@ -272,6 +275,9 @@ proxy/SDK akışları ve tarayıcıdaki hesap/ağ akışı doğrulandı. Biyomet
 testleri model gerektirmeyen fixture'lar kullanır; gerçek kamera/mikrofon ve
 SpeechBrain/Whisper/PaddleOCR/OpenCLIP kalite kabulü ayrıca yapılmalıdır.
 React arayüzü, web SDK ve üretim Python modülleri değiştirilmedi.
+
+Gerçek model ve donanım kabul adımları [biyometrik kabul yönergesinde](docs/BIOMETRIC_ACCEPTANCE.md)
+yer alır. Ön kontrolün geçmesi model/donanım kabulünün tamamlandığı anlamına gelmez.
 
 C# IP sorgusu `PYTHON_CMD` / `IpCheck:PythonCommand` ile çalıştırıcı,
 `VPNAPI_KEY` / `IpCheck:ApiKey` ile anahtar,

@@ -12,6 +12,7 @@
     "lint": "echo \"(todo)\"",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --filter @securekit/node-auth --filter @securekit/web-sdk test",
+    "test:biometric-preflight": "node scripts/biometric-preflight.mjs",
     "test:aspnet-parity": "dotnet build SecureKit.slnx && node scripts/aspnet-parity.mjs",
     "test:aspnet-demo": "dotnet build SecureKit.slnx && pnpm --filter demo-web test:aspnet-smoke"
   },
