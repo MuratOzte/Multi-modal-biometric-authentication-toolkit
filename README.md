@@ -22,6 +22,7 @@ SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini or
 | `packages/node-auth` | Geri dönüş için Express API ve Node/C# karşılaştırma testleri |
 | `packages/web-sdk` | Tarayıcı istemcisi ve klavye olay toplayıcısı |
 | `apps/demo-web` | React + Vite demo uygulaması |
+| `apps/landing-web` | Bağımsız Türkçe tanıtım sitesi; React + Vite |
 | `apps/securekit-api` | Varsayılan ASP.NET Core 10 API; tüm endpoint grupları (Aşama 0–8) |
 | `apps/securekit-api.tests` | xUnit + WebApplicationFactory HTTP sözleşme testleri |
 | `python/face_verification` | FaceNet / MTCNN yüz doğrulama işçileri |
@@ -65,6 +66,25 @@ Vite, port doluysa başka bir port seçebilir; terminaldeki adresi kullanın. Ka
 `MOCK_IP_CHECK=1` yalnızca ağ sorgusunu taklit eder. Yüz, ses ve kart doğrulaması için ilgili Python ortamı ayrıca kurulmalıdır. Klavye doğrulamasının TypeScript akışı Python gerektirmez; sabit metin akışı Python kullanır.
 
 ## Yapılandırma
+
+### Tanıtım sitesi
+
+Tanıtım sitesi API veya Python modellerine ihtiyaç duymadan çalışır:
+
+```powershell
+pnpm dev:landing
+# Üretim derlemesi:
+pnpm build:landing
+```
+
+Yerel adres: `http://localhost:5174`. Site; beş doğrulama modülünü, temsili
+biyometrik görselleri ve üç etkileşimli oturum senaryosunu içerir. Bu senaryolar
+gerçek doğrulama yapmaz; kamera, mikrofon veya konum izni istemez.
+Hareketler hero'daki düğmeyle duraklatılabilir ve sistemin azaltılmış hareket
+tercihi desteklenir. Mevcut Playground ve kayıt/giriş demosu kendi adreslerinde
+çalışmaya devam eder.
+
+### Ortam değişkenleri
 
 `packages/node-auth/.env.example` API değişkenlerini, `apps/demo-web/.env.example` ise web değişkenlerini gösterir. API `.env` dosyasını otomatik yüklemez; değişkenleri API'yi başlattığınız terminalde tanımlayın. Vite için örnek dosyayı kopyalayabilirsiniz:
 

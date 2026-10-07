@@ -9,6 +9,8 @@
     "build": "pnpm -r build",
     "dev": "node scripts/dev.mjs",
     "dev:node": "node scripts/dev.mjs node",
+    "dev:landing": "pnpm --filter landing-web dev",
+    "build:landing": "pnpm --filter landing-web build",
     "lint": "echo \"(todo)\"",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --filter @securekit/node-auth --filter @securekit/web-sdk test",
