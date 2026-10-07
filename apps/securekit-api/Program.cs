@@ -22,6 +22,9 @@ builder.Services.AddSingleton<FaceVerification>();
 builder.Services.AddSingleton<VoiceOptions>();
 builder.Services.AddSingleton<IVoicePython, VoicePython>();
 builder.Services.AddSingleton<VoiceVerification>();
+builder.Services.AddSingleton<CardOptions>();
+builder.Services.AddSingleton<ICardPython, CardPython>();
+builder.Services.AddSingleton<CardVerification>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

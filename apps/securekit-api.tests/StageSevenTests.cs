@@ -4,6 +4,8 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SecureKit.Api.Services;
 using SecureKit.Api.Tests.Support;
 
 namespace SecureKit.Api.Tests;
@@ -118,5 +120,65 @@ public sealed class StageSevenTests
     {
         using var f = new Factory(); using var client = f.CreateClient(); await Send(client, Form(), 404);
         f.References(); await Send(client, Form(reference: "../test-card.jpg"), 404); await Send(client, Form("missing"), 404);
+    }
+    [Fact]
+    public async Task EnrollmentPreservesOtherBiometricsAndConcurrentReplacementLeavesOneFile()
+    {
+        using var f = new Factory(); using var client = f.CreateClient();
+        var storage = f.Services.GetRequiredService<IProfileStorage>();
+        await storage.SaveProfilesAsync("u", new JsonObject { ["userId"] = "u", ["voiceEmbedding"] = new JsonArray(1, 0), ["faceReferenceImagePath"] = "face.jpg" });
+        await Task.WhenAll(Enumerable.Range(0, 3).Select(_ => Send(client, Form("u", field: "referenceImage"), enroll: true)));
+        var stored = await storage.GetProfilesAsync("u"); Assert.Equal("face.jpg", stored!["faceReferenceImagePath"]!.GetValue<string>());
+        Assert.Equal(1, stored["voiceEmbedding"]![0]!.GetValue<int>()); Assert.Single(Directory.GetFiles(Path.Combine(f.Root, "users")));
+    }
+    [Theory]
+    [InlineData(true)] [InlineData(false)]
+    public async Task CancellationAndTimeoutStopWorkerAndChildrenAndCleanImages(bool cancel)
+    {
+        using var f = new Factory(); f.References();
+        var script = Path.Combine(f.Root, "cancel.py"); var pid = Path.Combine(f.Root, "pid.txt");
+        await File.WriteAllTextAsync(script, "import os,time,pathlib,subprocess,sys\nchild=subprocess.Popen([sys.executable,'-c','import time; time.sleep(20)'])\npathlib.Path(" + System.Text.Json.JsonSerializer.Serialize(pid) + ").write_text(str(os.getpid())+','+str(child.pid))\ntime.sleep(20)");
+        f.Settings["Card:ScriptPath"] = script; f.Settings["CARD_PYTHON_TIMEOUT_MS"] = "2000";
+        var service = f.Services.GetRequiredService<CardVerification>();
+        using var stream = new MemoryStream(new byte[16]);
+        var file = new Microsoft.AspNetCore.Http.FormFile(stream, 0, 16, "probeImage", "probe.jpg") { Headers = new Microsoft.AspNetCore.Http.HeaderDictionary(), ContentType = "image/jpeg" };
+        using var cancellation = new CancellationTokenSource(); var run = service.VerifyAsync(null, null, file, null, cancellation.Token);
+        for (var i = 0; i < 100 && !File.Exists(pid); i++) await Task.Delay(20);
+        Assert.True(File.Exists(pid)); var ids = (await File.ReadAllTextAsync(pid)).Split(',').Select(int.Parse).ToArray();
+        if (cancel) { cancellation.Cancel(); await Assert.ThrowsAnyAsync<OperationCanceledException>(() => run); }
+        else Assert.Equal("PYTHON_TIMEOUT", (await Assert.ThrowsAsync<CardFailure>(() => run)).Code);
+        foreach (var processId in ids)
+        {
+            bool Stopped() { try { using var p = System.Diagnostics.Process.GetProcessById(processId); return p.HasExited; } catch (ArgumentException) { return true; } }
+            for (var i = 0; i < 50 && !Stopped(); i++) await Task.Delay(20);
+            Assert.True(Stopped(), $"Card worker {processId} is still running.");
+        }
+        f.Clean();
+    }
+    [Theory]
+    [InlineData("[]")]
+    [InlineData("{}")]
+    [InlineData("{\"event\":\"ready\",\"ok\":false,\"reason\":\"invalid_request\"}")]
+    public async Task InvalidStartupIsRejected(string payload)
+    {
+        using var f = new Factory(); f.References(); var script = Path.Combine(f.Root, "bad.py");
+        await File.WriteAllTextAsync(script, "print(" + System.Text.Json.JsonSerializer.Serialize(payload) + ",flush=True)"); f.Settings["Card:ScriptPath"] = script;
+        using var client = f.CreateClient(); var result = await Send(client, Form(), 502);
+        Assert.Equal("PYTHON_OUTPUT_INVALID", result["error"]!["code"]!.GetValue<string>()); f.Clean();
+    }
+    [Fact]
+    public async Task StartupDependencyErrorIsMapped()
+    {
+        using var f = new Factory(); f.References(); var script = Path.Combine(f.Root, "missing.py");
+        await File.WriteAllTextAsync(script, "import securekit_missing_card_dependency"); f.Settings["Card:ScriptPath"] = script;
+        using var client = f.CreateClient(); var result = await Send(client, Form(), 502);
+        Assert.Equal("PYTHON_PROCESS_ERROR", result["error"]!["code"]!.GetValue<string>()); Assert.Contains("securekit_missing_card_dependency", result["error"]!["message"]!.GetValue<string>()); f.Clean();
+    }
+    [Fact]
+    public async Task StoredReferenceOutsideAllowedRootsIsRejected()
+    {
+        using var f = new Factory(); using var client = f.CreateClient();
+        await f.Services.GetRequiredService<IProfileStorage>().SaveProfilesAsync("u", new JsonObject { ["cardReferenceImagePath"] = Path.Combine(f.Root, "outside.jpg") });
+        await Send(client, Form("u"), 400);
     }
 }

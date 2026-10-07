@@ -15,11 +15,12 @@ public sealed class HealthTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task UnmigratedBiometricRoutesAreNotExposed()
+    public async Task CardEnrollmentRouteValidatesMissingUpload()
     {
         using var client = factory.CreateClient();
         using var response = await client.PostAsync("/enroll/card/reference", null);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        var json = await ContractAssert.JsonResponseAsync(response, HttpStatusCode.BadRequest);
+        Assert.Equal("referenceImage is required.", json["error"]!["message"]!.GetValue<string>());
     }
 
     [Fact]
