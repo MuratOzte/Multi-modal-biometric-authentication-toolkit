@@ -1,48 +1,38 @@
-import { useEffect, useRef, useState } from "react";
-import { Face, Icon, Mark, SignalVisual } from "./Visuals";
+import { useEffect, useState } from "react";
+import { IdentityTrace, Icon, Mark, SignalVisual } from "./Visuals";
 
 const repository =
   "https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit";
 const modules = [
   {
     title: "Yazım ritminiz.",
-    sub: "Her tuşta size ait bir iz.",
     tag: "DAVRANIŞSAL BİYOMETRİ",
     text: "Tuşlara basma ve tuşlar arasındaki geçiş süreleriyle kişiye özgü bir biyometrik profil oluşturun.",
-    detail: "Sabit ve dinamik metin doğrulaması",
-    tech: "TypeScript · Keystroke dynamics",
+    href: "#/wiki/2.2.2-keystroke-session-and-risk-services",
   },
   {
     title: "Yüzünüz.",
-    sub: "Bir görüntüden daha fazlası.",
     tag: "GÖRSEL BİYOMETRİ",
     text: "Referans yüz ile yeni örneği karşılaştırın. Canlılık sinyallerini doğrulama akışına dahil edin.",
-    detail: "Yüz benzerliği ve canlılık sinyalleri",
-    tech: "MTCNN · FaceNet",
+    href: "#/wiki/5.1-face-and-voice-workers",
   },
   {
     title: "Sesiniz.",
-    sub: "Kimliğinizin duyulan hali.",
     tag: "SES BİYOMETRİSİ",
     text: "Konuşmacı benzerliğini ve söylenen challenge metnini birlikte değerlendirin.",
-    detail: "Konuşmacı ve metin doğrulaması",
-    tech: "SpeechBrain · Whisper",
+    href: "#/wiki/5.1-face-and-voice-workers",
   },
   {
     title: "Kartınız.",
-    sub: "Görüntüyü bilgiye dönüştürün.",
     tag: "BELGE DOĞRULAMA",
     text: "Kartı yakalayın ve hizalayın. Metin alanlarını çıkarın, referansla görsel benzerliğini karşılaştırın.",
-    detail: "Kart yakalama, OCR ve benzerlik",
-    tech: "PaddleOCR · OpenCLIP",
+    href: "#/wiki/5.2-card-verification-worker",
   },
   {
     title: "Bağlamınız.",
-    sub: "Oturumun arkasındaki sinyaller.",
     tag: "AĞ & KONUM",
     text: "IP, VPN, proxy, Tor ve ülke sinyallerini oturum politikanız üzerinden değerlendirin.",
-    detail: "Biyometrinin yanında bağlamsal kontrol",
-    tech: "IP analizi · Konum politikası",
+    href: "#/wiki/5.3-ip-check-and-environment-setup",
   },
 ];
 const scenarios = [
@@ -73,11 +63,9 @@ const scenarios = [
 ];
 
 function App() {
-  const [active, setActive] = useState(0);
   const [scenario, setScenario] = useState(0);
   const [paused, setPaused] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const moduleRows = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -85,22 +73,6 @@ function App() {
       if (id && !id.startsWith("/")) document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
     });
     return () => cancelAnimationFrame(frame);
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting)
-            setActive(Number((entry.target as HTMLElement).dataset.module));
-        });
-      },
-      { rootMargin: "-25% 0px -45% 0px", threshold: 0 },
-    );
-    moduleRows.current.forEach((row) => {
-      if (row) observer.observe(row);
-    });
-    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -204,15 +176,10 @@ function App() {
               </div>
             </div>
             <div className="hero-visual hero-enter">
-              <div className="visual-topline">
-                <span>SECUREKIT / IDENTITY ENGINE</span>
-                <span>01 — 05</span>
-              </div>
-              <Face hero />
+              <IdentityTrace />
               <div className="hero-visual-bottom">
                 <span>
-                  <span className="status-dot" /> BİR KİMLİK. BİRDEN FAZLA
-                  SİNYAL.
+                  Size ait tek bir iz.
                 </span>
                 <button
                   className="motion-control"
@@ -258,81 +225,29 @@ function App() {
               Birlikte daha kapsamlı bir doğrulama akışı oluştururlar.
             </p>
           </div>
-          <div className="module-layout">
-            <div className="module-stories">
-              {modules.map((module, i) => (
-                <article
-                  id={`module-${i}`}
-                  data-module={i}
-                  key={module.title}
-                  ref={(el) => {
-                    moduleRows.current[i] = el;
-                  }}
-                  className={`module-story ${active === i ? "active" : ""}`}
-                >
-                  <div className="module-number">
-                    0{i + 1}
-                    <span />
-                    <Icon kind={i} />
-                  </div>
-                  <p className="eyebrow">{module.tag}</p>
-                  <h3>
-                    {module.title}
-                    <span>{module.sub}</span>
-                  </h3>
-                  <p>{module.text}</p>
-                  <div className="module-detail">
-                    <span>↳</span>
-                    {module.detail}
-                  </div>
-                  <div className="mobile-module-visual">
-                    <SignalVisual active={i} />
-                  </div>
-                </article>
-              ))}
-            </div>
-            <div className="module-sticky">
-              <div className="module-stage">
-                <div className="stage-header">
-                  <span>SİNYAL GÖRÜNÜMÜ</span>
-                  <span>0{active + 1} / 05</span>
+          <div className="capability-list">
+            {modules.map((module, i) => (
+              <article
+                id={`module-${i}`}
+                key={module.title}
+                className="capability-block"
+              >
+                <div className="capability-copy">
+                  <p className="capability-badge">
+                    <span className="status-dot" />
+                    {module.tag}
+                  </p>
+                  <h3>{module.title}</h3>
+                  <p className="capability-description">{module.text}</p>
+                  <a className="capability-link" href={module.href}>
+                    Teknik detaylar <span aria-hidden="true">→</span>
+                  </a>
                 </div>
-                <div className="stage-visual" key={active}>
-                  <SignalVisual active={active} />
+                <div className="capability-art">
+                  <SignalVisual active={i} />
                 </div>
-                <div className="stage-footer">
-                  <span className="status-dot" />
-                  <span>{modules[active].tech}</span>
-                  <span className="stage-example">ÖRNEK GÖRSEL</span>
-                </div>
-              </div>
-              <div className="module-tabs" aria-label="Modül görseli">
-                {modules.map((module, i) => (
-                  <button
-                    key={i}
-                    aria-label={`${module.title} bölümüne git`}
-                    aria-pressed={active === i}
-                    onClick={() => {
-                      setActive(i);
-                      moduleRows.current[i]?.scrollIntoView({
-                        behavior: window.matchMedia(
-                          "(prefers-reduced-motion: reduce)",
-                        ).matches
-                          ? "instant"
-                          : "smooth",
-                        block: "center",
-                      });
-                    }}
-                  >
-                    <span>0{i + 1}</span>
-                    <Icon kind={i} />
-                  </button>
-                ))}
-              </div>
-              <p className="stage-note">
-                Temsili görseller. Kamera veya mikrofon erişimi gerektirmez.
-              </p>
-            </div>
+              </article>
+            ))}
           </div>
         </section>
         <section className="flow-section section" id="flow">

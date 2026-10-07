@@ -1,5 +1,3 @@
-import { useId, type CSSProperties } from "react";
-
 export function Mark({ small = false }: { small?: boolean }) {
   return (
     <svg
@@ -15,6 +13,32 @@ export function Mark({ small = false }: { small?: boolean }) {
         strokeWidth="2"
       />
       <path d="m13 20 5 5 10-12" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+export function IdentityTrace() {
+  return (
+    <svg
+      className="identity-trace"
+      viewBox="0 0 600 480"
+      role="img"
+      aria-label="Kimliğin kişiye özgü izini temsil eden sade parmak izi çizimi"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+    >
+      <path d="M178 205c0-77 49-127 122-127 69 0 122 51 122 122" />
+      <path d="M157 260c10-20 7-40 7-60 0-87 57-136 136-136 82 0 136 57 136 136 0 33-2 59-10 87" />
+      <path d="M180 288c15-30 12-58 12-83 0-66 44-113 108-113 63 0 108 46 108 108 0 58-5 106-28 149" />
+      <path d="M196 317c25-35 10-78 10-112 0-58 38-99 94-99 55 0 94 39 94 94 0 69-11 124-40 172" />
+      <path d="M216 337c30-39 4-94 4-132 0-49 32-85 80-85 47 0 80 33 80 80 0 78-16 137-50 185" />
+      <path d="M239 351c29-46-5-102-5-146 0-42 27-71 66-71 38 0 66 28 66 66 0 87-21 149-58 193" />
+      <path d="M259 320c0-42-11-77-11-115 0-33 21-57 52-57 30 0 52 22 52 52 0 94-24 157-65 194" />
+      <path className="identity-trace-accent" d="M274 302c0-34-12-65-12-97 0-26 15-43 38-43s38 16 38 38c0 97-29 158-71 189" />
+      <path d="M289 280c0-25-13-48-13-75 0-18 9-29 24-29s24 10 24 24c0 77-19 129-48 162" />
+      <path d="M300 200c0 36 14 67 5 107" />
     </svg>
   );
 }
@@ -61,236 +85,70 @@ export function Icon({ kind }: { kind: number }) {
   );
 }
 
-// A deterministic point cloud: raised nose, recessed eyes, lips and cheekbones.
-const facePoints: { x: number; y: number; r: number; opacity: number }[] = [];
-for (let row = 0; row <= 73; row++) {
-  const v = row / 73;
-  const y = -1 + v * 2;
-  const width =
-    Math.sqrt(Math.max(0, 1 - y * y)) * (y > 0.35 ? 1 - (y - 0.35) * 0.3 : 1);
-  for (let col = 0; col <= 46; col++) {
-    const u = -1 + col / 23;
-    const x = u * width;
-    const surface =
-      Math.sqrt(Math.max(0, 1 - u * u)) * Math.sqrt(Math.max(0, 1 - y * y));
-    const nose = 0.5 * Math.exp((-x * x) / 0.014 - (y - 0.03) ** 2 / 0.11);
-    const eye =
-      0.18 *
-      Math.exp(-((Math.abs(x) - 0.32) ** 2) / 0.013 - (y + 0.19) ** 2 / 0.007);
-    const lips = 0.13 * Math.exp((-x * x) / 0.09 - (y - 0.42) ** 2 / 0.004);
-    const z = surface + nose - eye + lips;
-    facePoints.push({
-      x: 280 + x * 122 + z * 38,
-      y: 233 + y * 165 - z * 7,
-      r: 0.7 + z * 0.48,
-      opacity: 0.18 + z * 0.49,
-    });
-  }
-}
-
-export function Face({ hero = false }: { hero?: boolean }) {
-  const scanId = useId();
+// Static line illustrations share the hero's ink and violet accent.
+export function SignalVisual({ active }: { active: number }) {
+  const labels = [
+    "Yazım ritmini temsil eden tuşlar ve çizgiler",
+    "Yüz biyometrisini temsil eden sade yüz çizimi",
+    "Ses biyometrisini temsil eden sabit ses dalgaları",
+    "Belge doğrulamayı temsil eden sade kimlik kartı",
+    "Ağ ve konumu temsil eden sade küre çizimi",
+  ];
+  const illustrations = [
+    <>
+      <path d="M164 169h44m24 0h88m24 0h92M164 185h76m24 0h40m24 0h108M164 201h28m24 0h92m24 0h104" />
+      <rect x="145" y="239" width="64" height="64" rx="10" />
+      <rect x="227" y="239" width="64" height="64" rx="10" />
+      <rect className="signal-accent" x="309" y="239" width="64" height="64" rx="10" />
+      <rect x="391" y="239" width="64" height="64" rx="10" />
+      <path d="M164 327h272M166 352h268" />
+      <path className="signal-accent" d="M324 271h34" />
+    </>,
+    <>
+      <path d="M207 205c-9-80 29-121 93-121s102 41 93 121l-12 85c-5 41-45 89-81 89s-76-48-81-89Z" />
+      <path d="M222 196c-7-65 22-97 78-97s85 32 78 97M238 184c0-49 22-70 62-70s62 21 62 70" />
+      <path d="M237 217c11-8 25-8 37 0m52 0c12-8 26-8 37 0M242 232c8 6 16 6 25 0m66 0c9 6 17 6 25 0" />
+      <path className="signal-accent" d="M302 225v49c0 8 6 12 16 12" />
+      <path d="M274 312c16 10 36 10 52 0M252 343c14 15 29 23 48 23s34-8 48-23" />
+    </>,
+    <>
+      {[172, 202, 232, 262, 292].map((y, i) => (
+        <path
+          key={y}
+          className={i === 2 ? "signal-accent" : undefined}
+          d={`M135 ${y}h40c30 0 30-48 60-48s30 96 60 96 30-96 60-96 30 48 60 48h50`}
+        />
+      ))}
+    </>,
+    <>
+      <rect x="142" y="133" width="316" height="216" rx="18" />
+      <path d="M157 119h286M157 363h286" />
+      <rect x="174" y="181" width="100" height="116" rx="8" />
+      <circle cx="224" cy="217" r="18" />
+      <path d="M193 280v-11c0-33 62-33 62 0v11M304 190h116M304 214h82M304 263h116M304 287h64" />
+      <path className="signal-accent" d="m376 316 12 12 27-28" />
+    </>,
+    <>
+      <circle cx="300" cy="240" r="132" />
+      <ellipse cx="300" cy="240" rx="96" ry="132" />
+      <ellipse cx="300" cy="240" rx="48" ry="132" />
+      <path d="M168 240h264M186 174c62 27 166 27 228 0M186 306c62-27 166-27 228 0" />
+      <path className="signal-accent" d="M300 108c43 57 43 207 0 264" />
+    </>,
+  ];
   return (
     <svg
-      className={`face-art ${hero ? "hero-face" : ""}`}
+      className="signal-illustration"
       viewBox="0 0 600 480"
       role="img"
-      aria-label="Yüz biyometrisini temsil eden üç boyutlu nokta bulutu"
+      aria-label={labels[active]}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <defs>
-        <linearGradient id={scanId} x1="0" y1="0" x2="1" y2="0">
-          <stop stopColor="#6b2bea" stopOpacity="0" />
-          <stop offset=".5" stopColor="#6b2bea" stopOpacity=".7" />
-          <stop offset="1" stopColor="#6b2bea" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <g className="face-orbits" fill="none" stroke="#d8d7e2" strokeWidth=".8">
-        <ellipse cx="310" cy="235" rx="210" ry="210" />
-        <ellipse cx="310" cy="235" rx="164" ry="164" />
-        <path d="M65 235h475M310 17v436" strokeDasharray="3 7" />
-        <ellipse
-          cx="310"
-          cy="235"
-          rx="223"
-          ry="72"
-          transform="rotate(-28 310 235)"
-        />
-      </g>
-      <g fill="#6b2bea">
-        {facePoints.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={p.r} opacity={p.opacity} />
-        ))}
-      </g>
-      <g fill="none" stroke="#0a0f1f" opacity=".65">
-        <path d="M187 115h-14v25m262-25h14v25M173 334v25h14m262-25v25h-14" />
-      </g>
-      <g className="scan-line">
-        <path d="M145 238h326" stroke={`url(#${scanId})`} strokeWidth="2" />
-        <circle cx="319" cy="238" r="4" fill="#6b2bea" />
-      </g>
-      <g
-        className="face-landmarks"
-        fill="#fff"
-        stroke="#6b2bea"
-        strokeWidth="1.3"
-      >
-        <circle cx="268" cy="195" r="4" />
-        <circle cx="347" cy="195" r="4" />
-        <circle cx="341" cy="235" r="4" />
-        <circle cx="319" cy="300" r="4" />
-      </g>
-      {hero && (
-        <>
-          <path
-            d="m271 194-93-29H76m264 70 104 42h90m-215 24-114 67h-91"
-            fill="none"
-            stroke="#d8d7e2"
-          />
-          <g fill="#777783" fontSize="10" fontFamily="monospace">
-            <text x="76" y="151">
-              FACE / LANDMARKS
-            </text>
-            <text x="456" y="264">
-              IDENTITY VECTOR
-            </text>
-            <text x="114" y="385">
-              MULTI-MODAL INPUT
-            </text>
-          </g>
-          <circle cx="95" cy="235" r="3" fill="#0a0f1f" />
-          <circle cx="461" cy="91" r="3" fill="#6b2bea" />
-        </>
-      )}
+      {illustrations[active]}
     </svg>
-  );
-}
-
-export function SignalVisual({ active }: { active: number }) {
-  if (active === 1) return <Face />;
-  if (active === 0)
-    return (
-      <div className="keyboard-visual">
-        <div className="rhythm-lines">
-          {Array.from({ length: 36 }, (_, i) => (
-            <span
-              key={i}
-              style={
-                {
-                  height: `${18 + Math.sin(i * 2.3) ** 2 * 88}px`,
-                  "--delay": `${i * 45}ms`,
-                } as CSSProperties
-              }
-            />
-          ))}
-        </div>
-        <div className="keys">
-          {"SECURE".split("").map((key, i) => (
-            <span
-              key={i}
-              style={{ "--delay": `${i * 180}ms` } as CSSProperties}
-            >
-              {key}
-            </span>
-          ))}
-        </div>
-        <div className="visual-caption">
-          <span>keydown</span>
-          <span>hold time</span>
-          <span>keyup</span>
-        </div>
-      </div>
-    );
-  if (active === 2)
-    return (
-      <div className="voice-visual">
-        <div className="waveform">
-          {Array.from({ length: 57 }, (_, i) => (
-            <span
-              key={i}
-              style={
-                {
-                  height: `${6 + Math.sin(i * 0.63) ** 2 * Math.sin((i / 57) * Math.PI) * 120}px`,
-                  "--delay": `${i * 32}ms`,
-                } as CSSProperties
-              }
-            />
-          ))}
-        </div>
-        <span className="wave-line" />
-        <p>“Kimliğimi sesimle doğruluyorum.”</p>
-        <span className="visual-caption">
-          KONUŞMACI BENZERLİĞİ + METİN KONTROLÜ
-        </span>
-      </div>
-    );
-  if (active === 3)
-    return (
-      <div className="card-visual">
-        <div className="sample-card">
-          <div className="card-top">
-            <Mark small />
-            <span>ÖRNEK KART</span>
-          </div>
-          <div className="card-content">
-            <div className="portrait-placeholder">
-              <svg viewBox="0 0 80 100" aria-hidden="true">
-                <circle cx="40" cy="32" r="17" />
-                <path d="M10 100V82c0-35 60-35 60 0v18" />
-              </svg>
-            </div>
-            <div>
-              <small>KART SAHİBİ</small>
-              <strong>Deniz Örnek</strong>
-              <small>KART NUMARASI</small>
-              <span>SK · 0000 0000</span>
-            </div>
-          </div>
-          <div className="card-bottom">
-            <span>SECUREKIT / DEMO</span>
-            <span>▥ ▥ ▥</span>
-          </div>
-        </div>
-        <p className="visual-caption">HİZALAMA → OCR → GÖRSEL KARŞILAŞTIRMA</p>
-      </div>
-    );
-  return (
-    <div className="network-visual">
-      <svg
-        viewBox="0 0 500 310"
-        role="img"
-        aria-label="Ağ ve konum sinyallerinin birleşimi"
-      >
-        <g stroke="#d8d7e2" fill="none">
-          <ellipse cx="250" cy="155" rx="116" ry="116" />
-          <ellipse cx="250" cy="155" rx="56" ry="116" />
-          <ellipse cx="250" cy="155" rx="116" ry="47" />
-          <path d="M134 155h232M250 39v232M72 74l178 81 172-60M97 244l153-89 154 93" />
-        </g>
-        <g fill="#fff" stroke="#0a0f1f">
-          {[
-            [72, 74],
-            [422, 95],
-            [97, 244],
-            [404, 248],
-          ].map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r="8" />
-          ))}
-        </g>
-        <circle
-          className="network-pulse"
-          cx="250"
-          cy="155"
-          r="22"
-          fill="#0a0f1f"
-        />
-        <path
-          d="m241 155 6 6 13-13"
-          stroke="#fff"
-          strokeWidth="2"
-          fill="none"
-        />
-      </svg>
-      <p className="visual-caption">IP · VPN · PROXY · TOR · KONUM</p>
-    </div>
   );
 }
