@@ -1,0 +1,116 @@
+<h1 id="biometric-acceptance-harness">Biometric Acceptance Harness</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-acceptance.example.json" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-acceptance.example.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-manual-acceptance.example.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-manual-acceptance.example.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.test.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.test.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.test.mjs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>The Biometric Acceptance Harness provides an end-to-end local validation framework for SecureKit&#x27;s multi-modal biometric authentication models (face, voice, card). While protocol and HTTP-level compliance are handled by automated test suites, actual hardware, model weights, and inference outputs are verified using the acceptance scripts located under <code>scripts/</code> and documented in <code>docs/BIOMETRIC_ACCEPTANCE.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-7</a></p>
+<p>The harness operates by spinning up an isolated, ephemeral instance of the C# ASP.NET Core API with temporary file stores, reading a user-supplied JSON manifest containing consented local sample assets, exercising the production Python workers (<code>face_verification.py</code>, <code>voice_worker.py</code>, <code>main.py</code>), and asserting strict pass/fail criteria without leaking privacy-sensitive paths, embeddings, or transcription texts into shared git history or logs <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-64</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L1-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 1-110</a></p>
+<hr>
+<h2 id="preparation-workspace-and-status-tooling">Preparation, Workspace, and Status Tooling</h2>
+<p>Before executing biometric acceptance tests, the workspace must be initialized using preparation scripts that copy template files and establish git-ignored local directories.</p>
+<h3 id="preparation-flow-object-object">Preparation Flow (<code>scripts/biometric-acceptance-prepare.mjs</code>)</h3>
+<p>The preparation script copies example manifests and manual logs into <code>.run-logs/acceptance/</code>, ensuring exclusive creation semantics (<code>COPYFILE_EXCL</code>) so that existing user captures or observations are never overwritten on subsequent runs <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L8-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 8-26</a></p>
+<pre></pre>
+<p><em>Figure 1: Preparation Workflow Architecture linking CLI commands to <code>prepareAcceptance</code> in <code>scripts/biometric-acceptance-prepare.mjs</code>.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 1-48</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.test.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.test.mjs 1-48</a></p>
+<h3 id="status-verification-object-object">Status Verification (<code>scripts/biometric-acceptance-status.mjs</code>)</h3>
+<p>The status tool evaluates local manifest validity and sample readiness without initializing models, APIs, or hardware devices <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L104-L108" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 104-108</a> It parses the manifest and runs module-specific validation, returning explicit status tokens (<code>ready</code>, <code>blocked</code>, <code>not-selected</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L20-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 20-51</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L1-L78" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 1-78</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.test.mjs#L1-L105" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.test.mjs 1-105</a></p>
+<hr>
+<h2 id="manifest-schema-validation-and-distinct-sample-checks">Manifest Schema, Validation, and Distinct Sample Checks</h2>
+<p>The acceptance manifest (<code>manifest.json</code>) defines file references and spoken texts for face, voice, and card evaluation modules <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L65-L73" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 65-73</a> Validation logic resides in <code>validateManifest()</code> inside <code>scripts/biometric-acceptance.mjs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L21-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 21-58</a></p>
+<pre></pre>
+<p><em>Figure 2: Manifest parsing and validation pipeline bridging natural language manifest configuration to <code>validateManifest</code> and <code>requireDistinct</code> functions.</em></p>
+<h3 id="validation-rules-and-constraints">Validation Rules and Constraints</h3>
+<ul>
+<li><strong>File Types</strong>: Audio files must use extensions <code>.wav</code>, <code>.webm</code>, <code>.mp3</code>, <code>.m4a</code>, or <code>.ogg</code>. Images must use <code>.jpg</code>, <code>.jpeg</code>, <code>.png</code>, or <code>.webp</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L124-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 124</a></li>
+<li><strong>Size Limits</strong>: Audio samples are capped at <code>12 MiB</code>, and image samples are capped at <code>5 MiB</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L125-L125" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 125</a></li>
+<li><strong>Distinctness</strong>: Reusing the exact same file path or identical file contents (verified via SHA-256 digests) across positive and negative captures triggers validation errors such as <code>FACE_DISTINCT_SAMPLES_REQUIRED</code>, <code>VOICE_DISTINCT_SAMPLES_REQUIRED</code>, or <code>CARD_DISTINCT_SAMPLES_REQUIRED</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L34-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 34-38</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.test.mjs#L98-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.test.mjs 98-110</a></li>
+<li><strong>Voice Requirements</strong>: Voice manifests require exactly three enrollment samples, a <code>sameSpeaker</code> sample, a <code>differentSpeaker</code> sample, and a distinct <code>wrongText</code> string <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L46-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 46-51</a></li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L16-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 16-58</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L122-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 122-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-acceptance.example.json#L1-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-acceptance.example.json 1-22</a></p>
+<hr>
+<h2 id="isolated-ephemeral-api-execution-and-worker-binding">Isolated Ephemeral API Execution and Worker Binding</h2>
+<p>To prevent pollution of existing profile stores and test against clean state, the test runner spawns an isolated instance of the ASP.NET Core API (<code>SecureKit.Api.dll</code>) on a randomized ephemeral port (<code>http://127.0.0.1:0</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L63" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-63</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a></p>
+<h3 id="process-isolation-and-storage-overrides">Process Isolation and Storage Overrides</h3>
+<p>The <code>startApi()</code> function configures environment variables that route file persistence, user databases, and worker temp directories to ephemeral subdirectories inside an isolated temporary directory <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L98" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-98</a></p>
+<pre><pre><code>// Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98ASPNETCORE_ENVIRONMENT = &quot;Testing&quot;MOCK_IP_CHECK = &quot;1&quot;SECUREKIT_PROFILE_STORE = &quot;&lt;temp-dir&gt;/profiles.json&quot;SECUREKIT_USERS_FILE = &quot;&lt;temp-dir&gt;/users.json&quot;SECUREKIT_KEYSTROKE_STORE = &quot;&lt;temp-dir&gt;/keystroke&quot;Face__TempRoot = &quot;&lt;temp-dir&gt;/face-temp&quot;Face__ReferenceDirectory = &quot;&lt;temp-dir&gt;/face-references&quot;Voice__TempRoot = &quot;&lt;temp-dir&gt;/voice-temp&quot;Card__TempRoot = &quot;&lt;temp-dir&gt;/card-temp&quot;FACE_PYTHON_SCRIPT_PATH = &quot;python/face_verification/face_verification.py&quot;VOICE_PYTHON_SCRIPT_PATH = &quot;python/voice_verification/voice_worker.py&quot;CARD_PYTHON_SCRIPT_PATH = &quot;python/card_verification/main.py&quot;</code></pre></pre>
+<p>When the test run concludes (whether passing or failing), the child process is terminated via signal or process-tree cleanup, and the temporary directory is purged <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L61-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 61</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L101-L101" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 101</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-64</a></p>
+<hr>
+<p>Title: Acceptance Pass Criteria and Privacy-Safe Reporting Architecture</p>
+<pre></pre>
+<p><em>Figure 3: Acceptance decision and privacy-safe reporting flow illustrating the <code>accepted</code> function in <code>scripts/biometric-acceptance.mjs</code>.</em></p>
+<h3 id="pass-criteria-rules-object-object">Pass Criteria Rules (<code>accepted</code>)</h3>
+<p>The <code>accepted(name, result)</code> function evaluates API response payloads against strict success definitions for each check type <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L61-L77" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 61-77</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Documentation table"><table><thead><tr><th>Check Name</th><th>Required API Response Condition</th><th>Code Reference</th></tr></thead><tbody><tr><td><code>face-enrollment</code></td><td><code>body.reference</code> is present and truthy</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L65-L65" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 65</a></td></tr><tr><td><code>face-same-person</code></td><td><code>body.matched === true</code>, finite <code>score</code>, no <code>failureCode</code></td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L66-L66" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 66</a></td></tr><tr><td><code>face-different-person</code></td><td><code>body.matched === false</code>, finite <code>score</code>, no <code>failureCode</code></td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L67-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 67</a></td></tr><tr><td><code>voice-enrollment</code></td><td><code>body.enrollmentProgress.complete === true</code>, sample count $\ge 3$</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L68-L68" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 68</a></td></tr><tr><td><code>voice-same-speaker</code></td><td><code>matched === true</code>, <code>decision === &quot;allow&quot;</code>, transcript matched</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L69-L69" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 69</a></td></tr><tr><td><code>voice-different-speaker</code></td><td><code>matched === false</code>, <code>decision === &quot;deny&quot;</code>, transcript matched</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L70-L70" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 70</a></td></tr><tr><td><code>voice-wrong-text</code></td><td><code>matched === false</code>, <code>decision === &quot;deny&quot;</code>, transcript mismatch</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L71-L71" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 71</a></td></tr><tr><td><code>card-same</code></td><td><code>matched === true</code>, decision <code>&quot;same&quot;</code>, OCR/CLIP backends valid</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L73-L73" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 73</a></td></tr><tr><td><code>card-different</code></td><td><code>matched === false</code>, decision <code>&quot;different&quot;</code>, OCR/CLIP backends valid</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L74-L74" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 74</a></td></tr></tbody></table></div>
+<h3 id="privacy-safe-reporting-object-object">Privacy-Safe Reporting (<code>safeReason</code>)</h3>
+<p>To maintain strict compliance with local data privacy, filesystem error handlers (<code>safeReason</code>) map raw Node error codes and exception messages to fixed, non-revealing error strings (e.g., <code>SAMPLE_FILE_MISSING</code>, <code>SAMPLE_UNREADABLE</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L14-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 14-18</a> Absolute filesystem paths, user identifiers, spoken phrases, OCR text fields, and vector embeddings are strictly excluded from automated output logs and CI reports <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L5-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 5-7</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 13</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L60-L82" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 60-82</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L13-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 13-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L5-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 5-7</a></p>

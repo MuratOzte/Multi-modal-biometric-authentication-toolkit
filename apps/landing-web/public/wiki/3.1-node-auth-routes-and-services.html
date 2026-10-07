@@ -1,0 +1,59 @@
+<h1 id="node-auth-routes-and-services">node-auth Routes and Services</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json</a></li>
+</ul>
+</details>
+<p>The <code>packages/node-auth</code> package provides the legacy Node.js and Express-based API backend for the SecureKit toolkit <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-37</a> It exposes multi-modal biometric authentication routes, challenge generation, session lifecycle management, and profile storage prior to full migration to ASP.NET Core <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 1-6</a> This page details the server bootstrap, Express routers, storage modules, and request/response contracts implemented in this package.</p>
+<hr>
+<h2 id="server-bootstrap-and-middleware-setup-object-object">Server Bootstrap and Middleware Setup (<code>server.ts</code>)</h2>
+<p>The Express application is bootstrapped in <code>packages/node-auth/src/server.ts</code> (referenced via <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>). It configures global middleware, global error handling, body parsing limits, and mounts all feature routers under standard base paths.</p>
+<h3 id="key-configuration-parameters">Key Configuration Parameters</h3>
+<ul>
+<li><strong>Base URL / Port</strong>: Typically hosted on <code>http://localhost:3001</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 10</a></li>
+<li><strong>CORS</strong>: Enabled globally via <code>cors()</code> permitting all origins without credential exposure <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 13</a></li>
+<li><strong>Payload Limits</strong>: JSON body parser size is capped at <code>2mb</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 13-14</a></li>
+<li><strong>Error Envelope</strong>: Non-parser route failures return structured JSON matching <code>{&quot;error&quot;:{&quot;code&quot;:&quot;...&quot;,&quot;message&quot;:&quot;...&quot;,&quot;details&quot;:{}}}</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L14-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 14-16</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-1.svg" alt="node-auth Routes and Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 1: Natural Language to Code Entity Space — Middleware and Router Dispatch Pipeline.</em></p>
+<p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>, <code>packages/node-auth/package.json</code></p>
+<hr>
+<h2 id="express-routers-and-endpoint-contracts">Express Routers and Endpoint Contracts</h2>
+<p>The API surface is partitioned into specialized Express routers located under <code>packages/node-auth/src/routes/</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L31-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 31-33</a></p>
+<h3 id="1-health-and-authentication-object-object-object-object">1. Health and Authentication (<code>auth.ts</code>, <code>legacyVerification.ts</code>)</h3>
+<ul>
+<li><code>GET /health</code>: Returns application health status <code>200 {&quot;ok&quot;:true}</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L37-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 37</a></li>
+<li><code>GET /auth/users</code>: Lists registered user records with creation and update timestamps <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L38-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 38</a></li>
+<li><code>POST /auth/register</code>: Registers a new user with <code>userId</code> and <code>password</code>. Returns <code>201</code> on creation or <code>200</code> if identical parameters exist <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L39-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 39</a></li>
+<li><code>POST /auth/login</code>: Authenticates credentials, returning <code>200</code> on success or <code>401 INVALID_CREDENTIALS</code> on mismatch <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L40-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 40</a></li>
+</ul>
+<h3 id="2-challenges-object-object">2. Challenges (<code>challenge.ts</code>)</h3>
+<ul>
+<li><code>POST /challenge/text</code>: Generates text verification challenges with configurable language (<code>lang</code>), length (<code>length</code>), and <code>wordCount</code> (defaulting to Turkish, short length, 120-second TTL) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L41-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 41-48</a></li>
+<li><code>POST /challenge/text/consume</code>: Consumes a challenge ID single-use token, returning errors (<code>404</code>, <code>410</code>, <code>409</code>) if invalid, expired, or already used <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L42-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 42-48</a></li>
+</ul>
+<h3 id="3-consent-and-profiles-object-object-object-object">3. Consent and Profiles (<code>consent.ts</code>, <code>profiles.ts</code>)</h3>
+<ul>
+<li><code>POST /consent</code>: Records user consent versions and timestamps <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L43-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 43</a></li>
+<li><code>GET /user/:userId/profiles</code>: Retrieves stored biometric profile references (keystroke, face, card, voice) for a given user <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L44-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 44</a></li>
+<li><code>DELETE /user/biometrics</code>: Clears stored biometric profiles and optionally consent records when <code>?deleteConsent=true</code> is provided <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L45-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 45-50</a></li>
+</ul>
+<h3 id="4-sessions-and-risk-evaluation-object-object-object-object">4. Sessions and Risk Evaluation (<code>session.ts</code>, <code>session/inMemoryStore.ts</code>)</h3>
+<ul>
+<li><code>POST /session/start</code>: Initializes a session with a default 900-second TTL <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L66-L69" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 66-69</a></li>
+<li><code>POST /verify/session</code>: Evaluates risk scores, policy compliance, and signal aggregations (location, network, voice, keystroke), yielding decisions of <code>allow</code>, <code>step-up</code>, or <code>deny</code> along with <code>requiredSteps</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L67-L75" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 67-75</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-2.svg" alt="node-auth Routes and Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 2: Natural Language to Code Entity Space — Session Verification and Risk Evaluation Flow.</em></p>
+<p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code></p>
+<hr>
+<h2 id="storage-modules-and-data-layer">Storage Modules and Data Layer</h2>
+<p>The <code>node-auth</code> package relies on lightweight in-memory and file-backed storage utilities to manage user registries, active challenges, and verification sessions.</p>
+<ul>
+<li><strong>Normalization Rules</strong>: User IDs are processed with <code>.trim().toLowerCase()</code> in authentication and card routers, and regular <code>.trim()</code> in secondary routers <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L25-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 25-26</a></li>
+<li><strong>State Stores</strong>: Transient states such as session timeouts and challenge consumption flags are maintained via <code>inMemoryStore.ts</code> modules to support fast validation cycles during testing and development <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L61-L62" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 61-62</a></li>
+</ul>
+<p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>, <code>packages/node-auth/package.json</code></p>

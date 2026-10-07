@@ -1,0 +1,48 @@
+<h1 id="biometric-preflight">Biometric Preflight</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py</a></li>
+</ul>
+</details>
+<h2 id="overview-and-scope">Overview and Scope</h2>
+<p>The Biometric Preflight subsystem (<code>scripts/biometric-preflight.mjs</code> and <code>scripts/biometric-preflight.py</code>) provides automated validation of runtime environments, third-party python dependencies, hardware acceleration (CUDA), and external system binaries (such as <code>ffmpeg</code>) required by SecureKit&#x27;s multimodal biometric verification workers. Before spinning up Python subprocess bridges in the ASP.NET Core API or legacy Node backend, the preflight script executes a series of safe, non-invasive probes that verify module importability without loading heavy ML weights into memory or downloading model checkpoints.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L1-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 1-11</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 1-6</a></p>
+<hr>
+<h2 id="binary-resolution-order">Binary Resolution Order</h2>
+<p>The Node.js orchestrator (<code>scripts/biometric-preflight.mjs</code>) resolves the appropriate Python interpreter for each biometric domain (<code>face</code>, <code>voice</code>, and <code>card</code>) using a strict precedence order.</p>
+<p>The binary resolution order evaluates:</p>
+<ol>
+<li><strong>Explicit Environment Variables</strong>: Checks <code>${PREFIX}_PYTHON_BIN</code>, <code>PYTHON_BIN</code>, and configuration-mapped command properties <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L41-L41" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 41</a></li>
+<li><strong>Local Virtual Environments</strong>: Checks if a local workspace virtual environment exists at <code>.venv-face</code>, <code>.venv-voice</code>, or <code>.venv-card</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L42-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 42</a></li>
+<li><strong>System Fallbacks</strong>: Defaults to platform-specific system Python (<code>py</code> on Windows, <code>python3</code> on POSIX systems) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 45</a></li>
+</ol>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/6.1-biometric-preflight-1.svg" alt="Biometric Preflight — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 1: Python binary resolution and subprocess spawning flow in <code>scripts/biometric-preflight.mjs</code>.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L39-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 39-50</a></p>
+<hr>
+<h2 id="python-probe-implementation-and-checks">Python Probe Implementation and Checks</h2>
+<p>The worker-side script (<code>scripts/biometric-preflight.py</code>) executes imports wrapped in <code>contextlib.redirect_stdout</code> and <code>contextlib.redirect_stderr</code> to prevent third-party initialization noise from corrupting JSON payloads <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 21-25</a></p>
+<p>The script validates distinct dependency arrays per domain:</p>
+<ul>
+<li><strong>Face</strong>: <code>numpy</code>, <code>PIL</code>, <code>torch</code>, <code>torchvision</code>, <code>facenet_pytorch</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 9</a></li>
+<li><strong>Voice</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
+<li><strong>Card</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/6.1-biometric-preflight-2.svg" alt="Biometric Preflight — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 2: Module verification pipeline executed inside <code>scripts/biometric-preflight.py</code>.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-49</a></p>
+<hr>
+<h2 id="run-log-output-and-acceptance-state">Run-Log Output and Acceptance State</h2>
+<p>Upon completing probes for all modules, <code>scripts/biometric-preflight.mjs</code> writes a consolidated diagnostic report to <code>.run-logs/biometric-preflight.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.gjs#L8-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.gjs 8-58</a></p>
+<p>The JSON report schema contains:</p>
+<ul>
+<li><code>checkedAt</code>: ISO timestamp of the run <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 9</a></li>
+<li><code>dependenciesPassed</code>: Boolean flag indicating whether all required (non-optional) checks passed across all modules <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L9-L56" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 9-56</a></li>
+<li><code>modelAcceptance</code>: Status string (<code>&quot;pending&quot;</code>, <code>&quot;passed&quot;</code>, or <code>&quot;failed&quot;</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10</a></li>
+<li><code>hardwareAcceptance</code>: Status string for GPU/camera/microphone availability <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10-59</a></li>
+<li><code>modules</code>: Array of individual module check results, runtime sources, and specific error metadata <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10-50</a></li>
+</ul>
+<p>If any non-optional check fails, the preflight script terminates with exit code <code>1</code>, halting automated pipelines before invalid worker environments can be initialized <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L60-L60" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 60</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L8-L60" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 8-60</a></p>

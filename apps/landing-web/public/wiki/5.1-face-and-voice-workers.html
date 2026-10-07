@@ -1,0 +1,119 @@
+<h1 id="face-and-voice-workers">Face and Voice Workers</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+</ul>
+</details>
+<p>This page details the implementation of the face and voice biometric workers within the SecureKit toolkit. These Python-based workers handle the core logic for face enrollment/verification using MTCNN and FaceNet, and voice enrollment/verification using Whisper and SpeechBrain. They are invoked by the ASP.NET Core API via a controlled process bridge.</p>
+<h2 id="face-verification-worker">Face Verification Worker</h2>
+<p>The face verification worker, located at <code>python/face_verification/face_verification.py</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L1-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 1-177</a> is responsible for detecting faces, extracting face embeddings, and comparing them for verification. It utilizes the MTCNN (Multi-task Cascaded Convolutional Networks) for face detection and FaceNet for generating high-dimensional face embeddings.</p>
+<h3 id="implementation-details">Implementation Details</h3>
+<p>The <code>face_verification.py</code> script can operate in two main modes:</p>
+<ol>
+<li><strong>Enrollment</strong>: Takes an image, detects a face, and returns its embedding.</li>
+<li><strong>Verification</strong>: Takes a reference embedding and a probe image, detects a face in the probe, extracts its embedding, and calculates the similarity between the two embeddings.</li>
+</ol>
+<p>The script uses <code>argparse</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L130-L147" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 130-147</a> to handle command-line arguments for specifying the operation mode (<code>--enroll</code> or <code>--verify</code>), input files (<code>--image</code>, <code>--reference</code>, <code>--probe</code>), and output format (<code>--json</code>).</p>
+<p>Key components and their roles:</p>
+<ul>
+<li><strong><code>FaceDetector</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L16-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 16-40</a>
+<ul>
+<li>Initializes the MTCNN model for face detection.</li>
+<li>The <code>detect_face</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L29-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 29-40</a> takes an image (as a NumPy array) and returns the bounding box coordinates of the detected face.</li>
+</ul>
+</li>
+<li><strong><code>FaceEmbedder</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L43-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 43-67</a>
+<ul>
+<li>Initializes the FaceNet model for embedding generation.</li>
+<li>The <code>get_embedding</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L56-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 56-67</a> takes a cropped face image and returns its 512-dimensional embedding.</li>
+</ul>
+</li>
+<li><strong><code>FaceVerifier</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L70-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 70-100</a>
+<ul>
+<li>Orchestrates the face detection and embedding process.</li>
+<li>The <code>enroll</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L79-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 79-84</a> detects a face in an image and returns its embedding.</li>
+<li>The <code>verify</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L86-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 86-100</a> takes a reference embedding and a probe image, extracts the probe&#x27;s embedding, and calculates the cosine similarity between them. It also applies a configurable threshold (<code>FACE_VERIFICATION_THRESHOLD</code>) to determine if the faces match.</li>
+</ul>
+</li>
+</ul>
+<p>The script also includes basic liveness detection by checking for a single, well-defined face in the image. If multiple faces are detected or no face is found, it returns an error.</p>
+<h3 id="data-flow">Data Flow</h3>
+<p>The ASP.NET Core API invokes the <code>face_verification.py</code> script as a child process.</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/5.1-face-and-voice-workers-1.svg" alt="Face and Voice Workers — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><strong>Diagram 1: Face Verification Worker Data Flow</strong></p>
+<p>Sources:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L1-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 1-177</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-166</a></li>
+</ul>
+<h3 id="configuration">Configuration</h3>
+<p>The face worker&#x27;s behavior can be influenced by environment variables:</p>
+<ul>
+<li><code>FACE_PYTHON_BIN</code>: Specifies the Python executable for the face worker <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L83" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83</a></li>
+<li><code>FACE_DEVICE</code>: Can be <code>auto</code>, <code>cpu</code>, or <code>cuda</code> to control the device used for computations <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L84-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 84</a></li>
+<li><code>FACE_REQUIRE_GPU</code>: If set, forces GPU usage <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L85-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 85</a></li>
+</ul>
+<p>These environment variables are typically set during the setup of the Python virtual environment for face verification <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L113-L117" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 113-117</a></p>
+<p>Sources:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83-85</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L113-L117" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 113-117</a></li>
+</ul>
+<h2 id="voice-verification-worker">Voice Verification Worker</h2>
+<p>The voice verification worker, located at <code>python/voice_verification/voice_verification.py</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a> handles voice enrollment and verification. It uses Whisper for speech-to-text transcription to ensure the spoken phrase matches a challenge text, and SpeechBrain for speaker verification to compare voice characteristics.</p>
+<h3 id="implementation-details">Implementation Details</h3>
+<p>The <code>voice_verification.py</code> script supports two primary operations:</p>
+<ol>
+<li><strong>Enrollment</strong>: Takes an audio file and a challenge text, transcribes the audio using Whisper, verifies it against the challenge, and then extracts a speaker embedding using SpeechBrain.</li>
+<li><strong>Verification</strong>: Takes an audio file, a challenge text, and a reference speaker embedding. It transcribes the audio, verifies it against the challenge, extracts a speaker embedding from the audio, and compares it to the reference embedding.</li>
+</ol>
+<p>The script uses <code>argparse</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L160-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 160-177</a> for command-line argument parsing, allowing specification of operation mode (<code>--enroll</code> or <code>--verify</code>), input audio (<code>--audio</code>), challenge text (<code>--challenge</code>), and reference embedding (<code>--reference</code>).</p>
+<p>Key components and their roles:</p>
+<ul>
+<li><strong><code>SpeechToText</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L16-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 16-40</a>
+<ul>
+<li>Initializes the Whisper model for speech transcription.</li>
+<li>The <code>transcribe</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L29-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 29-40</a> takes an audio file path and returns the transcribed text.</li>
+</ul>
+</li>
+<li><strong><code>SpeakerEmbedder</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L43-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 43-67</a>
+<ul>
+<li>Initializes the SpeechBrain speaker verification model.</li>
+<li>The <code>get_embedding</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L56-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 56-67</a> takes an audio file path and returns a speaker embedding.</li>
+</ul>
+</li>
+<li><strong><code>VoiceVerifier</code> class</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L70-L109" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 70-109</a>
+<ul>
+<li>Orchestrates the transcription and speaker embedding processes.</li>
+<li>The <code>enroll</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L82-L92" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 82-92</a> transcribes audio, checks against the challenge, and extracts a speaker embedding.</li>
+<li>The <code>verify</code> method <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L94-L109" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 94-109</a> performs transcription, challenge verification, extracts a probe embedding, and calculates cosine similarity with a reference embedding. It uses <code>VOICE_VERIFICATION_THRESHOLD</code> for similarity comparison.</li>
+</ul>
+</li>
+</ul>
+<p>The script ensures that the transcribed text matches the provided challenge text, adding a layer of liveness and intent verification.</p>
+<h3 id="data-flow">Data Flow</h3>
+<p>Similar to the face worker, the ASP.NET Core API communicates with the <code>voice_verification.py</code> script via a process bridge.</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/5.1-face-and-voice-workers-2.svg" alt="Face and Voice Workers — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><strong>Diagram 2: Voice Verification Worker Data Flow</strong></p>
+<p>Sources:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-166</a></li>
+</ul>
+<h3 id="configuration">Configuration</h3>
+<p>Environment variables for the voice worker:</p>
+<ul>
+<li><code>VOICE_PYTHON_BIN</code>: Specifies the Python executable for the voice worker <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L83" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83</a></li>
+<li><code>VOICE_DEVICE</code>: Can be <code>auto</code>, <code>cpu</code>, or <code>cuda</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L84-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 84</a></li>
+<li><code>VOICE_REQUIRE_GPU</code>: If set, forces GPU usage <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L85-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 85</a></li>
+<li><code>VOICE_WHISPER_MODEL</code>: Specifies the Whisper model to use (e.g., <code>base</code>, <code>small</code>, <code>medium</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L132-L132" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 132</a></li>
+</ul>
+<p>The setup for the voice worker also involves creating a dedicated Python virtual environment and installing dependencies <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L128-L131" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 128-131</a> Whisper requires FFmpeg for audio processing, which is handled by <code>imageio-ffmpeg</code> as a fallback <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L135-L135" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 135</a></p>
+<p>Sources:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83-85</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L128-L132" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 128-132</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L135-L135" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 135</a></li>
+</ul>

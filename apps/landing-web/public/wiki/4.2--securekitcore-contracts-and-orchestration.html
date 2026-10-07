@@ -1,0 +1,55 @@
+<h1 id="securekitcore-contracts-and-orchestration">@securekit/core Contracts and Orchestration</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md</a></li>
+</ul>
+</details>
+<p>The <code>@securekit/core</code> package serves as the foundational shared TypeScript library within the SecureKit monorepo. It establishes the domain models, request/response contracts, biometric signal interfaces, risk evaluation policies, and orchestration logic utilized by both server-side implementations (<code>packages/node-auth</code>, <code>apps/securekit-api</code>) and client-side SDKs (<code>packages/web-sdk</code>).</p>
+<hr>
+<h2 id="1-shared-request-and-response-contracts">1. Shared Request and Response Contracts</h2>
+<p>The core package defines standard data transfer objects (DTOs) and state interfaces for user lifecycle management, challenge issuance, consent verification, and multi-modal profile storage.</p>
+<p>Key structural definitions encompass:</p>
+<ul>
+<li><strong>User Records &amp; Profiles</strong>: Standardized schemas for <code>userId</code>, registration timestamps, consent versions, and profile associations (keystroke models, face embeddings, voice references, and card metadata). Identifiers are consistently normalized (trimmed and lowercased where appropriate) across authentication boundaries.</li>
+<li><strong>Challenges</strong>: Structures governing challenge generation, including language parameters (<code>lang</code>), string lengths (<code>length</code>), dynamic word counts (<code>wordCount</code>), and strict time-to-live (<code>CHALLENGE_TTL_SECONDS</code>) constraints.</li>
+<li><strong>Session Lifecycle</strong>: Time-bound session handles (<code>sessionId</code>) tracking expiration windows (<code>SESSION_TTL_SECONDS</code>), accumulated signal states, and evaluation outcomes.</li>
+</ul>
+<pre></pre>
+<p><em>Figure 1: Contract Validation and Orchestration Flow</em></p>
+<p>Sources: <code>README.md:19-21</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:30-52</code></p>
+<hr>
+<h2 id="2-biometrics-modules-and-signal-models">2. Biometrics Modules and Signal Models</h2>
+<p>Biometric and contextual data are encapsulated into structured signal payloads before being passed to verification services or risk evaluators. The core contracts define uniform schemas for:</p>
+<ul>
+<li><strong>Keystroke Dynamics</strong>: Timings for <code>keydown</code> and <code>keyup</code> events, measuring hold durations and transition latencies to match against Exponential Moving Average (EMA) user profiles or fixed-text templates.</li>
+<li><strong>Facial and Voice Signals</strong>: Embeddings, reference image paths, liveness indicators, and speech-to-text verification payloads evaluated by external Python subprocesses.</li>
+<li><strong>Network and Location Signals</strong>: IP metadata structures containing flags for VPN, proxy, Tor, or relay usage, alongside geographic drift calculations and country-code allowances (<code>allowedCountries</code>).</li>
+</ul>
+<pre></pre>
+<p><em>Signal Processing and Module Mapping to Code Entities</em></p>
+<p>Sources: <code>README.md:9-14</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:69-76</code></p>
+<hr>
+<h2 id="3-risk-policies-and-default-configuration-object-object">3. Risk Policies and Default Configuration (<code>defaultPolicy</code>)</h2>
+<p>The risk policy engine calculates session trust scores and determines whether an authentication attempt is permitted, denied, or requires step-up verification. The <code>defaultPolicy</code> configuration dictates threshold rules and security constraints:</p>
+<ul>
+<li><strong>Risk Score Bounds</strong>: Defines numeric boundaries such as <code>allowMaxRisk</code> and <code>denyMinRisk</code> to categorize aggregated signal scores.</li>
+<li><strong>Network Enforcement</strong>: Parameters like <code>treatVpnAsFailure</code> and <code>minNetworkScore</code> dictate strict denial or penalization when non-residential or proxy IP flags are raised.</li>
+<li><strong>Step-Up Requirements</strong>: Specifies <code>stepUpSteps</code> array mappings, identifying secondary verification modalities (e.g., voice challenge, face re-verification) required when risk scores fall into intermediate bands.</li>
+<li><strong>Decision Outcomes</strong>: Yields discrete resolution values: <code>allow</code>, <code>step_up</code>, or <code>deny</code> for dynamic evaluations, and <code>accept</code> or <code>reject</code> for fixed-text verifications.</li>
+</ul>
+<p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md:27-29</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:69-76</code></p>
+<hr>
+<h2 id="4-the-orchestration-engine">4. The Orchestration Engine</h2>
+<p>The orchestrator coordinates state persistence, incremental signal aggregation, and policy enforcement across an active authentication session.</p>
+<p>When a verification request is submitted, the orchestrator executes the following sequence:</p>
+<ol>
+<li>Retrieves the active session state from the underlying storage layer (<code>SessionStore</code>).</li>
+<li>Appends or merges incoming telemetry signals (<code>signalsUsed</code>) with historical session data.</li>
+<li>Invokes the risk evaluation service (<code>SessionRiskEvaluator</code>) against the active policy profile (<code>defaultPolicy</code>).</li>
+<li>Generates a unified decision (<code>decision</code>), computes the resulting <code>riskScore</code>, and compiles any required step-up actions (<code>requiredSteps</code>) or diagnostic reasons (<code>reasons</code>).</li>
+</ol>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/4.2--securekitcore-contracts-and-orchestration-1.svg" alt="@securekit/core Contracts and Orchestration — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Orchestration and Policy Evaluation Pipeline</em></p>
+<p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md:59-76</code></p>

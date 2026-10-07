@@ -1,0 +1,42 @@
+<h1 id="client-side-sdk-core-and-demo-app">Client Side: SDK, Core and Demo App</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json</a></li>
+</ul>
+</details>
+<p>This section provides a high-level overview of the client-side architecture of SecureKit, which encompasses the browser-facing TypeScript SDK (<code>@securekit/web-sdk</code>), the shared contracts and logic package (<code>@securekit/core</code>), and the React demonstration playground (<code>apps/demo-web</code>).</p>
+<p>For in-depth technical details, implementation specifics, and module internals, refer to the respective child pages:</p>
+<ul>
+<li><code>@securekit/web-sdk</code>: See @securekit/web-sdk</li>
+<li><code>@securekit/core Contracts and Orchestration</code>: See @securekit/core Contracts and Orchestration</li>
+<li><code>demo-web Application</code>: See demo-web Application</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a></p>
+<hr>
+<h2 id="41-object-object-overview">4.1. <code>@securekit/web-sdk</code> Overview</h2>
+<p>The <code>@securekit/web-sdk</code> package provides the browser-side interface for interacting with authentication endpoints, capturing user biometrics, and tracking contextual signals. It encapsulates transport logic, keystroke event collectors, location/network context handlers, and legacy client compatibility adapters <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<p>For detailed coverage of <code>client.ts</code>, transport layers, keystroke collectors, adapters, and legacy support surfaces, see @securekit/web-sdk.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<hr>
+<h2 id="42-object-object-contracts-and-orchestration">4.2. <code>@securekit/core</code> Contracts and Orchestration</h2>
+<p>The <code>@securekit/core</code> package serves as the foundational shared layer across the monorepo. It defines request/response contracts, biometric processing modules, risk evaluation policies, and the client orchestration logic required to evaluate multi-modal signals <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21</a></p>
+<p>For detailed information regarding shared contracts, biometrics modules, risk policies, the orchestrator, and default policies, see @securekit/core Contracts and Orchestration.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21</a></p>
+<hr>
+<h2 id="43-object-object-application">4.3. <code>demo-web</code> Application</h2>
+<p>The <code>demo-web</code> application is a React and Vite-based playground (<code>apps/demo-web</code>) designed to test registration, login, consent flows, and multi-modal biometric profile verification <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 15</a> It integrates with both the <code>@securekit/web-sdk</code> and <code>@securekit/core</code> packages <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<p>For details on the Vite development proxy, backend target resolution (<code>api-target.ts</code>), the <code>AuthApp</code> UI, authentication flows (<code>auth.html</code>), and acceptance smoke test scripts, see demo-web Application.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 15</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<hr>
+<h2 id="client-side-architecture-and-code-entity-mapping">Client-Side Architecture and Code Entity Mapping</h2>
+<p>The following diagram illustrates the relationship between the browser-facing client components, shared core contracts, and the demo application playground.</p>
+<p>Title: Client-Side Component Structure</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/4-client-side--sdk-core-and-demo-app-1.svg" alt="Client Side: SDK, Core and Demo App — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<hr>
+<p>Data flow across the client-side packages during an authentication or registration attempt proceeds from the React UI (<code>demo-web</code>) through the SDK transport layer, utilizing shared structures from <code>@securekit/core</code>.</p>
+<p>Title: Client Request Flow</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/4-client-side--sdk-core-and-demo-app-2.svg" alt="Client Side: SDK, Core and Demo App — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a></p>

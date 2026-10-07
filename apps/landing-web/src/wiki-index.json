@@ -1,0 +1,1313 @@
+{
+  "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit",
+  "indexedAt": "2026-10-07",
+  "sourceCommit": "7b9cbda5",
+  "pages": [
+    {
+      "slug": "1-overview",
+      "title": "Overview",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1-overview",
+      "number": "1",
+      "headings": [
+        {
+          "id": "overview",
+          "level": 1,
+          "title": "Overview"
+        },
+        {
+          "id": "11-monorepo-layout-and-tooling",
+          "level": 2,
+          "title": "1.1. Monorepo Layout and Tooling"
+        },
+        {
+          "id": "12-getting-started-and-local-development",
+          "level": 2,
+          "title": "1.2. Getting Started and Local Development"
+        },
+        {
+          "id": "13-authentication-decision-model",
+          "level": 2,
+          "title": "1.3. Authentication Decision Model"
+        }
+      ],
+      "searchText": "Overview Relevant source files MIGRATION_TO_ASPNET10_PLAN.md README.md package.json scripts/aspnet-parity.mjs SecureKit is a multi-modal biometric authentication toolkit monorepo that integrates keystroke dynamics, facial verification, voice similarity, document card recognition, network telemetry, and IP context into a unified verification pipeline README.md 1-16 The architecture coordinates an ASP.NET Core 10 API backend (apps/securekit-api), a legacy Node.js/Express API (packages/node-auth), a TypeScript web SDK (packages/web-sdk), a React and Vite demonstration playground (apps/demo-web), and isolated Python worker pipelines (python/) README.md 17-31 Diyagramı büyütmek için seçin ↗ Sources: README.md 1-31 package.json 1-7 For detailed documentation on specific subsystems, see the child pages below: Monorepo Layout and Tooling Getting Started and Local Development Authentication Decision Model 1.1. Monorepo Layout and Tooling The repository is structured as a pnpm workspace containing shared packages, server applications, standalone Python worker modules, and automation scripts package.json 1-7 Root scripts defined in package.json manage parallel builds, type checking, test suites, biometric preflight checks, and ASP.NET Core parity verification package.json 8-22 The workspace isolates build targets and dependencies to ensure clean boundaries between the client SDK, backend services, and machine learning workers. For full details on workspace architecture, build commands, and directory layouts, see Monorepo Layout and Tooling. Sources: package.json 1-36 README.md 17-31 1.2. Getting Started and Local Development Local orchestration is managed through scripts/dev.mjs, which handles environment configuration, proxy targets, and concurrent process execution package.json 10 Developers can launch the development environment using pnpm dev for the default ASP.NET Core backend or pnpm dev:node for the legacy Express backend package.json 10-11 Services run across predictable local ports: the ASP.NET Core API on port 3002, the legacy Node API on port 3001, and the Vite React demo application on port 5173 README.md 51-58 Environment variables such as MOCK_IP_CHECK, VPNAPI_KEY, and various PYTHON_BIN paths govern local integration README.md 75-89 For environment setup guides, port configurations, and script orchestration details, see Getting Started and Local Development. Sources: README.md 32-91 package.json 8-12 1.3. Authentication Decision Model SecureKit aggregates multiple asynchronous biometric and contextual signals—including keystroke dynamics, facial embeddings, voice verification, document card data, and network/IP reputation—into a centralized risk evaluation engine (packages/core) README.md 7-15 Diyagramı büyütmek için seçin ↗ Sources: README.md 7-15 The decision model applies risk-scoring policies to yield one of three outcomes: allow, step_up, or deny README.md 14 Sessions are governed by challenge TTLs, consent validation, and continuous risk monitoring MIGRATION_TO_ASPNET10_PLAN.md 72-166 For comprehensive details on signal processing, threshold rules, and session lifecycle management, see Authentication Decision Model. Sources: README.md 7-15 MIGRATION_TO_ASPNET10_PLAN.md 72-166",
+      "diagrams": [
+        "1-overview-1.svg",
+        "1-overview-2.svg"
+      ],
+      "words": 407
+    },
+    {
+      "slug": "1.1-monorepo-layout-and-tooling",
+      "title": "Monorepo Layout and Tooling",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.1-monorepo-layout-and-tooling",
+      "number": "1.1",
+      "headings": [
+        {
+          "id": "monorepo-layout-and-tooling",
+          "level": 1,
+          "title": "Monorepo Layout and Tooling"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "workspace-layout-and-directory-structure",
+          "level": 2,
+          "title": "Workspace Layout and Directory Structure"
+        },
+        {
+          "id": "diagram-workspace-layout-to-code-entities",
+          "level": 3,
+          "title": "Diagram: Workspace Layout to Code Entities"
+        },
+        {
+          "id": "root-tooling-and-object-object-configuration",
+          "level": 2,
+          "title": "Root Tooling and"
+        },
+        {
+          "id": "root-script-definitions",
+          "level": 3,
+          "title": "Root Script Definitions"
+        },
+        {
+          "id": "build-parity-and-test-pipelines",
+          "level": 2,
+          "title": "Build, Parity, and Test Pipelines"
+        },
+        {
+          "id": "diagram-parity-test-pipeline-architecture",
+          "level": 3,
+          "title": "Diagram: Parity Test Pipeline Architecture"
+        }
+      ],
+      "searchText": "Monorepo Layout and Tooling Relevant source files apps/demo-web/package.json package.json packages/node-auth/package.json scripts/aspnet-parity.mjs Purpose and Scope This page details the structural layout, workspace organization, and script tooling of the SecureKit multi-modal biometric authentication toolkit monorepo. It covers pnpm workspace definitions, root package.json task orchestration, build/typecheck/test pipelines, and the physical directory layout (apps/, packages/, python/, and scripts/). Workspace Layout and Directory Structure The SecureKit monorepo is managed via pnpm workspaces package.json 4-7 The project layout segregates backend APIs, frontend/client SDKs, Python biometric microservices, and orchestration scripts. Directory / WorkspaceTarget / RoleKey Referencesapps/securekit-api/ASP.NET Core 10 backend APISecureKit.slnx package.json 19apps/demo-web/React 19 demonstration playground (demo-web)apps/demo-web/package.json 1-18packages/node-auth/Legacy Express API and parity test harness (@securekit/node-auth)packages/node-auth/package.json 1-18packages/core/Shared biometric risk policies, contracts, and orchestrators (@securekit/core)Referenced by workspacespackages/web-sdk/Browser SDK for client-side capture and transport (@securekit/web-sdk)Referenced by workspacespython/Python biometric verification pipelines (face, voice, card, IP)Invoked via process bridgesscripts/Monorepo orchestration, preflight, acceptance, and parity scriptspackage.json 10-21 Diagram: Workspace Layout to Code Entities Diyagramı büyütmek için seçin ↗ *Sources: package.json 4-7 apps/demo-web/package.json 1-18 packages/node-auth/package.json 1-18 scripts/aspnet-parity.mjs 1-38 * Root Tooling and package.json Configuration The root package.json specifies strict engine requirements and package manager versions, enforcing Node >=22.12.0 and pnpm@9.15.9 package.json 32-35 Workspace globs cover all subdirectories under packages/* and apps/* package.json 4-7 Root Script Definitions Root scripts drive the primary development, building, and validation lifecycles: Build: \"pnpm -r build\" recursively builds all packages package.json 9 Development: \"node scripts/dev.mjs\" and \"node scripts/dev.mjs node\" manage local orchestrations package.json 10-11 Typechecking: \"pnpm -r --if-present typecheck\" evaluates TypeScript types across workspaces package.json 13 Testing: Scoped workspace test filters target specific verification modules, such as @securekit/node-auth and @securekit/web-sdk package.json 14 Parity & Acceptance: Integration tests build the .NET solution (SecureKit.slnx) and execute Node-based runners like scripts/aspnet-parity.mjs package.json 19-21 Build, Parity, and Test Pipelines The test and parity tooling bridges Node.js orchestration scripts with .NET and Python executables. For instance, scripts/aspnet-parity.mjs systematically executes stage-by-stage parity verification between the legacy Node/Express API and the modern ASP.NET Core backend. The parity script spawns each stage script (from stage one to seven) using tsx scripts/aspnet-parity.mjs 11-14 captures output logs scripts/aspnet-parity.mjs 17-22 extracts comparison summaries scripts/aspnet-parity.mjs 24 and persists structured JSON reports into .run-logs/aspnet-parity.json scripts/aspnet-parity.mjs 7 Diagram: Parity Test Pipeline Architecture Diyagramı büyütmek için seçin ↗ Sources: package.json 20 scripts/aspnet-parity.mjs 1-38 packages/node-auth/package.json 11-17",
+      "diagrams": [
+        "1.1-monorepo-layout-and-tooling-1.svg",
+        "1.1-monorepo-layout-and-tooling-2.svg"
+      ],
+      "words": 369
+    },
+    {
+      "slug": "1.2-getting-started-and-local-development",
+      "title": "Getting Started and Local Development",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.2-getting-started-and-local-development",
+      "number": "1.2",
+      "headings": [
+        {
+          "id": "getting-started-and-local-development",
+          "level": 1,
+          "title": "Getting Started and Local Development"
+        },
+        {
+          "id": "local-development-orchestration-object-object",
+          "level": 2,
+          "title": "Local Development Orchestration ("
+        },
+        {
+          "id": "process-lifecycle-and-signal-handling",
+          "level": 3,
+          "title": "Process Lifecycle and Signal Handling"
+        },
+        {
+          "id": "port-allocations-and-vite-proxy-resolution",
+          "level": 2,
+          "title": "Port Allocations and Vite Proxy Resolution"
+        },
+        {
+          "id": "proxy-target-resolution-hierarchy",
+          "level": 3,
+          "title": "Proxy Target Resolution Hierarchy"
+        },
+        {
+          "id": "environment-variables-and-configuration",
+          "level": 2,
+          "title": "Environment Variables and Configuration"
+        },
+        {
+          "id": "example-environment-configuration-object-object",
+          "level": 3,
+          "title": "Example Environment Configuration ("
+        },
+        {
+          "id": "runtime-environment-variables-for-data-migration",
+          "level": 3,
+          "title": "Runtime Environment Variables for Data Migration"
+        },
+        {
+          "id": "backend-switching-and-backward-compatibility",
+          "level": 2,
+          "title": "Backend Switching and Backward Compatibility"
+        },
+        {
+          "id": "switching-to-aspnet-core-default",
+          "level": 3,
+          "title": "Switching to ASP.NET Core (Default)"
+        },
+        {
+          "id": "switching-to-nodeexpress",
+          "level": 3,
+          "title": "Switching to Node/Express"
+        }
+      ],
+      "searchText": "Getting Started and Local Development Relevant source files apps/demo-web/.env.example docs/ASPNET_CUTOVER.md scripts/dev.mjs This page details the local development environment orchestration for the SecureKit multi-modal biometric authentication toolkit monorepo. It covers the root development scripts, process orchestration via scripts/dev.mjs, port allocations (3002 for ASP.NET Core, 3001 for Node/Express, and 5173 for the Vite demo-web frontend), environment variable configurations, and backend switching procedures. Sources: docs/ASPNET_CUTOVER.md 1-110 scripts/dev.mjs 1-40 apps/demo-web/.env.example 1-4 Local Development Orchestration (scripts/dev.mjs) The local development workflow is managed by the orchestration script scripts/dev.mjs. This script inspects runtime arguments or environment variables to determine whether to launch the modern ASP.NET Core 10 backend (apps/securekit-api) or the legacy Node/Express API (packages/node-auth), alongside the React demo application (apps/demo-web) scripts/dev.mjs 1-40 Process Lifecycle and Signal Handling When executing pnpm dev or pnpm dev:node, scripts/dev.mjs performs the following steps: Resolves the repository root and the target backend (aspnet or node), defaulting to aspnet if unspecified scripts/dev.mjs 5-7 If aspnet is selected, it asynchronously runs dotnet build apps/securekit-api to compile the C# solution scripts/dev.mjs 25-29 Spawns the compiled API executable (SecureKit.Api.dll) or the Node server (src/server.ts via tsx), attaching stdin/stdout/stderr via stdio: \"inherit\" scripts/dev.mjs 16-34 Spawns the Vite development server for apps/demo-web, injecting proxy environment variables that point to the active backend scripts/dev.mjs 35-38 Listens for termination signals (SIGINT, SIGTERM) to cleanly terminate all spawned child processes via process-tree traversal scripts/dev.mjs 10-40 Sources: scripts/dev.mjs 1-40 Port Allocations and Vite Proxy Resolution SecureKit utilizes a strict port layout for local integration testing and browser access: 3002: ASP.NET Core 10 API (apps/securekit-api) default port docs/ASPNET_CUTOVER.md 8 3001: Legacy Node/Express API (packages/node-auth) default port docs/ASPNET_CUTOVER.md 10 5173: Vite development server for apps/demo-web docs/ASPNET_CUTOVER.md 8 Proxy Target Resolution Hierarchy The Vite development server uses a proxy layer to route API calls from /api/securekit to the chosen backend docs/ASPNET_CUTOVER.md 28-30 The proxy target is resolved using a fallback hierarchy evaluated by scripts/dev.mjs and Vite configuration: VITE_SECUREKIT_DEV_PROXY_TARGET: If an explicit non-empty URL is provided in the environment, it takes absolute precedence docs/ASPNET_CUTOVER.md 21 VITE_SECUREKIT_API_BACKEND: If set to aspnet, it targets http://localhost:3002; if set to node, it targets http://localhost:3001 docs/ASPNET_CUTOVER.md 22 Default Fallback: If neither is defined, it defaults to the ASP.NET Core API at http://localhost:3002 docs/ASPNET_CUTOVER.md 23 Sources: docs/ASPNET_CUTOVER.md 18-30 scripts/dev.mjs 35-38 Environment Variables and Configuration Configuration for local development can be managed via .env files in specific packages (such as apps/demo-web/.env.example) or via terminal environment variables passed to the orchestrator docs/ASPNET_CUTOVER.md 25-27 apps/demo-web/.env.example 1-4 Example Environment Configuration (apps/demo-web/.env.example) VITE_SECUREKIT_BASE_URL=/api/securekitVITE_SECUREKIT_API_BACKEND=aspnet# Optional explicit target (takes precedence over API_BACKEND):# VITE_SECUREKIT_DEV_PROXY_TARGET=http://localhost:3002 Sources: apps/demo-web/.env.example 1-4 Runtime Environment Variables for Data Migration When transitioning between the legacy Node backend and the ASP.NET Core backend while preserving local user stores and biometric reference folders, specific environment variables must be exposed in the terminal session before executing pnpm dev docs/ASPNET_CUTOVER.md 39-51: Variable NamePurposeExample ValueSECUREKIT_USERS_FILEPath to the JSON user credential storeC:\\Repo\\users.jsonSECUREKIT_PROFILE_STOREPath to user biometric profile metadata.../node-auth/.securekit/user-profiles.jsonSECUREKIT_KEYSTROKE_STOREDirectory for keystroke dynamic profile data.../node-auth/.data/keystrokeFace__ReferenceDirectoryDirectory containing enrolled face embedding references.../node-auth/.securekit/face-referencesFACE_SLIDING_REFERENCES_ROOTSliding window reference root for face verification.../node-auth/.securekit/face-sliding-windowCard__UserReferenceDirectoryDirectory for identity card reference images.../node-auth/.securekit/card-referencesMOCK_IP_CHECKBypasses external network calls for IP checks during local dev1 Sources: docs/ASPNET_CUTOVER.md 42-50 Backend Switching and Backward Compatibility Developers can switch between backends dynamically depending on testing requirements. Switching to ASP.NET Core (Default) Stop any running processes with Ctrl+C docs/ASPNET_CUTOVER.md 64 Ensure VITE_SECUREKIT_DEV_PROXY_TARGET is unset or points to http://localhost:3002 docs/ASPNET_CUTOVER.md 66 Run pnpm dev docs/ASPNET_CUTOVER.md 8 Switching to Node/Express Stop running processes with Ctrl+C docs/ASPNET_CUTOVER.md 64 Run pnpm dev:node to launch the Express server on port 3001 and bind the Vite proxy accordingly docs/ASPNET_CUTOVER.md 10 [!WARNING] Both backends should never write to the same JSON state files simultaneously. Always shut down one backend instance before starting the other if sharing persistent store directories docs/ASPNET_CUTOVER.md 36-37 Sources: docs/ASPNET_CUTOVER.md 1-110",
+      "diagrams": [],
+      "words": 613
+    },
+    {
+      "slug": "1.3-authentication-decision-model",
+      "title": "Authentication Decision Model",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.3-authentication-decision-model",
+      "number": "1.3",
+      "headings": [
+        {
+          "id": "authentication-decision-model",
+          "level": 1,
+          "title": "Authentication Decision Model"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "1-multi-modal-signal-ingestion",
+          "level": 2,
+          "title": "1. Multi-Modal Signal Ingestion"
+        },
+        {
+          "id": "2-challenge-consent-and-session-management",
+          "level": 2,
+          "title": "2. Challenge, Consent, and Session Management"
+        },
+        {
+          "id": "3-risk-scoring-and-decision-outcomes",
+          "level": 2,
+          "title": "3. Risk Scoring and Decision Outcomes"
+        },
+        {
+          "id": "4-architecture-and-code-entity-mapping",
+          "level": 2,
+          "title": "4. Architecture and Code Entity Mapping"
+        },
+        {
+          "id": "decision-pipeline-mapping",
+          "level": 3,
+          "title": "Decision Pipeline Mapping"
+        },
+        {
+          "id": "session-verification-and-risk-evaluation-flow",
+          "level": 3,
+          "title": "Session Verification and Risk Evaluation Flow"
+        }
+      ],
+      "searchText": "Authentication Decision Model Relevant source files MIGRATION_TO_ASPNET10_PLAN.md README.md Purpose and Scope The Authentication Decision Model in SecureKit governs how multi-modal biometric signals (keystroke dynamics, face verification, voice recognition, and ID card OCR/matching) are combined with contextual risk indicators (IP geolocation, VPN/proxy/Tor detection) to evaluate user authenticity README.md 9-14 This page details the ingestion of signals, challenge-response lifecycles, consent recording, session tracking, and the risk evaluation logic that yields one of three terminal outcomes: allow, step_up, or deny README.md 14 1. Multi-Modal Signal Ingestion SecureKit evaluates a heterogeneous set of biometric and contextual vectors to verify identity without relying strictly on static secrets: Keystroke Dynamics: Captures precise keydown and keyup telemetry (dwell time and flight latency) via the web SDK. It evaluates both dynamic typing cadence against Exponential Moving Average (EMA) profiles and static challenge text verification README.md 9 MIGRATION_TO_ASPNET10_PLAN.md 125-126 Face Verification: Processes frame captures through MTCNN and FaceNet pipelines to extract facial embeddings, perform liveness checks, and manage reference profiles via a sliding window mechanism README.md 10 Voice Verification: Ingests audio samples validated against random challenge phrases via Whisper for transcription accuracy and SpeechBrain for speaker similarity matching README.md 11 Card Verification: Combines document capture, PaddleOCR text extraction, and OpenCLIP visual similarity scoring to authenticate government-issued identification cards README.md 12 Network & IP Context: Queries IP intelligence services (such as VPNAPI) to flag VPNs, proxies, Tor exit nodes, data center traffic, and geolocation anomalies against defined country access policies README.md 13 Sources: README.md 7-14 MIGRATION_TO_ASPNET10_PLAN.md 125-126 2. Challenge, Consent, and Session Management SecureKit enforces cryptographic and stateful controls surrounding user interactions through dedicated storage managers and endpoints: Challenge Generation and Consumption: Handled via POST /challenge/text and POST /challenge/text/consume. Challenges maintain a strict default Time-To-Live (TTL) of 120 seconds, enforce single-use consumption rules, and are managed in-memory via ChallengeStore MIGRATION_TO_ASPNET10_PLAN.md 75-79 Consent Tracking: Recorded via POST /consent and persisted in file-based JSON storage utilizing atomic file writes and intra-process locking mechanisms to prevent race conditions MIGRATION_TO_ASPNET10_PLAN.md 78-79 Session Lifecycle: Managed through POST /session/start and POST /verify/session. Sessions have a sliding expiration (defaulting to 15 minutes) tracked in the SessionStore MIGRATION_TO_ASPNET10_PLAN.md 119-120 Signals across requests are accumulated, and historical keystroke metrics are updated against the user's EMA profile MIGRATION_TO_ASPNET10_PLAN.md 121-126 Sources: MIGRATION_TO_ASPNET10_PLAN.md 72-126 3. Risk Scoring and Decision Outcomes The decision engine evaluates aggregated biometric deviation scores and contextual threat indicators through the SessionRiskEvaluator and supporting risk policies README.md 21 MIGRATION_TO_ASPNET10_PLAN.md 121-124 Based on configurable risk weights, country-of-origin rules, and network threat flags, the evaluator outputs one of three explicit decisions: allow: The aggregate risk score falls below the primary threshold, and all mandatory biometric checks validate successfully. The session is authorized. step_up (or step-up): Moderate risk or partial biometric mismatch is detected. The session requires secondary verification (e.g., repeating a voice challenge or facial liveness check) before full access is granted MIGRATION_TO_ASPNET10_PLAN.md 122-123 deny: High risk scores, blacklisted IP ranges, active Tor/proxy detection, or severe biometric verification failures trigger an immediate termination of the request or session. Sources: README.md 14 MIGRATION_TO_ASPNET10_PLAN.md 121-124 4. Architecture and Code Entity Mapping The following diagrams bridge the natural language concepts of the authentication decision model with their concrete implementations within the C# and TypeScript codebases. Decision Pipeline Mapping Diyagramı büyütmek için seçin ↗ Sources: README.md 21-30 MIGRATION_TO_ASPNET10_PLAN.md 121-126 Session Verification and Risk Evaluation Flow Diyagramı büyütmek için seçin ↗ Sources: MIGRATION_TO_ASPNET10_PLAN.md 118-126",
+      "diagrams": [
+        "1.3-authentication-decision-model-1.svg",
+        "1.3-authentication-decision-model-2.svg"
+      ],
+      "words": 558
+    },
+    {
+      "slug": "2-securekit-asp.net-core-api",
+      "title": "SecureKit ASP.NET Core API",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2-securekit-asp.net-core-api",
+      "number": "2",
+      "headings": [
+        {
+          "id": "securekit-aspnet-core-api",
+          "level": 1,
+          "title": "SecureKit ASP.NET Core API"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "architecture-and-bootstrap",
+          "level": 2,
+          "title": "Architecture and Bootstrap"
+        },
+        {
+          "id": "21-http-endpoints-and-controllers",
+          "level": 2,
+          "title": "2.1 HTTP Endpoints and Controllers"
+        },
+        {
+          "id": "22-verification-services",
+          "level": 2,
+          "title": "2.2 Verification Services"
+        },
+        {
+          "id": "23-storage-and-configuration",
+          "level": 2,
+          "title": "2.3 Storage and Configuration"
+        }
+      ],
+      "searchText": "SecureKit ASP.NET Core API Relevant source files MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api/Program.cs apps/securekit-api/appsettings.json Purpose and Scope The apps/securekit-api project is a high-performance, enterprise-grade ASP.NET Core 10 (net10.0) Web API that serves as the backend engine for the SecureKit multi-modal biometric authentication toolkit MIGRATION_TO_ASPNET10_PLAN.md 1-24 It replaces the legacy Node/Express API while preserving exact HTTP routes, request/response contracts, and error structures MIGRATION_TO_ASPNET10_PLAN.md 5-13 The application is structured around a robust dependency injection bootstrap in Program.cs apps/securekit-api/Program.cs 8-28 strict JSON serialization policies apps/securekit-api/Program.cs 29-38 centralized middleware exception handling apps/securekit-api/Program.cs 54-59 and file-based state stores apps/securekit-api/Program.cs 10-17 Sources: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 1-66 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 1-33 Architecture and Bootstrap The API initializes via apps/securekit-api/Program.cs, where core infrastructure, state stores, verification engines, and Python bridge services are registered as singletons in the ASP.NET Core IoC container apps/securekit-api/Program.cs 8-28 Configuration parameters for biometric limits, timeouts, and hardware execution options are driven by apps/securekit-api/appsettings.json apps/securekit-api/appsettings.json 1-35 Figure 2.1: SecureKit ASP.NET Core Bootstrap and Configuration Flow Sources: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 8-63 apps/securekit-api/appsettings.json apps/securekit-api/appsettings.json 1-35 2.1 HTTP Endpoints and Controllers The API exposes a comprehensive set of controller classes corresponding to the functional capabilities of the authentication workflow: user lifecycle management, challenge issuance, consent tracking, session evaluation, and multi-modal biometric verification (face, voice, ID card, dynamic and fixed keystrokes, network/IP checks, and health monitoring). For detailed information on route definitions, input validation rules, and JSON request/response contracts, see HTTP Endpoints and Controllers. Sources: MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 21-25 2.2 Verification Services The service layer encapsulates core security logic, multi-modal signal scoring, and Python worker execution bridges. Services such as FaceVerification, VoiceVerification, CardVerification, and SessionKeystrokeVerifier process raw inputs and interact with external Python scripts through stdin/stdout subprocess wrappers (FacePython, VoicePython, CardPython, KeystrokePython). For a detailed breakdown of service implementations, risk calculation policies, and Python process inter-op, see Verification Services. For low-level details on subprocess execution, see Python Process Bridge, and for scoring algorithms, see Keystroke, Session and Risk Services. Sources: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 14-27 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 11-15 2.3 Storage and Configuration SecureKit uses file-based JSON storage adapters (FileUserStore, FileProfileStorage, FixedKeystrokeStore) alongside in-memory stores (SessionStore, ChallengeStore) to manage user credentials, biometric profiles, active tokens, and single-use challenges. State mutations are protected by atomic file write patterns and thread synchronization primitives to prevent corruption under concurrent requests. For details on schema layouts, atomic locking strategies, and environment variable overrides, see Storage and Configuration. Sources: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 10-17 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 27-30 Figure 2.2: End-to-End Request Routing and Biometric Verification Architecture Sources: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 8-28 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 19-33",
+      "diagrams": [],
+      "words": 406
+    },
+    {
+      "slug": "2.1-http-endpoints-and-controllers",
+      "title": "HTTP Endpoints and Controllers",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.1-http-endpoints-and-controllers",
+      "number": "2.1",
+      "headings": [
+        {
+          "id": "http-endpoints-and-controllers",
+          "level": 1,
+          "title": "HTTP Endpoints and Controllers"
+        },
+        {
+          "id": "1-controller-architecture-and-routing-overview",
+          "level": 2,
+          "title": "1. Controller Architecture and Routing Overview"
+        },
+        {
+          "id": "2-requestresponse-contracts-and-error-envelopes",
+          "level": 2,
+          "title": "2. Request/Response Contracts and Error Envelopes"
+        },
+        {
+          "id": "3-detailed-controller-breakdown",
+          "level": 2,
+          "title": "3. Detailed Controller Breakdown"
+        },
+        {
+          "id": "health-controller",
+          "level": 3,
+          "title": "Health Controller"
+        },
+        {
+          "id": "card-controller-object-object",
+          "level": 3,
+          "title": "Card Controller ("
+        },
+        {
+          "id": "4-api-request-pipeline-and-flow-diagram",
+          "level": 2,
+          "title": "4. API Request Pipeline and Flow Diagram"
+        }
+      ],
+      "searchText": "HTTP Endpoints and Controllers Relevant source files MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api.tests/HealthTests.cs apps/securekit-api/Controllers/CardController.cs This page details the HTTP endpoints, controller classes, routing behaviors, and request/response contracts implemented in the ASP.NET Core API (apps/securekit-api). The controllers act as the primary boundary layer, receiving incoming HTTP traffic (JSON payloads and multipart form uploads), validating inputs, interfacing with verification and storage services, and serializing responses into standardized JSON envelopes or error payloads. 1. Controller Architecture and Routing Overview The API is built on ASP.NET Core 10 using attribute-routed controllers marked with the [ApiController] annotation apps/securekit-api/Controllers/CardController.cs 11-13 Endpoints maintain strict parity with the legacy Node/Express routes to ensure seamless compatibility with the @securekit/web-sdk and apps/demo-web MIGRATION_TO_ASPNET10_PLAN.md 5-14 The controller suite covers the following functional domains: Health: System status probes (/health) apps/securekit-api.tests/HealthTests.cs 9-15 Auth: User registration, login, and enumeration (/auth/register, /auth/login, /auth/users) MIGRATION_TO_ASPNET10_PLAN.md 150-152 Challenge: Biometric and text challenge generation and single-use consumption (/challenge/text, /challenge/text/consume) MIGRATION_TO_ASPNET10_PLAN.md 99-100 Session & Profiles: Session initialization, sliding-window risk evaluation, profile querying, and user biometric wiping (/session/start, /verify/session, /user/{userId}/profiles, /user/biometrics) MIGRATION_TO_ASPNET10_PLAN.md 101-154 Biometric Verification (Card, Face, Voice, Keystroke, FixedKeystroke): Enrollment and verification endpoints handling multipart image/audio uploads and biometric telemetry. Network: IP and VPN verification checks (/verify/network). Sources: [apps/securekit-api/Controllers/CardController.cs:11-13], [apps/securekit-api.tests/HealthTests.cs:9-15], [MIGRATION_TO_ASPNET10_PLAN.md:5-14] 2. Request/Response Contracts and Error Envelopes Endpoints communicate via JSON (application/json) or multipart form data (multipart/form-data) for file uploads (such as ID cards, face images, or voice samples). Standard errors are wrapped in a consistent JSON envelope containing an error code, message, and optional details: { \"error\": { \"code\": \"INVALID_REQUEST\", \"message\": \"referenceImage is required.\", \"details\": null }} If an upload payload exceeds the configured maximum body size (CardOptions.MaxUploadBytes), the controllers catch BadHttpRequestException or InvalidDataException and return a 413 Payload Too Large status with an IMAGE_TOO_LARGE code apps/securekit-api/Controllers/CardController.cs 36-88 Sources: [apps/securekit-api/Controllers/CardController.cs:25-89], [apps/securekit-api.tests/HealthTests.cs:18-24] 3. Detailed Controller Breakdown Health Controller GET /health: Returns system liveness. Response (200 OK): {\"ok\":true} apps/securekit-api.tests/HealthTests.cs 12-14 Card Controller (CardController.cs) The CardController manages ID card reference images and verification probes using OCR and embedding comparison workers apps/securekit-api/Controllers/CardController.cs 12-13 GET /card/references: Lists stored card reference records apps/securekit-api/Controllers/CardController.cs 14-19 POST /enroll/card/reference: Accepts a multipart/form-data payload containing a userId string and a referenceImage file (image/jpeg, image/png, image/webp) apps/securekit-api/Controllers/CardController.cs 20-61 POST /verify/card: Accepts a probe image (probeImage), optional referenceId, userId, and threshold, returning match scores and verification outcomes apps/securekit-api/Controllers/CardController.cs 22-80 Sources: [apps/securekit-api/Controllers/CardController.cs:11-89], [apps/securekit-api.tests/HealthTests.cs:18-24] 4. API Request Pipeline and Flow Diagram The following diagram illustrates how incoming HTTP requests flow through the ASP.NET Core middleware pipeline into the respective controllers and service layers. Sources: [apps/securekit-api/Controllers/CardController.cs:1-90], [apps/securekit-api.tests/HealthTests.cs:1-34], [MIGRATION_TO_ASPNET10_PLAN.md:43-125]",
+      "diagrams": [],
+      "words": 411
+    },
+    {
+      "slug": "2.2-verification-services",
+      "title": "Verification Services",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2-verification-services",
+      "number": "2.2",
+      "headings": [
+        {
+          "id": "verification-services",
+          "level": 1,
+          "title": "Verification Services"
+        },
+        {
+          "id": "1-service-layer-architecture-and-responsibilities",
+          "level": 2,
+          "title": "1. Service Layer Architecture and Responsibilities"
+        },
+        {
+          "id": "2-python-process-bridge-integration",
+          "level": 2,
+          "title": "2. Python Process Bridge Integration"
+        },
+        {
+          "id": "3-keystroke-risk-and-session-management",
+          "level": 2,
+          "title": "3. Keystroke, Risk, and Session Management"
+        }
+      ],
+      "searchText": "Verification Services Relevant source files apps/securekit-api/Services/CardResult.cs apps/securekit-api/Services/CardVerification.cs The service layer in apps/securekit-api orchestrates multi-modal biometric authentication, risk evaluation, session tracking, and network inspections. It acts as the business logic intermediary between HTTP controllers and underlying mechanisms such as file-based storage, network checkers, and isolated Python worker scripts. For detailed breakdowns of specific sub-systems, refer to the child pages: Python Process Bridge — Details on how C# services spawn and manage Python workers (CardPython, FacePython, VoicePython, KeystrokePython). Keystroke, Session and Risk Services — Details on dynamic and fixed keystroke parsing, EMA profiling, session stores, and SessionRiskEvaluator. 1. Service Layer Architecture and Responsibilities The verification service layer separates concerns across biometric verification pipelines, security evaluations, and state persistence. C# service classes encapsulate the validation rules, input preprocessing, and response normalization required before returning decisions to the HTTP endpoints. Diyagramı büyütmek için seçin ↗ Figure 1: Service Layer Entity Mapping and Responsibilities. CardVerification: Coordinates card image uploads, reference directory scans, and delegates visual/OCR comparisons to the python process bridge ICardPython apps/securekit-api/Services/CardVerification.cs 8-10 CardResult: Normalizes and validates raw JSON outputs from the card verification Python process, handling missing dependencies and schema validation apps/securekit-api/Services/CardResult.cs 8-38 Face, Voice, and Keystroke Services: Handle biometric enrollment, template updates, and feature extraction via dedicated Python workers or internal mathematical profiling. Sources: apps/securekit-api/Services/CardVerification.cs apps/securekit-api/Services/CardResult.cs 2. Python Process Bridge Integration Biometric pipelines like PaddleOCR/OpenCLIP (card), MTCNN/FaceNet (face), and Whisper/SpeechBrain (voice) execute inside isolated Python environments. The ASP.NET Core service layer interacts with these workers through specialized bridge abstractions. Diyagramı büyütmek için seçin ↗ Sequence 2: Verification Invocation and Normalization Flow. For deeper technical details regarding process spawning, CLI contracts, timeout management, process-tree termination, and temporary file isolation, see Python Process Bridge. Sources: apps/securekit-api/Services/CardVerification.cs apps/securekit-api/Services/CardResult.cs 3. Keystroke, Risk, and Session Management Beyond biometric matching, the toolkit evaluates authentication requests through behavioral dynamics and risk scoring models. Keystroke Biometrics: Analyzes timing metrics (dwell time, flight time) for both dynamic typing challenges and fixed-text passwords. Profiles are updated dynamically using Exponential Moving Averages (EMA). Session Risk Evaluation: The SessionRiskEvaluator combines signals from recent authentication attempts, anomaly detection, challenge verification status, and IP/network checking (NetworkVerification) to produce a composite risk score resulting in an allow, step_up, or deny decision. State Stores: Transient challenges and active user sessions are managed via in-memory or file-backed stores (ChallengeStore, SessionStore). For comprehensive implementation details on keystroke feature extraction, profile storage, and risk scoring logic, see Keystroke, Session and Risk Services. Sources: apps/securekit-api/Services/CardVerification.cs",
+      "diagrams": [
+        "2.2-verification-services-1.svg",
+        "2.2-verification-services-2.svg"
+      ],
+      "words": 403
+    },
+    {
+      "slug": "2.2.1-python-process-bridge",
+      "title": "Python Process Bridge",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.1-python-process-bridge",
+      "number": "2.2.1",
+      "headings": [
+        {
+          "id": "python-process-bridge",
+          "level": 1,
+          "title": "Python Process Bridge"
+        },
+        {
+          "id": "1-worker-discovery-and-environment-resolution",
+          "level": 2,
+          "title": "1. Worker Discovery and Environment Resolution"
+        },
+        {
+          "id": "2-cli-contracts-and-stdinstdout-json-lines-protocol",
+          "level": 2,
+          "title": "2. CLI Contracts and Stdin/Stdout JSON-Lines Protocol"
+        },
+        {
+          "id": "3-timeouts-error-handling-and-process-tree-termination",
+          "level": 2,
+          "title": "3. Timeouts, Error Handling, and Process-Tree Termination"
+        },
+        {
+          "id": "4-temporary-files-and-data-flow",
+          "level": 2,
+          "title": "4. Temporary Files and Data Flow"
+        }
+      ],
+      "searchText": "Python Process Bridge Relevant source files apps/securekit-api/Services/CardOptions.cs apps/securekit-api/Services/CardPython.cs The Python Process Bridge is the subsystem responsible for managing the lifecycle, input/output streaming, and error handling of external Python biometric verification workers (CardPython, FacePython, VoicePython, KeystrokePython) from the ASP.NET Core backend. It handles process discovery across virtual environments, establishes JSON-lines-based communication over standard input/output, enforces strict execution timeouts, and guarantees process-tree termination to prevent zombie worker processes. 1. Worker Discovery and Environment Resolution The C# orchestration layer discovers and launches Python runtimes dynamically based on configuration parameters and local workspace conventions. The CardOptions class resolves paths for the script, temporary directories, and fallback search paths [apps/securekit-api/Services/CardOptions.cs:12-25]. The CardPython implementation iterates through a prioritized list of runtime candidate locations (Candidates()), evaluating virtual environments (.venv-card, .venv) before falling back to system-level interpreters (py -3, python3, python) [apps/securekit-api/Services/CardPython.cs:22-43]. If a dependency failure occurs (such as a missing Python package), the process bridge captures standard error output and translates the exception into a structured HTTP-mapped failure response [apps/securekit-api/Services/CardPython.cs:27-31, 80-87]. Sources: apps/securekit-api/Services/CardPython.cs 18-43 apps/securekit-api/Services/CardOptions.cs 12-25 2. CLI Contracts and Stdin/Stdout JSON-Lines Protocol Once a worker process is spawned, communication is established via a synchronous, line-oriented JSON protocol over standard input and standard output streams. As implemented in CardPython.Converse, the worker launches with the --worker flag and emits a stream of newline-delimited JSON objects [apps/securekit-api/Services/CardPython.cs:57-58, 99-128]. The protocol requires a two-phase handshake: Readiness Phase: The C# process reads stdout until it receives an event where event equals ready and ok is true [apps/securekit-api/Services/CardPython.cs:115-120]. Conversation Phase: Upon receiving readiness, the C# process writes the payload request object (assigned id: \"1\") to standard input (process.StandardInput) and awaits the matching response line on standard output [apps/securekit-api/Services/CardPython.cs:102-127]. Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api/Services/CardPython.cs 45-76 apps/securekit-api/Services/CardPython.cs 99-128 3. Timeouts, Error Handling, and Process-Tree Termination To prevent hanging worker threads or leaked OS resources during intensive computer vision tasks, CardPython wraps execution in linked cancellation tokens and process job containers. Timeouts: A CancellationTokenSource is bound to options.TimeoutMs (defaulting to 300,000ms / 5 minutes) [apps/securekit-api/Services/CardPython.cs:60-61]. If execution exceeds this window, an OperationCanceledException is intercepted and converted into a PYTHON_TIMEOUT failure code (504 Gateway Timeout) [apps/securekit-api/Services/CardPython.cs:77-78]. Process-Tree Kill: ProcessJob.Attach(process) registers the child process within a job object [apps/securekit-api/Services/CardPython.cs:68]. In the finally cleanup block, if the process has not exited, process.Kill(true) is invoked recursively to terminate the entire process tree, preventing orphaned Python sub-processes [apps/securekit-api/Services/CardPython.cs:88-96]. Stderr Drainage: Standard error is drained asynchronously via DrainError to prevent pipe deadlocks when stderr buffers fill up during exceptions or warnings [apps/securekit-api/Services/CardPython.cs:69]. Sources: [apps/securekit-api/Services/CardPython.cs:60-96] 4. Temporary Files and Data Flow Biometric verification pipelines often ingest high-resolution image or audio payloads. The process bridge coordinates data handoff by streaming inputs directly or referencing managed paths validated by CardOptions.Allowed [apps/securekit-api/Services/CardOptions.cs:28-41]. Path security constraints ensure that referenced reference images and temporary upload paths reside strictly within permitted roots (ReferenceDirectory, UserReferenceDirectory), preventing directory traversal vulnerabilities prior to spawning worker CLI arguments [apps/securekit-api/Services/CardOptions.cs:15-16, 24-41]. Sources: [apps/securekit-api/Services/CardOptions.cs:12-42]",
+      "diagrams": [
+        "2.2.1-python-process-bridge-1.svg"
+      ],
+      "words": 482
+    },
+    {
+      "slug": "2.2.2-keystroke-session-and-risk-services",
+      "title": "Keystroke, Session and Risk Services",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.2-keystroke-session-and-risk-services",
+      "number": "2.2.2",
+      "headings": [
+        {
+          "id": "keystroke-session-and-risk-services",
+          "level": 1,
+          "title": "Keystroke, Session and Risk Services"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "state-and-challenge-stores",
+          "level": 2,
+          "title": "State and Challenge Stores"
+        },
+        {
+          "id": "challengestore",
+          "level": 3,
+          "title": "ChallengeStore"
+        },
+        {
+          "id": "sessionstore",
+          "level": 3,
+          "title": "SessionStore"
+        },
+        {
+          "id": "keystroke-verification-and-ema-profiles",
+          "level": 2,
+          "title": "Keystroke Verification and EMA Profiles"
+        },
+        {
+          "id": "dynamic-keystroke-and-session-verification",
+          "level": 3,
+          "title": "Dynamic Keystroke and Session Verification"
+        },
+        {
+          "id": "fixed-keystroke-and-python-bridge",
+          "level": 3,
+          "title": "Fixed Keystroke and Python Bridge"
+        },
+        {
+          "id": "risk-evaluation-and-network-verification",
+          "level": 2,
+          "title": "Risk Evaluation and Network Verification"
+        },
+        {
+          "id": "sessionriskevaluator",
+          "level": 3,
+          "title": "SessionRiskEvaluator"
+        },
+        {
+          "id": "network-verification-ipcheckservice",
+          "level": 3,
+          "title": "Network Verification (IpCheckService)"
+        }
+      ],
+      "searchText": "Keystroke, Session and Risk Services Relevant source files MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api/Program.cs Purpose and Scope This section details the backend verification, state management, and risk evaluation components implemented within the ASP.NET Core API (apps/securekit-api). Specifically, this covers dynamic and fixed keystroke biometric parsing, Exponential Moving Average (EMA) user profiles, session state persistence (SessionStore), challenge lifecycle management (ChallengeStore), multi-signal risk decision logic (SessionRiskEvaluator), and network/IP verification (IpCheckService). Sources: apps/securekit-api/Program.cs 8-28 MIGRATION_TO_ASPNET10_PLAN.md 111-147 State and Challenge Stores Session and challenge data are maintained in-memory using thread-safe singleton services configured at bootstrap. ChallengeStore The ChallengeStore manages timed, single-use authentication and biometric challenges. TTL: Challenges enforce a default Time-To-Live (typically 120 seconds). Consumption: Challenges support strict single-use semantics; once consumed during verification or registration, subsequent validation attempts fail. Registration: Registered as a singleton service in apps/securekit-api/Program.cs 10 SessionStore The SessionStore tracks active user sessions. TTL: Sessions enforce a default sliding or absolute timeout (e.g., 15 minutes as described in MIGRATION_TO_ASPNET10_PLAN.md 119). State Merging: Signals and intermediate biometric verifications are accumulated across session lifecycle calls. Registration: Registered as a singleton service in apps/securekit-api/Program.cs 13 Diyagramı büyütmek için seçin ↗ Diagram 1: Natural Language Space to Code Entity Space for Challenge and Session Stores Sources: apps/securekit-api/Program.cs 10-13 MIGRATION_TO_ASPNET10_PLAN.md 74-79 MIGRATION_TO_ASPNET10_PLAN.md 118-124 Keystroke Verification and EMA Profiles Keystroke dynamics validation spans both dynamic behavioral typing analysis and fixed-text template matching via Python worker bridges. Dynamic Keystroke and Session Verification SessionKeystrokeVerifier: Evaluates dynamic typing patterns submitted during session checks against established user baselines. Metrics & EMA Profiles: Calculates timing metrics (dwell time, flight time) and updates user behavioral templates using Exponential Moving Average (EMA) profile updates MIGRATION_TO_ASPNET10_PLAN.md 125-126 Fixed Keystroke and Python Bridge FixedKeystrokeStore: Manages storage and retrieval of fixed-text keystroke enrollment templates. KeystrokePython: Interfaces with the underlying Python keystroke verification worker apps/securekit-api/Program.cs 17-18 Diyagramı büyütmek için seçin ↗ Diagram 2: Keystroke Pipeline Architecture and Code Entity Mapping Sources: apps/securekit-api/Program.cs 15-18 MIGRATION_TO_ASPNET10_PLAN.md 125-128 Risk Evaluation and Network Verification Risk evaluation aggregates multi-modal signals (keystrokes, face, voice, card, and network telemetry) to determine access outcomes. SessionRiskEvaluator The SessionRiskEvaluator processes accumulated verification signals against configured security policies: Outcomes: Returns decision states including allow, step_up (or step-up), and deny MIGRATION_TO_ASPNET10_PLAN.md 121-124 Policy Checks: Evaluates risk scores, country restrictions, VPN/proxy flags, and step-up authentication order requirements. Registration: Registered as a singleton in apps/securekit-api/Program.cs 14 Network Verification (IpCheckService) The IIpCheckService / IpCheckService evaluates client IP addresses against known VPN, data center, and geolocation databases to feed risk telemetry into the evaluation pipeline. Registration: Registered as a singleton in apps/securekit-api/Program.cs 16 Diyagramı büyütmek için seçin ↗ Diagram 3: Risk Evaluation and Network Verification Data Flow Sources: apps/securekit-api/Program.cs 14-16 MIGRATION_TO_ASPNET10_PLAN.md 119-124",
+      "diagrams": [
+        "2.2.2-keystroke-session-and-risk-services-1.svg",
+        "2.2.2-keystroke-session-and-risk-services-2.svg",
+        "2.2.2-keystroke-session-and-risk-services-3.svg"
+      ],
+      "words": 434
+    },
+    {
+      "slug": "2.3-storage-and-configuration",
+      "title": "Storage and Configuration",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.3-storage-and-configuration",
+      "number": "2.3",
+      "headings": [
+        {
+          "id": "storage-and-configuration",
+          "level": 1,
+          "title": "Storage and Configuration"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "file-based-json-stores-and-concurrency",
+          "level": 2,
+          "title": "File-Based JSON Stores and Concurrency"
+        },
+        {
+          "id": "configuration-architecture-object-object",
+          "level": 2,
+          "title": "Configuration Architecture ("
+        },
+        {
+          "id": "environment-variable-overrides-and-reference-roots",
+          "level": 2,
+          "title": "Environment Variable Overrides and Reference Roots"
+        }
+      ],
+      "searchText": "Storage and Configuration Relevant source files apps/securekit-api/appsettings.json docs/ASPNET_CUTOVER.md Purpose and Scope This section covers the storage mechanisms and configuration infrastructure of the SecureKit ASP.NET Core API (apps/securekit-api). SecureKit utilizes lightweight file-based JSON stores (FileUserStore, ProfileStorage, and FixedKeystrokeStore) to manage user records, biometric profiles, and keystroke templates without requiring an external database. Configuration is managed via appsettings.json and extended through hierarchical environment variable overrides, enforcing security boundaries via strict reference root validation and atomic write guarantees. Sources: docs/ASPNET_CUTOVER.md:34-37, apps/securekit-api/appsettings.json:1-35 File-Based JSON Stores and Concurrency The storage subsystem relies on local file persistence to store state across restarts. By default, stores are initialized under the apps/securekit-api/.securekit directory or overridden via specific environment variables docs/ASPNET_CUTOVER.md 34 Key components of the storage layer include: FileUserStore: Manages user credentials, salts, and identity hashes. The file path is configurable via SECUREKIT_USERS_FILE docs/ASPNET_CUTOVER.md 43 ProfileStorage: Stores multi-modal biometric profile mappings, tracked via SECUREKIT_PROFILE_STORE docs/ASPNET_CUTOVER.md 44 FixedKeystrokeStore: Manages fixed keystroke templates and reference inputs, tracked via SECUREKIT_KEYSTROKE_STORE docs/ASPNET_CUTOVER.md 45 To prevent race conditions and partial writes during concurrent requests, the storage layer employs atomic write patterns and process-level file locking. Sources: docs/ASPNET_CUTOVER.md:34-49 Configuration Architecture (appsettings.json) The API behavior is driven by structured configuration sections defined in apps/securekit-api/appsettings.json. The configuration schema maps directly to strongly-typed options classes used throughout the service layer. The configuration layout contains the following primary blocks: Logging: Defines Microsoft ASP.NET and default log levels apps/securekit-api/appsettings.json 2-7 Face: Controls face verification constraints, upload limits, timeout thresholds, device selection (auto), and GPU enforcement apps/securekit-api/appsettings.json 9-15 Voice: Configures speaker verification parameters, minimum enrollment samples, Whisper model tiers, and ECAPA-VoxCeleb embeddings apps/securekit-api/appsettings.json 16-26 Card: Defines OCR timeouts, upload limits, and default matching thresholds apps/securekit-api/appsettings.json 27-31 Cors: Manages allowed cross-origin resource sharing policies apps/securekit-api/appsettings.json 32-34 Sources: apps/securekit-api/appsettings.json:1-35 Environment Variable Overrides and Reference Roots ASP.NET Core allows overriding any hierarchical configuration key using double-underscore (__) syntax in environment variables. This mechanism is heavily used for deployment customization, file path redirection, and strict boundary enforcement for biometric references. Important environment variables and path mappings include: SECUREKIT_USERS_FILE: Absolute path override for the user store docs/ASPNET_CUTOVER.md 43 SECUREKIT_PROFILE_STORE: Absolute path override for user profiles docs/ASPNET_CUTOVER.md 44 SECUREKIT_KEYSTROKE_STORE: Directory path for fixed keystroke models docs/ASPNET_CUTOVER.md 45 Face__ReferenceDirectory / FACE_SLIDING_REFERENCES_ROOT: Storage roots for face embedding references docs/ASPNET_CUTOVER.md 46-47 Card__UserReferenceDirectory: Storage root for verified ID card templates docs/ASPNET_CUTOVER.md 48 Face__AllowedReferenceRoots__0 / Card__AllowedReferenceRoots__0: Explicit security constraints restricting file access to authorized reference directories docs/ASPNET_CUTOVER.md 58-59 MOCK_IP_CHECK: Flag to bypass live IP/VPN geolocation checks during development docs/ASPNET_CUTOVER.md 49 Sources: docs/ASPNET_CUTOVER.md:43-60",
+      "diagrams": [],
+      "words": 411
+    },
+    {
+      "slug": "3-legacy-nodeexpress-api-and-migration",
+      "title": "Legacy Node/Express API and Migration",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3-legacy-nodeexpress-api-and-migration",
+      "number": "3",
+      "headings": [
+        {
+          "id": "legacy-nodeexpress-api-and-migration",
+          "level": 1,
+          "title": "Legacy Node/Express API and Migration"
+        },
+        {
+          "id": "node-auth-routes-and-services",
+          "level": 2,
+          "title": "node-auth Routes and Services"
+        },
+        {
+          "id": "migration-plan-to-aspnet-core-10",
+          "level": 2,
+          "title": "Migration Plan to ASP.NET Core 10"
+        },
+        {
+          "id": "cutover-and-parity-testing",
+          "level": 2,
+          "title": "Cutover and Parity Testing"
+        }
+      ],
+      "searchText": "Legacy Node/Express API and Migration Relevant source files docs/NODE_API_CONTRACT_INVENTORY.md packages/node-auth/package.json This page outlines the legacy Node/Express API (packages/node-auth), its architectural footprint, and the migration strategy and parity validation suites designed to transition system responsibilities over to the ASP.NET Core 10 backend (apps/securekit-api). For deep technical breakdowns, refer to the dedicated child pages linked below. Diyagramı büyütmek için seçin ↗ Diagram 1: Legacy Node/Express API Code Entity Structure Sources: packages/node-auth/package.json:1-18, docs/NODE_API_CONTRACT_INVENTORY.md:1-46 node-auth Routes and Services The legacy backend is built around an Express application initialized in packages/node-auth/src/server.ts. It mounts modular routers under distinct prefixes to manage multi-modal verification workflows. These include authentication (auth.ts), dynamic/static text challenges (challenge.ts), user consent (consent.ts), biometric profile metadata (profiles.ts), and modal verification endpoints (face, voice, keystroke, card, and network/session evaluation). For details, see node-auth Routes and Services. Sources: docs/NODE_API_CONTRACT_INVENTORY.md:30-84, packages/node-auth/package.json:1-37 Migration Plan to ASP.NET Core 10 Migrating away from the Node/Express implementation involves an endpoint-by-endpoint porting effort into apps/securekit-api. The migration strategy preserves strict response schema contracts, error envelope formatting (VALIDATION_ERROR, UNAUTHORIZED, INTERNAL_ERROR), and ID normalization rules (trimming and lowercasing user identifiers where applicable) to guarantee seamless interoperability with @securekit/web-sdk and the React demo application. For details, see Migration Plan to ASP.NET Core 10. Sources: docs/NODE_API_CONTRACT_INVENTORY.md:1-29 Cutover and Parity Testing To ensure zero regression during the cutover phase, a comprehensive parity testing harness runs automated differential checks between the legacy Node implementation and the ASP.NET Core backend. The testing framework relies on incremental stage scripts (test:aspnet-stage1 through test:aspnet-stage7) defined in package configurations, executing end-to-end payload comparisons against shared test fixtures. Diyagramı büyütmek için seçin ↗ Diagram 2: Parity Testing Execution Pipeline For details, see Cutover and Parity Testing. Sources: packages/node-auth/package.json:6-18",
+      "diagrams": [
+        "3-legacy-nodeexpress-api-and-migration-1.svg",
+        "3-legacy-nodeexpress-api-and-migration-2.svg"
+      ],
+      "words": 274
+    },
+    {
+      "slug": "3.1-node-auth-routes-and-services",
+      "title": "node-auth Routes and Services",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.1-node-auth-routes-and-services",
+      "number": "3.1",
+      "headings": [
+        {
+          "id": "node-auth-routes-and-services",
+          "level": 1,
+          "title": "node-auth Routes and Services"
+        },
+        {
+          "id": "server-bootstrap-and-middleware-setup-object-object",
+          "level": 2,
+          "title": "Server Bootstrap and Middleware Setup ("
+        },
+        {
+          "id": "key-configuration-parameters",
+          "level": 3,
+          "title": "Key Configuration Parameters"
+        },
+        {
+          "id": "express-routers-and-endpoint-contracts",
+          "level": 2,
+          "title": "Express Routers and Endpoint Contracts"
+        },
+        {
+          "id": "1-health-and-authentication-object-object-object-object",
+          "level": 3,
+          "title": "1. Health and Authentication ("
+        },
+        {
+          "id": "2-challenges-object-object",
+          "level": 3,
+          "title": "2. Challenges ("
+        },
+        {
+          "id": "3-consent-and-profiles-object-object-object-object",
+          "level": 3,
+          "title": "3. Consent and Profiles ("
+        },
+        {
+          "id": "4-sessions-and-risk-evaluation-object-object-object-object",
+          "level": 3,
+          "title": "4. Sessions and Risk Evaluation ("
+        },
+        {
+          "id": "storage-modules-and-data-layer",
+          "level": 2,
+          "title": "Storage Modules and Data Layer"
+        }
+      ],
+      "searchText": "node-auth Routes and Services Relevant source files docs/NODE_API_CONTRACT_INVENTORY.md packages/node-auth/package.json The packages/node-auth package provides the legacy Node.js and Express-based API backend for the SecureKit toolkit packages/node-auth/package.json 1-37 It exposes multi-modal biometric authentication routes, challenge generation, session lifecycle management, and profile storage prior to full migration to ASP.NET Core docs/NODE_API_CONTRACT_INVENTORY.md 1-6 This page details the server bootstrap, Express routers, storage modules, and request/response contracts implemented in this package. Server Bootstrap and Middleware Setup (server.ts) The Express application is bootstrapped in packages/node-auth/src/server.ts (referenced via docs/NODE_API_CONTRACT_INVENTORY.md). It configures global middleware, global error handling, body parsing limits, and mounts all feature routers under standard base paths. Key Configuration Parameters Base URL / Port: Typically hosted on http://localhost:3001 docs/NODE_API_CONTRACT_INVENTORY.md 10 CORS: Enabled globally via cors() permitting all origins without credential exposure docs/NODE_API_CONTRACT_INVENTORY.md 13 Payload Limits: JSON body parser size is capped at 2mb docs/NODE_API_CONTRACT_INVENTORY.md 13-14 Error Envelope: Non-parser route failures return structured JSON matching {\"error\":{\"code\":\"...\",\"message\":\"...\",\"details\":{}}} docs/NODE_API_CONTRACT_INVENTORY.md 14-16 Diyagramı büyütmek için seçin ↗ Figure 1: Natural Language to Code Entity Space — Middleware and Router Dispatch Pipeline. Sources: docs/NODE_API_CONTRACT_INVENTORY.md, packages/node-auth/package.json Express Routers and Endpoint Contracts The API surface is partitioned into specialized Express routers located under packages/node-auth/src/routes/ docs/NODE_API_CONTRACT_INVENTORY.md 31-33 1. Health and Authentication (auth.ts, legacyVerification.ts) GET /health: Returns application health status 200 {\"ok\":true} docs/NODE_API_CONTRACT_INVENTORY.md 37 GET /auth/users: Lists registered user records with creation and update timestamps docs/NODE_API_CONTRACT_INVENTORY.md 38 POST /auth/register: Registers a new user with userId and password. Returns 201 on creation or 200 if identical parameters exist docs/NODE_API_CONTRACT_INVENTORY.md 39 POST /auth/login: Authenticates credentials, returning 200 on success or 401 INVALID_CREDENTIALS on mismatch docs/NODE_API_CONTRACT_INVENTORY.md 40 2. Challenges (challenge.ts) POST /challenge/text: Generates text verification challenges with configurable language (lang), length (length), and wordCount (defaulting to Turkish, short length, 120-second TTL) docs/NODE_API_CONTRACT_INVENTORY.md 41-48 POST /challenge/text/consume: Consumes a challenge ID single-use token, returning errors (404, 410, 409) if invalid, expired, or already used docs/NODE_API_CONTRACT_INVENTORY.md 42-48 3. Consent and Profiles (consent.ts, profiles.ts) POST /consent: Records user consent versions and timestamps docs/NODE_API_CONTRACT_INVENTORY.md 43 GET /user/:userId/profiles: Retrieves stored biometric profile references (keystroke, face, card, voice) for a given user docs/NODE_API_CONTRACT_INVENTORY.md 44 DELETE /user/biometrics: Clears stored biometric profiles and optionally consent records when ?deleteConsent=true is provided docs/NODE_API_CONTRACT_INVENTORY.md 45-50 4. Sessions and Risk Evaluation (session.ts, session/inMemoryStore.ts) POST /session/start: Initializes a session with a default 900-second TTL docs/NODE_API_CONTRACT_INVENTORY.md 66-69 POST /verify/session: Evaluates risk scores, policy compliance, and signal aggregations (location, network, voice, keystroke), yielding decisions of allow, step-up, or deny along with requiredSteps docs/NODE_API_CONTRACT_INVENTORY.md 67-75 Diyagramı büyütmek için seçin ↗ Figure 2: Natural Language to Code Entity Space — Session Verification and Risk Evaluation Flow. Sources: docs/NODE_API_CONTRACT_INVENTORY.md Storage Modules and Data Layer The node-auth package relies on lightweight in-memory and file-backed storage utilities to manage user registries, active challenges, and verification sessions. Normalization Rules: User IDs are processed with .trim().toLowerCase() in authentication and card routers, and regular .trim() in secondary routers docs/NODE_API_CONTRACT_INVENTORY.md 25-26 State Stores: Transient states such as session timeouts and challenge consumption flags are maintained via inMemoryStore.ts modules to support fast validation cycles during testing and development docs/NODE_API_CONTRACT_INVENTORY.md 61-62 Sources: docs/NODE_API_CONTRACT_INVENTORY.md, packages/node-auth/package.json",
+      "diagrams": [
+        "3.1-node-auth-routes-and-services-1.svg",
+        "3.1-node-auth-routes-and-services-2.svg"
+      ],
+      "words": 498
+    },
+    {
+      "slug": "3.2-migration-plan-to-asp.net-core-10",
+      "title": "Migration Plan to ASP.NET Core 10",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.2-migration-plan-to-asp.net-core-10",
+      "number": "3.2",
+      "headings": [
+        {
+          "id": "migration-plan-to-aspnet-core-10",
+          "level": 1,
+          "title": "Migration Plan to ASP.NET Core 10"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "target-architecture-and-core-components",
+          "level": 2,
+          "title": "Target Architecture and Core Components"
+        },
+        {
+          "id": "migration-principles-and-methodology",
+          "level": 2,
+          "title": "Migration Principles and Methodology"
+        },
+        {
+          "id": "migration-stages-and-status",
+          "level": 2,
+          "title": "Migration Stages and Status"
+        },
+        {
+          "id": "stage-summary-and-implementation-status",
+          "level": 3,
+          "title": "Stage Summary and Implementation Status"
+        }
+      ],
+      "searchText": "Migration Plan to ASP.NET Core 10 Relevant source files MIGRATION_TO_ASPNET10_PLAN.md Purpose and Scope The purpose of this document is to define the architectural migration plan for transitioning the legacy Node.js Express API located in packages/node-auth to a modern, high-performance ASP.NET Core 10 API located in apps/securekit-api (net10.0), ensuring complete contract compatibility without modifying client-facing applications MIGRATION_TO_ASPNET10_PLAN.md 1-6 The scope explicitly preserves the following components during the initial transition: The React/Vite demo application (apps/demo-web) MIGRATION_TO_ASPNET10_PLAN.md 8-10 The TypeScript web SDK (packages/web-sdk) MIGRATION_TO_ASPNET10_PLAN.md 8-11 Python workers for face, voice, card, IP, and fixed-text keystroke validation MIGRATION_TO_ASPNET10_PLAN.md 8-12 Existing HTTP routes, request/response payload schemas, and error structures MIGRATION_TO_ASPNET10_PLAN.md 8-13 Python workers are integrated via a controlled process bridge managed directly by C# services MIGRATION_TO_ASPNET10_PLAN.md 15 Database transitions, password security enhancements, and advanced authentication strategy shifts are treated as independent efforts separate from this API compatibility migration MIGRATION_TO_ASPNET10_PLAN.md 16-17 Sources: MIGRATION_TO_ASPNET10_PLAN.md 1-18 Target Architecture and Core Components The target system is structured around modern .NET 10 conventions utilizing ASP.NET Core Controllers, xUnit testing with WebApplicationFactory, and robust JSON file-based storage adapters that match the legacy Node.js behavioral contracts MIGRATION_TO_ASPNET10_PLAN.md 19-33 Diyagramı büyütmek için seçin ↗ Figure 1: Migration architectural mapping from natural language concepts to concrete code entities in the monorepo. Sources: MIGRATION_TO_ASPNET10_PLAN.md 19-33 Migration Principles and Methodology The migration adheres to a strict zero-regression rule set, ensuring that the legacy Node API remains operational until the corresponding C# modules pass all validation gates MIGRATION_TO_ASPNET10_PLAN.md 34-42 Fallback Preservation: The Node API (packages/node-auth) is preserved until every C# module passes all test harnesses MIGRATION_TO_ASPNET10_PLAN.md 34-36 Incremental Commits: Every migration step consists of small, independent, and revertible commits MIGRATION_TO_ASPNET10_PLAN.md 37 Contract-First Development: Schemas and tests are established prior to implementation MIGRATION_TO_ASPNET10_PLAN.md 38 Strict Parity: Routes, HTTP methods, status codes, and JSON field definitions remain unaltered MIGRATION_TO_ASPNET10_PLAN.md 39 Dual-Run Validation: Identical endpoints are executed against both Node and C# environments to verify payload parity MIGRATION_TO_ASPNET10_PLAN.md 40 Gate-Enforced Progression: Progression to subsequent stages is blocked until current stage test gates pass MIGRATION_TO_ASPNET10_PLAN.md 41 Sources: MIGRATION_TO_ASPNET10_PLAN.md 34-42 Migration Stages and Status The migration plan is partitioned into sequential stages, starting from core scaffolding and progressing through domain services, biometric verification bridges, and acceptance harnesses. Diyagramı büyütmek için seçin ↗ Figure 2: Sequential migration stages governed by automated test gates. Sources: MIGRATION_TO_ASPNET10_PLAN.md 43-166 Stage Summary and Implementation Status StageFocus AreasKey Code Entities & ArtifactsStatusStage 0Scaffold, CORS, JSON, Health CheckProgram.cs, apps/securekit-api.tests, /healthCompleted MIGRATION_TO_ASPNET10_PLAN.md 45-51Stage 1Challenge, Consent, ProfilesPOST /challenge/text, POST /consent, GET /user/{userId}/profiles, DELETE /user/biometricsCompleted MIGRATION_TO_ASPNET10_PLAN.md 74-81Stage 2Users & Session WorkflowGET /auth/users, POST /auth/register, POST /auth/login, POST /session/start, POST /verify/sessionCompleted MIGRATION_TO_ASPNET10_PLAN.md 113-118Stage 3Network, Location & LegacyNetwork verification, IP check, legacy proxy routesCompleted MIGRATION_TO_ASPNET10_PLAN.md 164-166 Sources: MIGRATION_TO_ASPNET10_PLAN.md 43-166",
+      "diagrams": [
+        "3.2-migration-plan-to-asp.net-core-10-1.svg",
+        "3.2-migration-plan-to-asp.net-core-10-2.svg"
+      ],
+      "words": 445
+    },
+    {
+      "slug": "3.3-cutover-and-parity-testing",
+      "title": "Cutover and Parity Testing",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.3-cutover-and-parity-testing",
+      "number": "3.3",
+      "headings": [
+        {
+          "id": "cutover-and-parity-testing",
+          "level": 1,
+          "title": "Cutover and Parity Testing"
+        },
+        {
+          "id": "backend-selection-and-environment-configuration",
+          "level": 2,
+          "title": "Backend Selection and Environment Configuration"
+        },
+        {
+          "id": "configuration-variables",
+          "level": 3,
+          "title": "Configuration Variables"
+        },
+        {
+          "id": "parity-runner-object-object",
+          "level": 2,
+          "title": "Parity Runner ("
+        },
+        {
+          "id": "execution-flow",
+          "level": 3,
+          "title": "Execution Flow"
+        },
+        {
+          "id": "run-logs-output-structure",
+          "level": 3,
+          "title": "Run-Logs Output Structure"
+        },
+        {
+          "id": "stage-one-through-seven-parity-scripts",
+          "level": 2,
+          "title": "Stage-One through Seven Parity Scripts"
+        },
+        {
+          "id": "normalization-and-assertion-logic",
+          "level": 3,
+          "title": "Normalization and Assertion Logic"
+        },
+        {
+          "id": "fixtures-and-deterministic-testing-object-object",
+          "level": 2,
+          "title": "Fixtures and Deterministic Testing ("
+        },
+        {
+          "id": "protocol-fixture-behavior",
+          "level": 3,
+          "title": "Protocol Fixture Behavior"
+        }
+      ],
+      "searchText": "Cutover and Parity Testing Relevant source files docs/ASPNET_CUTOVER.md package.json packages/node-auth/scripts/fixtures/card-stage7.py packages/node-auth/scripts/stage-seven-parity.ts scripts/aspnet-parity.mjs This page documents the migration strategy, backend selection environment variables, parity test harnesses, and validation fixtures used to transition from the legacy Node/Express API (packages/node-auth) to the SecureKit ASP.NET Core 10 API (apps/securekit-api). It covers the execution of the aspnet-parity.mjs test runner, the stage-one through stage-seven parity scripts, and the generation of run-logs under .run-logs/. Backend Selection and Environment Configuration The monorepo supports running either the legacy Node/Express API or the new ASP.NET Core API behind the Vite development proxy docs/ASPNET_CUTOVER.md 1-31 Backend selection is controlled via environment variables evaluated at startup in the root orchestration scripts and Vite configuration docs/ASPNET_CUTOVER.md 13-23 Configuration Variables VITE_SECUREKIT_API_BACKEND: Controls target selection. Setting this to aspnet routes requests to port 3002, while node routes to port 3001 docs/ASPNET_CUTOVER.md 21-22 VITE_SECUREKIT_DEV_PROXY_TARGET: Explicit URL override that takes precedence over VITE_SECUREKIT_API_BACKEND docs/ASPNET_CUTOVER.md 20-21 Port defaults: The C# ASP.NET Core API binds to port 3002, the Node/Express API binds to port 3001, and the Vite dev server runs on port 5173 docs/ASPNET_CUTOVER.md 8-10 Sources: docs/ASPNET_CUTOVER.md:6-31, package.json:8-22 Parity Runner (aspnet-parity.mjs) The parity testing harness is orchestrated by scripts/aspnet-parity.mjs scripts/aspnet-parity.mjs 1-38 It sequentially executes parity test scripts for stages one through seven using tsx scripts/aspnet-parity.mjs 11-14 Each stage spins up both the legacy Express application instance and the ASP.NET Core API binary, forwarding identical HTTP requests and asserting structural and behavioral contract parity. Execution Flow Diyagramı büyütmek için seçin ↗ Sources: scripts/aspnet-parity.mjs:1-38, packages/node-auth/scripts/stage-seven-parity.ts:1-34 Run-Logs Output Structure Results are serialized into .run-logs/aspnet-parity.json scripts/aspnet-parity.mjs 7-9 The schema records overall success, timestamps, and individual stage metrics: { \"startedAt\": \"2026-10-07T00:00:00.000Z\", \"passed\": true, \"stages\": [ { \"stage\": \"one\", \"passed\": true, \"durationMs\": 1250, \"summary\": \"124 comparisons passed\" } ], \"finishedAt\": \"2026-10-07T00:00:05.000Z\"} Sources: scripts/aspnet-parity.mjs:7-37 Stage-One through Seven Parity Scripts Parity tests are partitioned into seven distinct functional stages covering distinct routing domains and verification boundaries: Stage 1-3: Core authentication contracts, session management, risk evaluation schemas, and challenge stores. Stage 4-6: Biometric routing modules (face embeddings, voice verification, sliding windows, and keystroke profiling). Stage 7: Card verification endpoints, multi-part form handling, reference management, error injection, and Python process bridge behavior packages/node-auth/scripts/stage-seven-parity.ts 1-114 Normalization and Assertion Logic Because underlying storage paths, system-generated temporary directories, and volatile timestamps (enrolledAt, updatedAt) differ between Node and .NET runtimes, parity scripts normalize responses prior to deep comparison packages/node-auth/scripts/stage-seven-parity.ts 46-57 // Normalization logic mapping volatile paths and datesconst normalize = (value: any, key = \"\"): any => { if (Array.isArray(value)) return value.map(v => normalize(v)); if (value && typeof value === \"object\") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, normalize(v, k)])); if ([\"updatedAt\", \"enrolledAt\", \"cardReferenceEnrolledAt\"].includes(key)) return \"<time>\"; if (typeof value === \"string\") { for (const [name, replacement] of variablePaths) value = value.split(name).join(replacement); value = value.replace(/[^\\s\"']*securekit-card-[^/\\\\\\s\"']+[\\\\/]/g, \"<temp>/\").replaceAll(\"\\\\\", \"/\"); } return value;}; Sources: packages/node-auth/scripts/stage-seven-parity.ts:46-57 Sources: packages/node-auth/scripts/stage-seven-parity.ts:1-94, scripts/aspnet-parity.mjs:1-38 Fixtures and Deterministic Testing (card-stage7.py) To ensure parity tests run reliably without requiring local PyTorch, CUDA, or PaddleOCR runtimes, stage seven utilizes a deterministic Python protocol fixture (packages/node-auth/scripts/fixtures/card-stage7.py) packages/node-auth/scripts/fixtures/card-stage7.py 1-53 Protocol Fixture Behavior The script communicates over stdin/stdout using JSONL protocol frames. It inspects probe image paths to simulate various success and failure conditions without invoking actual machine learning models: timeout: Triggers an intentional 30-second delay to test worker timeout handling packages/node-auth/scripts/fixtures/card-stage7.py 14-15 invalid: Emits non-JSON output to test parser error recovery packages/node-auth/scripts/fixtures/card-stage7.py 16-18 stdout / stderr: Emits large payload buffers or error streams to validate output draining limits packages/node-auth/scripts/fixtures/card-stage7.py 19-24 dependency: Simulates missing python module exceptions (e.g. No module named 'paddleocr') packages/node-auth/scripts/fixtures/card-stage7.py 41-42 # Protocol event emission from card-stage7.pydef emit(value): print(json.dumps(value), flush=True) emit({\"event\": \"ready\", \"ok\": True})for line in sys.stdin: request = json.loads(line) mode = pathlib.Path(request[\"probeImagePath\"]).read_text() # ... mode handling and score evaluation ... Sources: packages/node-auth/scripts/fixtures/card-stage7.py:7-13 Sources: packages/node-auth/scripts/fixtures/card-stage7.py:1-54, packages/node-auth/scripts/stage-seven-parity.ts:15-16",
+      "diagrams": [
+        "3.3-cutover-and-parity-testing-1.svg"
+      ],
+      "words": 609
+    },
+    {
+      "slug": "4-client-side--sdk-core-and-demo-app",
+      "title": "Client Side: SDK, Core and Demo App",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4-client-side:-sdk-core-and-demo-app",
+      "number": "4",
+      "headings": [
+        {
+          "id": "client-side-sdk-core-and-demo-app",
+          "level": 1,
+          "title": "Client Side: SDK, Core and Demo App"
+        },
+        {
+          "id": "41-object-object-overview",
+          "level": 2,
+          "title": "4.1."
+        },
+        {
+          "id": "42-object-object-contracts-and-orchestration",
+          "level": 2,
+          "title": "4.2."
+        },
+        {
+          "id": "43-object-object-application",
+          "level": 2,
+          "title": "4.3."
+        },
+        {
+          "id": "client-side-architecture-and-code-entity-mapping",
+          "level": 2,
+          "title": "Client-Side Architecture and Code Entity Mapping"
+        }
+      ],
+      "searchText": "Client Side: SDK, Core and Demo App Relevant source files README.md apps/demo-web/package.json This section provides a high-level overview of the client-side architecture of SecureKit, which encompasses the browser-facing TypeScript SDK (@securekit/web-sdk), the shared contracts and logic package (@securekit/core), and the React demonstration playground (apps/demo-web). For in-depth technical details, implementation specifics, and module internals, refer to the respective child pages: @securekit/web-sdk: See @securekit/web-sdk @securekit/core Contracts and Orchestration: See @securekit/core Contracts and Orchestration demo-web Application: See demo-web Application Sources: README.md 21-24 4.1. @securekit/web-sdk Overview The @securekit/web-sdk package provides the browser-side interface for interacting with authentication endpoints, capturing user biometrics, and tracking contextual signals. It encapsulates transport logic, keystroke event collectors, location/network context handlers, and legacy client compatibility adapters README.md 23 For detailed coverage of client.ts, transport layers, keystroke collectors, adapters, and legacy support surfaces, see @securekit/web-sdk. Sources: README.md 23 4.2. @securekit/core Contracts and Orchestration The @securekit/core package serves as the foundational shared layer across the monorepo. It defines request/response contracts, biometric processing modules, risk evaluation policies, and the client orchestration logic required to evaluate multi-modal signals README.md 21 For detailed information regarding shared contracts, biometrics modules, risk policies, the orchestrator, and default policies, see @securekit/core Contracts and Orchestration. Sources: README.md 21 4.3. demo-web Application The demo-web application is a React and Vite-based playground (apps/demo-web) designed to test registration, login, consent flows, and multi-modal biometric profile verification README.md 15 It integrates with both the @securekit/web-sdk and @securekit/core packages apps/demo-web/package.json 16-17 For details on the Vite development proxy, backend target resolution (api-target.ts), the AuthApp UI, authentication flows (auth.html), and acceptance smoke test scripts, see demo-web Application. Sources: README.md 15 apps/demo-web/package.json 16-17 Client-Side Architecture and Code Entity Mapping The following diagram illustrates the relationship between the browser-facing client components, shared core contracts, and the demo application playground. Title: Client-Side Component Structure Diyagramı büyütmek için seçin ↗ Sources: README.md 21-24 apps/demo-web/package.json 16-17 Data flow across the client-side packages during an authentication or registration attempt proceeds from the React UI (demo-web) through the SDK transport layer, utilizing shared structures from @securekit/core. Title: Client Request Flow Diyagramı büyütmek için seçin ↗ Sources: README.md 21-24",
+      "diagrams": [
+        "4-client-side--sdk-core-and-demo-app-1.svg",
+        "4-client-side--sdk-core-and-demo-app-2.svg"
+      ],
+      "words": 346
+    },
+    {
+      "slug": "4.1--securekitweb-sdk",
+      "title": "@securekit/web-sdk",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.1-@securekitweb-sdk",
+      "number": "4.1",
+      "headings": [
+        {
+          "id": "securekitweb-sdk",
+          "level": 1,
+          "title": "@securekit/web-sdk"
+        },
+        {
+          "id": "client-initialization-and-core-architecture-object-object",
+          "level": 2,
+          "title": "Client Initialization and Core Architecture ("
+        },
+        {
+          "id": "transport-layer-and-adapters",
+          "level": 2,
+          "title": "Transport Layer and Adapters"
+        },
+        {
+          "id": "keystroke-collectors",
+          "level": 2,
+          "title": "Keystroke Collectors"
+        },
+        {
+          "id": "location-and-context-signals",
+          "level": 2,
+          "title": "Location and Context Signals"
+        },
+        {
+          "id": "legacy-client-surface",
+          "level": 2,
+          "title": "Legacy Client Surface"
+        }
+      ],
+      "searchText": "@securekit/web-sdk Relevant source files README.md The @securekit/web-sdk package (packages/web-sdk) serves as the primary browser-side client library for SecureKit. It provides modular utilities for capturing biometric keystroke dynamics, collecting contextual browser and location signals, communicating with the SecureKit API transport layer, and maintaining backward compatibility through legacy client surfaces. Sources: README.md 23 Client Initialization and Core Architecture (client.ts) The core entry point of @securekit/web-sdk is responsible for initializing the authentication client, managing configuration options (such as API base URLs, timeouts, and headers), and orchestrating the registration of biometric collectors. The client instance acts as a facade that aggregates transport mechanisms, keystroke monitoring bindings, and environmental signal collectors. Diyagramı büyütmek için seçin ↗ Figure 1: Client initialization and component wiring flow bridging browser events to transport. Sources: README.md 23 README.md 86-88 Transport Layer and Adapters The transport layer handles HTTP communication between the browser SDK and the backend API (apps/securekit-api or legacy packages/node-auth). It abstracts request serialization, authentication headers, error handling, and endpoint resolution based on environment variables like VITE_SECUREKIT_BASE_URL and VITE_SECUREKIT_API_BACKEND. Diyagramı büyütmek için seçin ↗ Figure 2: Transport routing and adapter selection for target backend APIs. Sources: README.md 75-88 Keystroke Collectors The keystroke collector captures real-time user typing rhythm by listening to keydown and keyup DOM events on designated input fields or forms. It records hold times (dwell time) and flight times (latency between consecutive keystrokes) to construct biometric profiles. Dwell Time: Duration between keydown and corresponding keyup events for a single key. Flight Time: Duration between keyup of a preceding key and keydown of the succeeding key. Dynamic/Fixed Scoring: Prepares raw event streams to be validated against both free-text dynamic typing models and fixed-text biometric templates. Sources: README.md 9 README.md 23 Location and Context Signals To support risk evaluation and device fingerprinting, the web SDK includes location and environment collectors. These modules gather contextual signals such as timezone offset, screen resolution, browser language, and optional geolocation coordinates (subject to user permission prompts), which are bundled into authentication challenge payloads. Sources: README.md 13-14 Legacy Client Surface To maintain compatibility with older applications or during migration phases between legacy Express endpoints (packages/node-auth) and ASP.NET Core controllers (apps/securekit-api), the SDK provides a legacy client surface. This adapter layer exposes backwards-compatible method signatures that map legacy request payloads to the updated API contracts without requiring client code rewrites. Sources: README.md 22 README.md 57-61",
+      "diagrams": [
+        "4.1--securekitweb-sdk-1.svg",
+        "4.1--securekitweb-sdk-2.svg"
+      ],
+      "words": 390
+    },
+    {
+      "slug": "4.2--securekitcore-contracts-and-orchestration",
+      "title": "@securekit/core Contracts and Orchestration",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.2-@securekitcore-contracts-and-orchestration",
+      "number": "4.2",
+      "headings": [
+        {
+          "id": "securekitcore-contracts-and-orchestration",
+          "level": 1,
+          "title": "@securekit/core Contracts and Orchestration"
+        },
+        {
+          "id": "1-shared-request-and-response-contracts",
+          "level": 2,
+          "title": "1. Shared Request and Response Contracts"
+        },
+        {
+          "id": "2-biometrics-modules-and-signal-models",
+          "level": 2,
+          "title": "2. Biometrics Modules and Signal Models"
+        },
+        {
+          "id": "3-risk-policies-and-default-configuration-object-object",
+          "level": 2,
+          "title": "3. Risk Policies and Default Configuration ("
+        },
+        {
+          "id": "4-the-orchestration-engine",
+          "level": 2,
+          "title": "4. The Orchestration Engine"
+        }
+      ],
+      "searchText": "@securekit/core Contracts and Orchestration Relevant source files README.md docs/NODE_API_CONTRACT_INVENTORY.md The @securekit/core package serves as the foundational shared TypeScript library within the SecureKit monorepo. It establishes the domain models, request/response contracts, biometric signal interfaces, risk evaluation policies, and orchestration logic utilized by both server-side implementations (packages/node-auth, apps/securekit-api) and client-side SDKs (packages/web-sdk). 1. Shared Request and Response Contracts The core package defines standard data transfer objects (DTOs) and state interfaces for user lifecycle management, challenge issuance, consent verification, and multi-modal profile storage. Key structural definitions encompass: User Records & Profiles: Standardized schemas for userId, registration timestamps, consent versions, and profile associations (keystroke models, face embeddings, voice references, and card metadata). Identifiers are consistently normalized (trimmed and lowercased where appropriate) across authentication boundaries. Challenges: Structures governing challenge generation, including language parameters (lang), string lengths (length), dynamic word counts (wordCount), and strict time-to-live (CHALLENGE_TTL_SECONDS) constraints. Session Lifecycle: Time-bound session handles (sessionId) tracking expiration windows (SESSION_TTL_SECONDS), accumulated signal states, and evaluation outcomes. Figure 1: Contract Validation and Orchestration Flow Sources: README.md:19-21, docs/NODE_API_CONTRACT_INVENTORY.md:30-52 2. Biometrics Modules and Signal Models Biometric and contextual data are encapsulated into structured signal payloads before being passed to verification services or risk evaluators. The core contracts define uniform schemas for: Keystroke Dynamics: Timings for keydown and keyup events, measuring hold durations and transition latencies to match against Exponential Moving Average (EMA) user profiles or fixed-text templates. Facial and Voice Signals: Embeddings, reference image paths, liveness indicators, and speech-to-text verification payloads evaluated by external Python subprocesses. Network and Location Signals: IP metadata structures containing flags for VPN, proxy, Tor, or relay usage, alongside geographic drift calculations and country-code allowances (allowedCountries). Signal Processing and Module Mapping to Code Entities Sources: README.md:9-14, docs/NODE_API_CONTRACT_INVENTORY.md:69-76 3. Risk Policies and Default Configuration (defaultPolicy) The risk policy engine calculates session trust scores and determines whether an authentication attempt is permitted, denied, or requires step-up verification. The defaultPolicy configuration dictates threshold rules and security constraints: Risk Score Bounds: Defines numeric boundaries such as allowMaxRisk and denyMinRisk to categorize aggregated signal scores. Network Enforcement: Parameters like treatVpnAsFailure and minNetworkScore dictate strict denial or penalization when non-residential or proxy IP flags are raised. Step-Up Requirements: Specifies stepUpSteps array mappings, identifying secondary verification modalities (e.g., voice challenge, face re-verification) required when risk scores fall into intermediate bands. Decision Outcomes: Yields discrete resolution values: allow, step_up, or deny for dynamic evaluations, and accept or reject for fixed-text verifications. Sources: docs/NODE_API_CONTRACT_INVENTORY.md:27-29, docs/NODE_API_CONTRACT_INVENTORY.md:69-76 4. The Orchestration Engine The orchestrator coordinates state persistence, incremental signal aggregation, and policy enforcement across an active authentication session. When a verification request is submitted, the orchestrator executes the following sequence: Retrieves the active session state from the underlying storage layer (SessionStore). Appends or merges incoming telemetry signals (signalsUsed) with historical session data. Invokes the risk evaluation service (SessionRiskEvaluator) against the active policy profile (defaultPolicy). Generates a unified decision (decision), computes the resulting riskScore, and compiles any required step-up actions (requiredSteps) or diagnostic reasons (reasons). Diyagramı büyütmek için seçin ↗ Orchestration and Policy Evaluation Pipeline Sources: docs/NODE_API_CONTRACT_INVENTORY.md:59-76",
+      "diagrams": [
+        "4.2--securekitcore-contracts-and-orchestration-1.svg"
+      ],
+      "words": 496
+    },
+    {
+      "slug": "4.3-demo-web-application",
+      "title": "demo-web Application",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.3-demo-web-application",
+      "number": "4.3",
+      "headings": [
+        {
+          "id": "demo-web-application",
+          "level": 1,
+          "title": "demo-web Application"
+        },
+        {
+          "id": "vite-configuration-and-dev-proxy-architecture",
+          "level": 2,
+          "title": "Vite Configuration and Dev Proxy Architecture"
+        },
+        {
+          "id": "backend-resolution-object-object",
+          "level": 2,
+          "title": "Backend Resolution ("
+        },
+        {
+          "id": "application-ui-and-multi-page-build-object-object",
+          "level": 2,
+          "title": "Application UI and Multi-Page Build ("
+        },
+        {
+          "id": "aspnet-smoke-test-script-object-object",
+          "level": 2,
+          "title": "ASP.NET Smoke Test Script ("
+        }
+      ],
+      "searchText": "demo-web Application Relevant source files apps/demo-web/.env.example apps/demo-web/api-target.ts apps/demo-web/scripts/aspnet-smoke.ts apps/demo-web/vite.config.ts The apps/demo-web package is a Vite-powered React single-page and multi-page application that serves as the primary demonstration and playground frontend for the SecureKit toolkit. It showcases registration, authentication, multi-modal biometric enrollment and verification (keystroke, face, voice, and card), network signal checks, and risk scoring using @securekit/web-sdk. This page details its build configuration, backend target resolution, proxy rewriting rules, UI entry points (auth.html), and the end-to-end smoke testing harness (aspnet-smoke.ts). Vite Configuration and Dev Proxy Architecture The frontend build and development server are configured via apps/demo-web/vite.config.ts apps/demo-web/vite.config.ts 1-54 Vite is initialized with the React plugin (@vitejs/plugin-react) apps/demo-web/vite.config.ts 4 resolves an alias for @securekit/web-sdk directly to the workspace source apps/demo-web/vite.config.ts 19 and establishes a local development proxy apps/demo-web/vite.config.ts 30-44 Because the legacy Node backend and the modern ASP.NET Core backend have subtle path conventions, the Vite dev server proxy inspects incoming requests matching /api/securekit apps/demo-web/vite.config.ts 32 and applies conditional path rewriting apps/demo-web/vite.config.ts 36-41 Specifically, keystroke routes retain their full prefix (/api/securekit/keystroke/...), while other routes strip /api/securekit before forwarding to the selected backend target apps/demo-web/vite.config.ts 36-41 Diyagramı büyütmek için seçin ↗ Figure 1: Vite proxy path-rewriting and routing architecture bridging natural language flow to code entities. Sources: apps/demo-web/vite.config.ts:1-54 Backend Resolution (api-target.ts) To support seamless switching between the legacy Express backend and the modern ASP.NET Core backend during development and testing, apps/demo-web/api-target.ts exports resolveApiTarget() apps/demo-web/api-target.ts 1-8 The resolution function evaluates environment variables loaded by Vite: It checks for an explicit target override (VITE_SECUREKIT_DEV_PROXY_TARGET), taking highest precedence apps/demo-web/api-target.ts 2-3 It falls back to VITE_SECUREKIT_API_BACKEND (defaulting to aspnet) apps/demo-web/api-target.ts 4 If set to aspnet, it resolves to http://localhost:3002 apps/demo-web/api-target.ts 5; if set to node, it resolves to http://localhost:3001 apps/demo-web/api-target.ts 6 Otherwise, it throws an error apps/demo-web/api-target.ts 7 Diyagramı büyütmek için seçin ↗ Resolution logic for backend targets using resolveApiTarget. Sources: apps/demo-web/api-target.ts:1-8, apps/demo-web/.env.example:1-5 Application UI and Multi-Page Build (auth.html) The demo application is structured as a multi-page Vite bundle defined in apps/demo-web/vite.config.ts under rollupOptions.input apps/demo-web/vite.config.ts 45-52: index: Maps to apps/demo-web/index.html apps/demo-web/vite.config.ts 48 serving the main dashboard and biometric playground. auth: Maps to apps/demo-web/auth.html apps/demo-web/vite.config.ts 49 serving dedicated authentication flows, consent modals, and challenge-response entry points. The UI leverages @securekit/web-sdk to execute client-side collection (keystroke dynamics, face capture, voice recordings, and card capture) and communicates with the backend APIs via standard REST calls and typed transport error handling. Sources: apps/demo-web/vite.config.ts:45-54 ASP.NET Smoke Test Script (aspnet-smoke.ts) The integration testing and acceptance of the demo application against the ASP.NET Core API is automated via apps/demo-web/scripts/aspnet-smoke.ts apps/demo-web/scripts/aspnet-smoke.ts 1-95 This script performs the following validation stages: Unit Testing Target Resolution: Asserts proper behavior of resolveApiTarget with various environment configurations apps/demo-web/scripts/aspnet-smoke.ts 12-15 Temporary Environment Provisioning: Creates a temporary directory apps/demo-web/scripts/aspnet-smoke.ts 17 and spawns the compiled ASP.NET Core API binary (SecureKit.Api.dll) on a dynamic port (http://127.0.0.1:0) apps/demo-web/scripts/aspnet-smoke.ts 21-33 Vite Dev Server Spin-up: Programmatically launches a Vite dev server pointing to the running ASP.NET Core instance apps/demo-web/scripts/aspnet-smoke.ts 46-50 End-to-End SDK Verification: Instantiates SecureKitClient and executes a comprehensive integration battery: health checks, user registration, consent granting, login, session creation, network/location verification, keystroke dynamic enrollment and challenge verification, face reference enrollment and verification (including sliding window), voice challenge-response verification, card enrollment/verification, and biometric cleanup apps/demo-web/scripts/aspnet-smoke.ts 52-95 Diyagramı büyütmek için seçin ↗ Figure 2: Integration lifecycle of the aspnet-smoke.ts test harness. Sources: apps/demo-web/scripts/aspnet-smoke.ts:1-95, apps/demo-web/api-target.ts:1-8",
+      "diagrams": [
+        "4.3-demo-web-application-1.svg",
+        "4.3-demo-web-application-2.svg",
+        "4.3-demo-web-application-3.svg"
+      ],
+      "words": 545
+    },
+    {
+      "slug": "5-python-biometric-workers",
+      "title": "Python Biometric Workers",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5-python-biometric-workers",
+      "number": "5",
+      "headings": [
+        {
+          "id": "python-biometric-workers",
+          "level": 1,
+          "title": "Python Biometric Workers"
+        },
+        {
+          "id": "face-and-voice-workers",
+          "level": 2,
+          "title": "Face and Voice Workers"
+        },
+        {
+          "id": "card-verification-worker",
+          "level": 2,
+          "title": "Card Verification Worker"
+        },
+        {
+          "id": "ip-check-and-environment-setup",
+          "level": 2,
+          "title": "IP Check and Environment Setup"
+        }
+      ],
+      "searchText": "Python Biometric Workers Relevant source files README.md scripts/biometric-preflight.py The Python biometric workers subsystem provides dedicated machine learning and computer vision pipelines for facial verification, voice enrollment and recognition, ID card parsing, and IP reputation checks. The backend integration layer invokes these Python scripts via subprocess bridges with standard input/output contracts or command-line arguments. The python/ directory houses isolated modules for each biometric modality README.md 27-30 alongside environment configuration scripts README.md 34 and preflight validation tools scripts/biometric-preflight.py 8-14 Each worker runs within its own Python virtual environment to manage dependencies like PyTorch, TorchAudio, Whisper, SpeechBrain, PaddleOCR, and OpenCLIP cleanly without version conflicts. Diyagramı büyütmek için seçin ↗ Sources: README.md 27-30 scripts/biometric-preflight.py 8-14 Face and Voice Workers The face and voice verification pipelines handle biometric embedding generation, liveness validation, challenge-phrase speech-to-text checks, and speaker similarity scoring README.md 10-11 The face verification module utilizes MTCNN for landmark detection and FaceNet for high-dimensional embedding extraction, supporting sliding-window reference management README.md 10 The voice verification module combines Whisper for transcription and SpeechBrain speaker recognition models README.md 11 For detailed architectures, command-line arguments, input/output JSON schemas, and integration pipelines, see Face and Voice Workers. Sources: README.md 10-11 Card Verification Worker The card verification worker (python/card_verification) automates ID document processing by combining PaddleOCR for text extraction and OpenCLIP for visual document similarity comparison README.md 12 It executes via structured configuration files (config.yaml / config.cpu.yaml) and handles image preprocessing, alignment, and robust field extraction README.md 29 For detailed execution scripts, configuration options, and test suites, see Card Verification Worker. Sources: README.md 12 README.md 29 IP Check and Environment Setup The IP check script (python/ip_check.py) queries reputation services such as VPNAPI to evaluate client network signals, detecting VPNs, proxies, Tor exit nodes, and relay configurations README.md 13 Environment setup involves configuring dedicated virtual environments (.venv-face, .venv-voice, .venv-card) README.md 34 resolving hardware acceleration paths (CPU vs CUDA), and ensuring FFmpeg availability for audio processing README.md 135 For installation instructions, preflight verification scripts scripts/biometric-preflight.py 8-14 and environment variable configuration, see IP Check and Environment Setup. Sources: README.md 13 README.md 34 README.md 135 scripts/biometric-preflight.py 8-14",
+      "diagrams": [
+        "5-python-biometric-workers-1.svg"
+      ],
+      "words": 343
+    },
+    {
+      "slug": "5.1-face-and-voice-workers",
+      "title": "Face and Voice Workers",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.1-face-and-voice-workers",
+      "number": "5.1",
+      "headings": [
+        {
+          "id": "face-and-voice-workers",
+          "level": 1,
+          "title": "Face and Voice Workers"
+        },
+        {
+          "id": "face-verification-worker",
+          "level": 2,
+          "title": "Face Verification Worker"
+        },
+        {
+          "id": "implementation-details",
+          "level": 3,
+          "title": "Implementation Details"
+        },
+        {
+          "id": "data-flow",
+          "level": 3,
+          "title": "Data Flow"
+        },
+        {
+          "id": "configuration",
+          "level": 3,
+          "title": "Configuration"
+        },
+        {
+          "id": "voice-verification-worker",
+          "level": 2,
+          "title": "Voice Verification Worker"
+        },
+        {
+          "id": "implementation-details",
+          "level": 3,
+          "title": "Implementation Details"
+        },
+        {
+          "id": "data-flow",
+          "level": 3,
+          "title": "Data Flow"
+        },
+        {
+          "id": "configuration",
+          "level": 3,
+          "title": "Configuration"
+        }
+      ],
+      "searchText": "Face and Voice Workers Relevant source files MIGRATION_TO_ASPNET10_PLAN.md README.md This page details the implementation of the face and voice biometric workers within the SecureKit toolkit. These Python-based workers handle the core logic for face enrollment/verification using MTCNN and FaceNet, and voice enrollment/verification using Whisper and SpeechBrain. They are invoked by the ASP.NET Core API via a controlled process bridge. Face Verification Worker The face verification worker, located at python/face_verification/face_verification.py python/face_verification/face_verification.py 1-177 is responsible for detecting faces, extracting face embeddings, and comparing them for verification. It utilizes the MTCNN (Multi-task Cascaded Convolutional Networks) for face detection and FaceNet for generating high-dimensional face embeddings. Implementation Details The face_verification.py script can operate in two main modes: Enrollment: Takes an image, detects a face, and returns its embedding. Verification: Takes a reference embedding and a probe image, detects a face in the probe, extracts its embedding, and calculates the similarity between the two embeddings. The script uses argparse python/face_verification/face_verification.py 130-147 to handle command-line arguments for specifying the operation mode (--enroll or --verify), input files (--image, --reference, --probe), and output format (--json). Key components and their roles: FaceDetector class: python/face_verification/face_verification.py 16-40 Initializes the MTCNN model for face detection. The detect_face method python/face_verification/face_verification.py 29-40 takes an image (as a NumPy array) and returns the bounding box coordinates of the detected face. FaceEmbedder class: python/face_verification/face_verification.py 43-67 Initializes the FaceNet model for embedding generation. The get_embedding method python/face_verification/face_verification.py 56-67 takes a cropped face image and returns its 512-dimensional embedding. FaceVerifier class: python/face_verification/face_verification.py 70-100 Orchestrates the face detection and embedding process. The enroll method python/face_verification/face_verification.py 79-84 detects a face in an image and returns its embedding. The verify method python/face_verification/face_verification.py 86-100 takes a reference embedding and a probe image, extracts the probe's embedding, and calculates the cosine similarity between them. It also applies a configurable threshold (FACE_VERIFICATION_THRESHOLD) to determine if the faces match. The script also includes basic liveness detection by checking for a single, well-defined face in the image. If multiple faces are detected or no face is found, it returns an error. Data Flow The ASP.NET Core API invokes the face_verification.py script as a child process. Diyagramı büyütmek için seçin ↗ Diagram 1: Face Verification Worker Data Flow Sources: python/face_verification/face_verification.py 1-177 MIGRATION_TO_ASPNET10_PLAN.md 1-166 Configuration The face worker's behavior can be influenced by environment variables: FACE_PYTHON_BIN: Specifies the Python executable for the face worker README.md 83 FACE_DEVICE: Can be auto, cpu, or cuda to control the device used for computations README.md 84 FACE_REQUIRE_GPU: If set, forces GPU usage README.md 85 These environment variables are typically set during the setup of the Python virtual environment for face verification README.md 113-117 Sources: README.md 83-85 README.md 113-117 Voice Verification Worker The voice verification worker, located at python/voice_verification/voice_verification.py python/voice_verification/voice_verification.py 1-200 handles voice enrollment and verification. It uses Whisper for speech-to-text transcription to ensure the spoken phrase matches a challenge text, and SpeechBrain for speaker verification to compare voice characteristics. Implementation Details The voice_verification.py script supports two primary operations: Enrollment: Takes an audio file and a challenge text, transcribes the audio using Whisper, verifies it against the challenge, and then extracts a speaker embedding using SpeechBrain. Verification: Takes an audio file, a challenge text, and a reference speaker embedding. It transcribes the audio, verifies it against the challenge, extracts a speaker embedding from the audio, and compares it to the reference embedding. The script uses argparse python/voice_verification/voice_verification.py 160-177 for command-line argument parsing, allowing specification of operation mode (--enroll or --verify), input audio (--audio), challenge text (--challenge), and reference embedding (--reference). Key components and their roles: SpeechToText class: python/voice_verification/voice_verification.py 16-40 Initializes the Whisper model for speech transcription. The transcribe method python/voice_verification/voice_verification.py 29-40 takes an audio file path and returns the transcribed text. SpeakerEmbedder class: python/voice_verification/voice_verification.py 43-67 Initializes the SpeechBrain speaker verification model. The get_embedding method python/voice_verification/voice_verification.py 56-67 takes an audio file path and returns a speaker embedding. VoiceVerifier class: python/voice_verification/voice_verification.py 70-109 Orchestrates the transcription and speaker embedding processes. The enroll method python/voice_verification/voice_verification.py 82-92 transcribes audio, checks against the challenge, and extracts a speaker embedding. The verify method python/voice_verification/voice_verification.py 94-109 performs transcription, challenge verification, extracts a probe embedding, and calculates cosine similarity with a reference embedding. It uses VOICE_VERIFICATION_THRESHOLD for similarity comparison. The script ensures that the transcribed text matches the provided challenge text, adding a layer of liveness and intent verification. Data Flow Similar to the face worker, the ASP.NET Core API communicates with the voice_verification.py script via a process bridge. Diyagramı büyütmek için seçin ↗ Diagram 2: Voice Verification Worker Data Flow Sources: python/voice_verification/voice_verification.py 1-200 MIGRATION_TO_ASPNET10_PLAN.md 1-166 Configuration Environment variables for the voice worker: VOICE_PYTHON_BIN: Specifies the Python executable for the voice worker README.md 83 VOICE_DEVICE: Can be auto, cpu, or cuda README.md 84 VOICE_REQUIRE_GPU: If set, forces GPU usage README.md 85 VOICE_WHISPER_MODEL: Specifies the Whisper model to use (e.g., base, small, medium) README.md 132 The setup for the voice worker also involves creating a dedicated Python virtual environment and installing dependencies README.md 128-131 Whisper requires FFmpeg for audio processing, which is handled by imageio-ffmpeg as a fallback README.md 135 Sources: README.md 83-85 README.md 128-132 README.md 135",
+      "diagrams": [
+        "5.1-face-and-voice-workers-1.svg",
+        "5.1-face-and-voice-workers-2.svg"
+      ],
+      "words": 834
+    },
+    {
+      "slug": "5.2-card-verification-worker",
+      "title": "Card Verification Worker",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.2-card-verification-worker",
+      "number": "5.2",
+      "headings": [
+        {
+          "id": "card-verification-worker",
+          "level": 1,
+          "title": "Card Verification Worker"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "1-c-orchestration-and-process-bridge-object-object-object-object",
+          "level": 2,
+          "title": "1. C# Orchestration and Process Bridge ("
+        },
+        {
+          "id": "runtime-resolution-and-execution",
+          "level": 3,
+          "title": "Runtime Resolution and Execution"
+        },
+        {
+          "id": "json-lines-conversational-protocol",
+          "level": 3,
+          "title": "JSON-Lines Conversational Protocol"
+        },
+        {
+          "id": "reference-management-and-verification-service",
+          "level": 3,
+          "title": "Reference Management and Verification Service"
+        },
+        {
+          "id": "2-pipeline-architecture-paddleocr-openclip",
+          "level": 2,
+          "title": "2. Pipeline Architecture (PaddleOCR + OpenCLIP)"
+        },
+        {
+          "id": "verification-data-flow",
+          "level": 3,
+          "title": "Verification Data Flow"
+        },
+        {
+          "id": "3-configuration-and-execution-files",
+          "level": 2,
+          "title": "3. Configuration and Execution Files"
+        }
+      ],
+      "searchText": "Card Verification Worker Relevant source files apps/securekit-api/Services/CardPython.cs apps/securekit-api/Services/CardVerification.cs Purpose and Scope This page details the implementation of the Card Verification subsystem within the SecureKit toolkit. It covers the Python-based card verification pipeline utilizing PaddleOCR for text extraction and OpenCLIP for visual and semantic similarity comparison, alongside the C# orchestration bridge (CardPython and CardVerification) that manages process lifecycles, virtual environments, and JSON-lines communication. 1. C# Orchestration and Process Bridge (CardPython & CardVerification) The C# API layer interacts with the card verification Python worker via standard input/output redirection using a JSON-lines conversational protocol. The CardPython class implements ICardPython to locate the Python runtime, initialize the worker process, handle handshakes, and manage timeouts and process failure recovery. Runtime Resolution and Execution CardPython scans for available Python virtual environments (.venv-card or .venv) or falls back to system installations (py -3, python3, python) apps/securekit-api/Services/CardPython.cs 34-43 Once a candidate is chosen, RunOnce spawns the process with UTF-8 encoding options and passes --worker to the target script apps/securekit-api/Services/CardPython.cs 45-58 Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api/Services/CardPython.cs 20-97 JSON-Lines Conversational Protocol The communication between C# and the Python worker proceeds via standard streams: The process starts and emits a ready event ({\"event\": \"ready\", \"ok\": true}) apps/securekit-api/Services/CardPython.cs 115-120 Converse intercepts this handshake and sends the payload containing paths to the probe image, reference directory, and matching threshold apps/securekit-api/Services/CardPython.cs 121-122 The worker evaluates the card and returns a JSON response object normalized by CardResult.Normalize(raw) apps/securekit-api/Services/CardPython.cs 126-127 Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api/Services/CardPython.cs 20-128 apps/securekit-api/Services/CardVerification.cs 52-97 Reference Management and Verification Service The CardVerification service handles user card enrollments (EnrollAsync) and verification requests (VerifyAsync) apps/securekit-api/Services/CardVerification.cs 28-97 It manages thread-safe reference directory enumeration, file validation against size constraints (MaxUploadBytes), and isolated temporary directory creation for processing probes apps/securekit-api/Services/CardVerification.cs 10-102 Sources: apps/securekit-api/Services/CardVerification.cs 1-105 2. Pipeline Architecture (PaddleOCR + OpenCLIP) The Python card verification worker combines optical character recognition with visual feature embeddings: PaddleOCR: Extracts textual fields from identification cards or badges, enabling text-based structural validation alongside visual checks. OpenCLIP: Computes high-dimensional visual embeddings of the probe card image and compares them against registered reference images using cosine similarity or metric distance thresholds. Verification Data Flow Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api/Services/CardVerification.cs 52-97 apps/securekit-api/Services/CardPython.cs 20-32 Sources: apps/securekit-api/Services/CardVerification.cs 52-97 apps/securekit-api/Services/CardPython.cs 20-32 3. Configuration and Execution Files The card verification worker relies on configuration files (config.yaml and config.cpu.yaml) to define model parameters, execution devices (CPU vs. CUDA/GPU), image preprocessing resolutions, and similarity thresholds. Environment Separation: CPU-only deployments utilize config.cpu.yaml to disable hardware acceleration requirements, making it suitable for lightweight preflight checks or containerized environments lacking dedicated GPUs. Error Handling: Missing Python dependencies trigger a specific PYTHON_DEPENDENCY_MISSING failure code, advising operators to install python/card_verification/requirements.txt in the targeted virtual environment apps/securekit-api/Services/CardPython.cs 83-86 *Sources: apps/securekit-api/Services/CardPython.cs 80-87 *",
+      "diagrams": [
+        "5.2-card-verification-worker-1.svg",
+        "5.2-card-verification-worker-2.svg",
+        "5.2-card-verification-worker-3.svg"
+      ],
+      "words": 449
+    },
+    {
+      "slug": "5.3-ip-check-and-environment-setup",
+      "title": "IP Check and Environment Setup",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.3-ip-check-and-environment-setup",
+      "number": "5.3",
+      "headings": [
+        {
+          "id": "ip-check-and-environment-setup",
+          "level": 1,
+          "title": "IP Check and Environment Setup"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "1-python-virtual-environments-and-dependency-isolation",
+          "level": 2,
+          "title": "1. Python Virtual Environments and Dependency Isolation"
+        },
+        {
+          "id": "2-preflight-probing-architecture",
+          "level": 2,
+          "title": "2. Preflight Probing Architecture"
+        },
+        {
+          "id": "probing-data-flow",
+          "level": 3,
+          "title": "Probing Data Flow"
+        },
+        {
+          "id": "3-hardware-requirements-gpucuda-and-ffmpeg",
+          "level": 2,
+          "title": "3. Hardware Requirements: GPU/CUDA and FFmpeg"
+        },
+        {
+          "id": "gpu-and-cuda-validation",
+          "level": 3,
+          "title": "GPU and CUDA Validation"
+        },
+        {
+          "id": "ffmpeg-requirements",
+          "level": 3,
+          "title": "FFmpeg Requirements"
+        },
+        {
+          "id": "4-ip-check-and-vpnapi-signals",
+          "level": 2,
+          "title": "4. IP Check and VPNAPI Signals"
+        },
+        {
+          "id": "key-signal-categories",
+          "level": 3,
+          "title": "Key Signal Categories"
+        }
+      ],
+      "searchText": "IP Check and Environment Setup Relevant source files scripts/biometric-preflight.mjs scripts/biometric-preflight.py Purpose and Scope This page details the environment setup, dependency management, virtual environments (.venv-face, .venv-voice, .venv-card), GPU/CUDA configuration, FFmpeg integration, and network/IP check infrastructure (including VPNAPI signals and ip_check.py) for SecureKit's Python biometric and intelligence workers. It explains how system preflight checks validate these dependencies before runtime execution. 1. Python Virtual Environments and Dependency Isolation SecureKit segregates Python dependencies into dedicated virtual environments per biometric modality (.venv-face, .venv-voice, .venv-card). This isolation prevents library version conflicts and Windows DLL collision issues—such as those occurring when PyTorch is imported alongside PaddleOCR. The preflight module validator defines explicit dependency requirements for each modality: Face: numpy, PIL, torch, torchvision, facenet_pytorch scripts/biometric-preflight.py 8-9 Voice: numpy, torch, torchaudio, whisper, speechbrain, imageio_ffmpeg scripts/biometric-preflight.py 10 Card: numpy, PIL, cv2, yaml, rapidfuzz, skimage, torch, open_clip, paddle, paddleocr scripts/biometric-preflight.py 13 Sources: scripts/biometric-preflight.py 8-14 2. Preflight Probing Architecture The preflight runner scripts/biometric-preflight.mjs orchestrates environment probing by spawning isolated Python subprocesses executing scripts/biometric-preflight.py scripts/biometric-preflight.mjs 12-37 Probing Data Flow Node Launcher: biometric-preflight.mjs checks environment variables (*_PYTHON_BIN), local .venv-* paths, and system python3 or py launchers scripts/biometric-preflight.mjs 40-48 Subprocess Spawn: Spawns python scripts/biometric-preflight.py <module> with isolated stdio and safety timeouts (45 seconds) scripts/biometric-preflight.mjs 12-20 Import Safety: biometric-preflight.py captures stdout/stderr during importlib.import_module() calls to prevent leaking local configuration paths or throwing unhandled import side-effects scripts/biometric-preflight.py 21-25 Report Generation: Results are parsed from JSON output and written to .run-logs/biometric-preflight.json scripts/biometric-preflight.mjs 30-58 Sources: scripts/biometric-preflight.mjs 12-37 scripts/biometric-preflight.py 15-26 3. Hardware Requirements: GPU/CUDA and FFmpeg GPU and CUDA Validation For face and voice modalities, biometric-preflight.py inspects PyTorch CUDA availability (torch.cuda.is_available()) scripts/biometric-preflight.py 27-33 Configuration parameters like FACE_DEVICE, FACE_REQUIRE_GPU, or Face__RequireGpu dictate whether GPU acceleration is strictly required scripts/biometric-preflight.py 30-31 If REQUIRE_GPU is enabled, preflight checks fail if CUDA is absent. FFmpeg Requirements Voice verification relies heavily on audio preprocessing via FFmpeg. The preflight check verifies FFmpeg availability using shutil.which(\"ffmpeg\"), with an automatic fallback to binaries bundled by imageio_ffmpeg scripts/biometric-preflight.py 34-44 Sources: scripts/biometric-preflight.py 27-44 4. IP Check and VPNAPI Signals Network verification and IP intelligence modules (ip_check.py) evaluate client connection metadata to assess fraud risk during authentication sessions. Key Signal Categories VPN / Proxy Detection: Queries IP intelligence providers (such as VPNAPI) to flag commercial VPN exits, data centers, and anonymous proxy ranges. Geolocation Risk: Validates client IP geographic origin against expected user profiles or session bounds. Threat Scoring: Computes aggregate risk scores incorporated into SessionRiskEvaluator. Sources: scripts/biometric-preflight.py 1-49",
+      "diagrams": [],
+      "words": 398
+    },
+    {
+      "slug": "6-testing-and-acceptance-tooling",
+      "title": "Testing and Acceptance Tooling",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6-testing-and-acceptance-tooling",
+      "number": "6",
+      "headings": [
+        {
+          "id": "testing-and-acceptance-tooling",
+          "level": 1,
+          "title": "Testing and Acceptance Tooling"
+        },
+        {
+          "id": "testing-architecture-and-tooling-flow",
+          "level": 2,
+          "title": "Testing Architecture and Tooling Flow"
+        },
+        {
+          "id": "61-biometric-preflight",
+          "level": 2,
+          "title": "6.1 Biometric Preflight"
+        },
+        {
+          "id": "62-biometric-acceptance-harness",
+          "level": 2,
+          "title": "6.2 Biometric Acceptance Harness"
+        },
+        {
+          "id": "63-net-test-suite",
+          "level": 2,
+          "title": "6.3 .NET Test Suite"
+        },
+        {
+          "id": "test-pyramid-and-verification-bridge",
+          "level": 2,
+          "title": "Test Pyramid and Verification Bridge"
+        }
+      ],
+      "searchText": "Testing and Acceptance Tooling Relevant source files docs/BIOMETRIC_ACCEPTANCE.md package.json scripts/aspnet-parity.mjs The testing and acceptance tooling in SecureKit provides a multi-tiered validation structure designed to ensure software correctness, protocol parity between legacy and modern backends, and rigorous physical/model-level biometric validation. The test pyramid spans programmatic unit and integration tests in .NET (apps/securekit-api.tests), protocol and stage parity scripts, environment validation, and isolated biometric execution harnesses (scripts/biometric-preflight.mjs, scripts/biometric-acceptance.mjs) package.json 14-21 docs/BIOMETRIC_ACCEPTANCE.md 1-139 Sources: package.json 8-22 docs/BIometric_ACCEPTANCE.md 1-139 Testing Architecture and Tooling Flow Title: Testing and Acceptance Tooling Architecture Diyagramı büyütmek için seçin ↗ Sources: package.json 8-22 scripts/aspnet-parity.mjs 1-38 6.1 Biometric Preflight The biometric preflight utility (scripts/biometric-preflight.mjs) evaluates local environment health before executing biometric workloads docs/BIOMETRIC_ACCEPTANCE.md 8-21 It verifies Python dependencies, CUDA availability for face and voice workers, and FFmpeg tooling for audio processing without invoking full weight downloads docs/BIOMETRIC_ACCEPTANCE.md 16-21 Binary resolution prioritizes environment variables like *_PYTHON_BIN, local virtual environments (.venv-*), and system paths docs/BIOMETRIC_ACCEPTANCE.md 23-26 For details, see Biometric Preflight. Sources: docs/BIOMETRIC_ACCEPTANCE.md 8-39 6.2 Biometric Acceptance Harness The biometric acceptance harness (scripts/biometric-acceptance.mjs) orchestrates end-to-end black-box testing against an isolated, temporary instance of the ASP.NET Core API docs/BIOMETRIC_ACCEPTANCE.md 56-64 It relies on manifest-driven configuration (prepare:biometric-acceptance, status:biometric-acceptance) to validate face, voice, and card pipelines while maintaining privacy-safe reporting and zero git pollution of local biometric samples docs/BIOMETRIC_ACCEPTANCE.md 65-140 For details, see Biometric Acceptance Harness. Sources: docs/BIOMETRIC_ACCEPTANCE.md 56-140 6.3 .NET Test Suite The .NET test suite (apps/securekit-api.tests) provides automated verification for controllers, verification service logic, dependency injection, and health endpoints. It ensures that the modern ASP.NET Core backend preserves the required API contracts and business logic expected by the SDK and verification bridges. For details, see .NET Test Suite. Sources: package.json 19-21 Test Pyramid and Verification Bridge Title: Test Pyramid and Verification Bridge Diyagramı büyütmek için seçin ↗ Sources: package.json 14-22 docs/BIOMETRIC_ACCEPTANCE.md 1-139",
+      "diagrams": [
+        "6-testing-and-acceptance-tooling-1.svg",
+        "6-testing-and-acceptance-tooling-2.svg"
+      ],
+      "words": 298
+    },
+    {
+      "slug": "6.1-biometric-preflight",
+      "title": "Biometric Preflight",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.1-biometric-preflight",
+      "number": "6.1",
+      "headings": [
+        {
+          "id": "biometric-preflight",
+          "level": 1,
+          "title": "Biometric Preflight"
+        },
+        {
+          "id": "overview-and-scope",
+          "level": 2,
+          "title": "Overview and Scope"
+        },
+        {
+          "id": "binary-resolution-order",
+          "level": 2,
+          "title": "Binary Resolution Order"
+        },
+        {
+          "id": "python-probe-implementation-and-checks",
+          "level": 2,
+          "title": "Python Probe Implementation and Checks"
+        },
+        {
+          "id": "run-log-output-and-acceptance-state",
+          "level": 2,
+          "title": "Run-Log Output and Acceptance State"
+        }
+      ],
+      "searchText": "Biometric Preflight Relevant source files scripts/biometric-preflight.mjs scripts/biometric-preflight.py Overview and Scope The Biometric Preflight subsystem (scripts/biometric-preflight.mjs and scripts/biometric-preflight.py) provides automated validation of runtime environments, third-party python dependencies, hardware acceleration (CUDA), and external system binaries (such as ffmpeg) required by SecureKit's multimodal biometric verification workers. Before spinning up Python subprocess bridges in the ASP.NET Core API or legacy Node backend, the preflight script executes a series of safe, non-invasive probes that verify module importability without loading heavy ML weights into memory or downloading model checkpoints. Sources: scripts/biometric-preflight.mjs 1-11 scripts/biometric-preflight.py 1-6 Binary Resolution Order The Node.js orchestrator (scripts/biometric-preflight.mjs) resolves the appropriate Python interpreter for each biometric domain (face, voice, and card) using a strict precedence order. The binary resolution order evaluates: Explicit Environment Variables: Checks ${PREFIX}_PYTHON_BIN, PYTHON_BIN, and configuration-mapped command properties scripts/biometric-preflight.mjs 41 Local Virtual Environments: Checks if a local workspace virtual environment exists at .venv-face, .venv-voice, or .venv-card scripts/biometric-preflight.mjs 42 System Fallbacks: Defaults to platform-specific system Python (py on Windows, python3 on POSIX systems) scripts/biometric-preflight.mjs 45 Diyagramı büyütmek için seçin ↗ Figure 1: Python binary resolution and subprocess spawning flow in scripts/biometric-preflight.mjs. Sources: scripts/biometric-preflight.mjs 39-50 Python Probe Implementation and Checks The worker-side script (scripts/biometric-preflight.py) executes imports wrapped in contextlib.redirect_stdout and contextlib.redirect_stderr to prevent third-party initialization noise from corrupting JSON payloads scripts/biometric-preflight.py 21-25 The script validates distinct dependency arrays per domain: Face: numpy, PIL, torch, torchvision, facenet_pytorch scripts/biometric-preflight.py 9 Voice: numpy, torch, torchaudio, whisper, speechbrain, imageio_ffmpeg scripts/biometric-preflight.py 10 Card: numpy, PIL, cv2, yaml, rapidfuzz, skimage, torch, open_clip, paddle, paddleocr scripts/biometric-preflight.py 13 Diyagramı büyütmek için seçin ↗ Figure 2: Module verification pipeline executed inside scripts/biometric-preflight.py. Sources: scripts/biometric-preflight.py 8-49 Run-Log Output and Acceptance State Upon completing probes for all modules, scripts/biometric-preflight.mjs writes a consolidated diagnostic report to .run-logs/biometric-preflight.json scripts/biometric-preflight.gjs 8-58 The JSON report schema contains: checkedAt: ISO timestamp of the run scripts/biometric-preflight.mjs 9 dependenciesPassed: Boolean flag indicating whether all required (non-optional) checks passed across all modules scripts/biometric-preflight.mjs 9-56 modelAcceptance: Status string (\"pending\", \"passed\", or \"failed\") scripts/biometric-preflight.mjs 10 hardwareAcceptance: Status string for GPU/camera/microphone availability scripts/biometric-preflight.mjs 10-59 modules: Array of individual module check results, runtime sources, and specific error metadata scripts/biometric-preflight.mjs 10-50 If any non-optional check fails, the preflight script terminates with exit code 1, halting automated pipelines before invalid worker environments can be initialized scripts/biometric-preflight.mjs 60 Sources: scripts/biometric-preflight.mjs 8-60",
+      "diagrams": [
+        "6.1-biometric-preflight-1.svg",
+        "6.1-biometric-preflight-2.svg"
+      ],
+      "words": 373
+    },
+    {
+      "slug": "6.2-biometric-acceptance-harness",
+      "title": "Biometric Acceptance Harness",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.2-biometric-acceptance-harness",
+      "number": "6.2",
+      "headings": [
+        {
+          "id": "biometric-acceptance-harness",
+          "level": 1,
+          "title": "Biometric Acceptance Harness"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "preparation-workspace-and-status-tooling",
+          "level": 2,
+          "title": "Preparation, Workspace, and Status Tooling"
+        },
+        {
+          "id": "preparation-flow-object-object",
+          "level": 3,
+          "title": "Preparation Flow ("
+        },
+        {
+          "id": "status-verification-object-object",
+          "level": 3,
+          "title": "Status Verification ("
+        },
+        {
+          "id": "manifest-schema-validation-and-distinct-sample-checks",
+          "level": 2,
+          "title": "Manifest Schema, Validation, and Distinct Sample Checks"
+        },
+        {
+          "id": "validation-rules-and-constraints",
+          "level": 3,
+          "title": "Validation Rules and Constraints"
+        },
+        {
+          "id": "isolated-ephemeral-api-execution-and-worker-binding",
+          "level": 2,
+          "title": "Isolated Ephemeral API Execution and Worker Binding"
+        },
+        {
+          "id": "process-isolation-and-storage-overrides",
+          "level": 3,
+          "title": "Process Isolation and Storage Overrides"
+        },
+        {
+          "id": "pass-criteria-rules-object-object",
+          "level": 3,
+          "title": "Pass Criteria Rules ("
+        },
+        {
+          "id": "privacy-safe-reporting-object-object",
+          "level": 3,
+          "title": "Privacy-Safe Reporting ("
+        }
+      ],
+      "searchText": "Biometric Acceptance Harness Relevant source files docs/BIOMETRIC_ACCEPTANCE.md docs/biometric-acceptance.example.json docs/biometric-manual-acceptance.example.md scripts/biometric-acceptance-prepare.mjs scripts/biometric-acceptance-prepare.test.mjs scripts/biometric-acceptance-status.mjs scripts/biometric-acceptance-status.test.mjs scripts/biometric-acceptance.mjs scripts/biometric-acceptance.test.mjs Purpose and Scope The Biometric Acceptance Harness provides an end-to-end local validation framework for SecureKit's multi-modal biometric authentication models (face, voice, card). While protocol and HTTP-level compliance are handled by automated test suites, actual hardware, model weights, and inference outputs are verified using the acceptance scripts located under scripts/ and documented in docs/BIOMETRIC_ACCEPTANCE.md docs/BIOMETRIC_ACCEPTANCE.md 1-7 The harness operates by spinning up an isolated, ephemeral instance of the C# ASP.NET Core API with temporary file stores, reading a user-supplied JSON manifest containing consented local sample assets, exercising the production Python workers (face_verification.py, voice_worker.py, main.py), and asserting strict pass/fail criteria without leaking privacy-sensitive paths, embeddings, or transcription texts into shared git history or logs docs/BIOMETRIC_ACCEPTANCE.md 56-64 Sources: docs/BIOMETRIC_ACCEPTANCE.md 1-139 scripts/biometric-acceptance.mjs 1-110 Preparation, Workspace, and Status Tooling Before executing biometric acceptance tests, the workspace must be initialized using preparation scripts that copy template files and establish git-ignored local directories. Preparation Flow (scripts/biometric-acceptance-prepare.mjs) The preparation script copies example manifests and manual logs into .run-logs/acceptance/, ensuring exclusive creation semantics (COPYFILE_EXCL) so that existing user captures or observations are never overwritten on subsequent runs scripts/biometric-acceptance-prepare.mjs 8-26 Figure 1: Preparation Workflow Architecture linking CLI commands to prepareAcceptance in scripts/biometric-acceptance-prepare.mjs. Sources: scripts/biometric-acceptance-prepare.mjs 1-48 scripts/biometric-acceptance-prepare.test.mjs 1-48 Status Verification (scripts/biometric-acceptance-status.mjs) The status tool evaluates local manifest validity and sample readiness without initializing models, APIs, or hardware devices docs/BIOMETRIC_ACCEPTANCE.md 104-108 It parses the manifest and runs module-specific validation, returning explicit status tokens (ready, blocked, not-selected) scripts/biometric-acceptance-status.mjs 20-51 Sources: scripts/biometric-acceptance-status.mjs 1-78 scripts/biometric-acceptance-status.test.mjs 1-105 Manifest Schema, Validation, and Distinct Sample Checks The acceptance manifest (manifest.json) defines file references and spoken texts for face, voice, and card evaluation modules docs/BIOMETRIC_ACCEPTANCE.md 65-73 Validation logic resides in validateManifest() inside scripts/biometric-acceptance.mjs scripts/biometric-acceptance.mjs 21-58 Figure 2: Manifest parsing and validation pipeline bridging natural language manifest configuration to validateManifest and requireDistinct functions. Validation Rules and Constraints File Types: Audio files must use extensions .wav, .webm, .mp3, .m4a, or .ogg. Images must use .jpg, .jpeg, .png, or .webp docs/BIOMETRIC_ACCEPTANCE.md 124 Size Limits: Audio samples are capped at 12 MiB, and image samples are capped at 5 MiB docs/BIOMETRIC_ACCEPTANCE.md 125 Distinctness: Reusing the exact same file path or identical file contents (verified via SHA-256 digests) across positive and negative captures triggers validation errors such as FACE_DISTINCT_SAMPLES_REQUIRED, VOICE_DISTINCT_SAMPLES_REQUIRED, or CARD_DISTINCT_SAMPLES_REQUIRED scripts/biometric-acceptance.mjs 34-38 scripts/biometric-acceptance.test.mjs 98-110 Voice Requirements: Voice manifests require exactly three enrollment samples, a sameSpeaker sample, a differentSpeaker sample, and a distinct wrongText string scripts/biometric-acceptance.mjs 46-51 Sources: scripts/biometric-acceptance.mjs 16-58 docs/BIOMETRIC_ACCEPTANCE.md 122-139 docs/biometric-acceptance.example.json 1-22 Isolated Ephemeral API Execution and Worker Binding To prevent pollution of existing profile stores and test against clean state, the test runner spawns an isolated instance of the ASP.NET Core API (SecureKit.Api.dll) on a randomized ephemeral port (http://127.0.0.1:0) docs/BIOMETRIC_ACCEPTANCE.md 58-63 scripts/biometric-acceptance.mjs 84-110 Process Isolation and Storage Overrides The startApi() function configures environment variables that route file persistence, user databases, and worker temp directories to ephemeral subdirectories inside an isolated temporary directory scripts/biometric-acceptance.mjs 84-98 // Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98ASPNETCORE_ENVIRONMENT = \"Testing\"MOCK_IP_CHECK = \"1\"SECUREKIT_PROFILE_STORE = \"<temp-dir>/profiles.json\"SECUREKIT_USERS_FILE = \"<temp-dir>/users.json\"SECUREKIT_KEYSTROKE_STORE = \"<temp-dir>/keystroke\"Face__TempRoot = \"<temp-dir>/face-temp\"Face__ReferenceDirectory = \"<temp-dir>/face-references\"Voice__TempRoot = \"<temp-dir>/voice-temp\"Card__TempRoot = \"<temp-dir>/card-temp\"FACE_PYTHON_SCRIPT_PATH = \"python/face_verification/face_verification.py\"VOICE_PYTHON_SCRIPT_PATH = \"python/voice_verification/voice_worker.py\"CARD_PYTHON_SCRIPT_PATH = \"python/card_verification/main.py\" When the test run concludes (whether passing or failing), the child process is terminated via signal or process-tree cleanup, and the temporary directory is purged docs/BIOMETRIC_ACCEPTANCE.md 61 scripts/biometric-acceptance.mjs 101 Sources: scripts/biometric-acceptance.mjs 84-110 docs/BIOMETRIC_ACCEPTANCE.md 58-64 Title: Acceptance Pass Criteria and Privacy-Safe Reporting Architecture Figure 3: Acceptance decision and privacy-safe reporting flow illustrating the accepted function in scripts/biometric-acceptance.mjs. Pass Criteria Rules (accepted) The accepted(name, result) function evaluates API response payloads against strict success definitions for each check type scripts/biometric-acceptance.mjs 61-77 Check NameRequired API Response ConditionCode Referenceface-enrollmentbody.reference is present and truthyscripts/biometric-acceptance.mjs 65face-same-personbody.matched === true, finite score, no failureCodescripts/biometric-acceptance.mjs 66face-different-personbody.matched === false, finite score, no failureCodescripts/biometric-acceptance.mjs 67voice-enrollmentbody.enrollmentProgress.complete === true, sample count $\\ge 3$scripts/biometric-acceptance.mjs 68voice-same-speakermatched === true, decision === \"allow\", transcript matchedscripts/biometric-acceptance.mjs 69voice-different-speakermatched === false, decision === \"deny\", transcript matchedscripts/biometric-acceptance.mjs 70voice-wrong-textmatched === false, decision === \"deny\", transcript mismatchscripts/biometric-acceptance.mjs 71card-samematched === true, decision \"same\", OCR/CLIP backends validscripts/biometric-acceptance.mjs 73card-differentmatched === false, decision \"different\", OCR/CLIP backends validscripts/biometric-acceptance.mjs 74 Privacy-Safe Reporting (safeReason) To maintain strict compliance with local data privacy, filesystem error handlers (safeReason) map raw Node error codes and exception messages to fixed, non-revealing error strings (e.g., SAMPLE_FILE_MISSING, SAMPLE_UNREADABLE) scripts/biometric-acceptance-status.mjs 14-18 Absolute filesystem paths, user identifiers, spoken phrases, OCR text fields, and vector embeddings are strictly excluded from automated output logs and CI reports docs/BIOMETRIC_ACCEPTANCE.md 5-7 scripts/biometric-acceptance-status.mjs 13 Sources: scripts/biometric-acceptance.mjs 60-82 scripts/biometric-acceptance-status.mjs 13-18 docs/BIOMETRIC_ACCEPTANCE.md 5-7",
+      "diagrams": [],
+      "words": 740
+    },
+    {
+      "slug": "6.3-.net-test-suite",
+      "title": ".NET Test Suite",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.3-.net-test-suite",
+      "number": "6.3",
+      "headings": [
+        {
+          "id": "net-test-suite",
+          "level": 1,
+          "title": ".NET Test Suite"
+        },
+        {
+          "id": "test-architecture-and-support-infrastructure",
+          "level": 2,
+          "title": "Test Architecture and Support Infrastructure"
+        },
+        {
+          "id": "stage-seven-and-card-verification-tests",
+          "level": 2,
+          "title": "Stage Seven and Card Verification Tests"
+        },
+        {
+          "id": "health-and-basic-contract-tests",
+          "level": 2,
+          "title": "Health and Basic Contract Tests"
+        }
+      ],
+      "searchText": ".NET Test Suite Relevant source files apps/securekit-api.tests/HealthTests.cs apps/securekit-api.tests/StageSevenTests.cs The .NET Test Suite (apps/securekit-api.tests) is the integration and unit testing framework for the SecureKit ASP.NET Core API (apps/securekit-api). It validates controller endpoints, service layers, biometric Python process bridges, error translation contracts, and health monitors against expected behaviors and legacy Node.js API parity. Test Architecture and Support Infrastructure The test suite relies heavily on Microsoft.AspNetCore.Mvc.Testing to spin up in-memory instances of the API using WebApplicationFactory<TEntryPoint>. Custom test fixtures and helpers like ContractAssert validate JSON response shapes, HTTP status codes, and error structures. For stage-specific tests, such as card verification integration (StageSevenTests), tests instantiate specialized web application factories that isolate file system operations, mock Python script execution paths, and override configuration keys (such as SECUREKIT_PROFILE_STORE, Card:ReferenceDirectory, and Card:ScriptPath). Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api.tests/StageSevenTests.cs 13-37 Stage Seven and Card Verification Tests StageSevenTests provides comprehensive coverage for card enrollment, reference listing, threshold validation, and Python worker bridge error mappings. The test factory sets up temporary storage roots and maps stub Python scripts (card-stage7.py) to simulate various success and failure conditions. Key test behaviors implemented in StageSevenTests: Reference Listing & Humanization: Ensures only valid image formats are listed and labels are properly formatted [apps/securekit-api.tests/StageSevenTests.cs:58-65]. Protocol & Decision Flow: Tests verification matches, best-match decisions, and automatic temporary file cleanup [apps/securekit-api.tests/StageSevenTests.cs:66-74]. Enrollment Normalization: Tests user ID sanitization, reference file replacement, and stored reference usage [apps/securekit-api.tests/StageSevenTests.cs:75-85]. Worker Error Mapping: Translates invalid outputs, schema failures, timeouts, and process errors into standard HTTP status codes (502, 504, 404) and error codes (PYTHON_OUTPUT_INVALID, PYTHON_TIMEOUT, REFERENCE_NOT_FOUND) [apps/securekit-api.tests/StageSevenTests.cs:86-100]. Input Validation: Rejects out-of-range thresholds (NaN, Infinity, -1, 2) and malformed file uploads [apps/securekit-api.tests/StageSevenTests.cs:101-112]. Diyagramı büyütmek için seçin ↗ Sources: apps/securekit-api.tests/StageSevenTests.cs 86-100 Health and Basic Contract Tests HealthTests verifies basic service availability, contract parity with the legacy Node API, and boundary protections such as verifying that internal test endpoints remain hidden in production environments. The test class injects ApiFactory to test: Health Endpoint Contract: Validates that GET /health returns an HTTP 200 OK with the exact body {\"ok\":true} matching legacy contract expectations [apps/securekit-api.tests/HealthTests.cs:8-15]. Route Validation: Ensures required multipart fields like referenceImage correctly trigger a 400 Bad Request with structured error details when missing [apps/securekit-api.tests/HealthTests.cs:17-24]. Security Isolation: Confirms that internal infrastructure probe routes like /__test/throw are not exposed and correctly return 404 Not Found [apps/securekit-api.tests/HealthTests.cs:27-32]. Sources: apps/securekit-api.tests/HealthTests.cs 8-15",
+      "diagrams": [
+        "6.3-.net-test-suite-1.svg",
+        "6.3-.net-test-suite-2.svg"
+      ],
+      "words": 383
+    },
+    {
+      "slug": "7-glossary",
+      "title": "Glossary",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/7-glossary",
+      "number": "7",
+      "headings": [
+        {
+          "id": "glossary",
+          "level": 1,
+          "title": "Glossary"
+        },
+        {
+          "id": "purpose-and-scope",
+          "level": 2,
+          "title": "Purpose and Scope"
+        },
+        {
+          "id": "1-parity-stage-and-parity-harness",
+          "level": 2,
+          "title": "1. Parity Stage and Parity Harness"
+        },
+        {
+          "id": "2-biometric-manifest",
+          "level": 2,
+          "title": "2. Biometric Manifest"
+        },
+        {
+          "id": "3-biometric-preflight",
+          "level": 2,
+          "title": "3. Biometric Preflight"
+        },
+        {
+          "id": "4-model-and-hardware-acceptance",
+          "level": 2,
+          "title": "4. Model and Hardware Acceptance"
+        },
+        {
+          "id": "5-challenge-ttl-and-challenge-store",
+          "level": 2,
+          "title": "5. Challenge TTL and Challenge Store"
+        },
+        {
+          "id": "6-step-up-authentication-object-object",
+          "level": 2,
+          "title": "6. Step-Up Authentication ("
+        },
+        {
+          "id": "7-sliding-window-face-reference-management",
+          "level": 2,
+          "title": "7. Sliding Window Face Reference Management"
+        },
+        {
+          "id": "8-exponential-moving-average-ema-keystroke-profile",
+          "level": 2,
+          "title": "8. Exponential Moving Average (EMA) Keystroke Profile"
+        },
+        {
+          "id": "9-reference-roots",
+          "level": 2,
+          "title": "9. Reference Roots"
+        },
+        {
+          "id": "10-worker-bridge",
+          "level": 2,
+          "title": "10. Worker Bridge"
+        }
+      ],
+      "searchText": "Glossary Relevant source files README.md docs/ASPNET_CUTOVER.md docs/BIOMETRIC_ACCEPTANCE.md Purpose and Scope This page defines core terminology specific to the SecureKit multi-modal biometric authentication toolkit. It details the technical implementation, data flows, configuration parameters, and architectural patterns behind each concept, linking them directly to code entities across the monorepo. Sources: README.md 1-145 docs/BIOMETRIC_ACCEPTANCE.md 1-139 docs/ASPNET_CUTOVER.md 1-110 1. Parity Stage and Parity Harness Parity stages (stage-one through stage-seven) represent incremental milestones used during the migration and contractual verification between the legacy Node/Express API (packages/node-auth) and the default ASP.NET Core 10 API (apps/securekit-api). The parity harness (aspnet-parity.mjs and related scripts) executes sequential HTTP contract comparisons against both backend implementations using automated fixtures. Data Flow: The test runner issues identical HTTP payloads across both backend endpoints, recording response structures, status codes, and headers into .run-logs/aspnet-parity.json. Key Functions/Classes: Parity validation runner scripts located in packages/node-auth/scripts/ and C# integration test suites under apps/securekit-api.tests. Diyagramı büyütmek için seçin ↗ Sources: docs/ASPNET_CUTOVER.md 76-102 2. Biometric Manifest A manifest is a JSON configuration structure (manifest.json) utilized by the biometric acceptance testing framework to declare paths, sample metadata, and verification parameters for face, voice, and card evaluation pipelines without exposing raw personally identifiable information (PII) or embedding vectors to the Git repository. Implementation: Managed via preparation scripts (scripts/biometric-acceptance-prepare.mjs) and validated by the acceptance engine (scripts/biometric-acceptance.mjs). Data Flow: The manifest specifies file locations under .run-logs/acceptance/samples. The runner loads these samples, initializes an isolated temporary C# API instance, and validates HTTP contract responses against predefined success criteria. Diyagramı büyütmek için seçin ↗ Sources: docs/BIOMETRIC_ACCEPTANCE.md 56-128 3. Biometric Preflight Preflight refers to the environment verification phase executed prior to real biometric acceptance tests (scripts/biometric-preflight.mjs and .py). It checks runtime dependencies, CUDA availability, binary path resolutions, and FFmpeg integration. Implementation: Performs non-destructive dependency checking (e.g., verifying Python imports for FaceNet, Whisper, SpeechBrain, and PaddleOCR) without downloading model weights or parsing raw user images. Key Files: scripts/biometric-preflight.mjs, producing output logs at .run-logs/biometric-preflight.json. Sources: docs/BIOMETRIC_ACCEPTANCE.md 8-39 4. Model and Hardware Acceptance Model and hardware acceptance designates the phase of verification where actual deep-learning models (MTCNN, FaceNet, Whisper, SpeechBrain, OpenCLIP, PaddleOCR) and host hardware accelerators (CPU, CUDA GPUs) execute real inference pipelines. Distinction: Unlike protocol fixture tests (apps/securekit-api.tests), which validate JSON serialization and routing contracts, model acceptance evaluates numerical embedding similarity, liveness detection, optical character recognition accuracy, and hardware throughput under constraints defined by FACE_DEVICE, VOICE_DEVICE, and timeout configurations. Sources: docs/BIOMETRIC_ACCEPTANCE.md NaN-NaN 5. Challenge TTL and Challenge Store Challenge TTL (Time-To-Live) and the Challenge Store manage time-sensitive, single-use authentication challenges (such as speech verification challenge phrases or cryptographic nonces). Implementation: Challenges are generated server-side, assigned an expiration timestamp (TTL), stored in an in-memory or session-backed repository (ChallengeStore), and invalidated immediately upon verification attempt or timeout. Sources: README.md NaN-NaN 6. Step-Up Authentication (step_up) step_up is an intermediary authentication decision outcome generated by the risk evaluation engine when baseline multi-factor signals are insufficient, ambiguous, or indicate elevated risk. Decision Model: The risk engine evaluates aggregated signals (keystroke dynamics, face match score, IP/network reputation) to produce one of three outcomes: allow, step_up, or deny. A step_up result forces the client SDK to prompt for an additional biometric modality (e.g., voice or card verification) before session promotion. Diyagramı büyütmek için seçin ↗ Sources: README.md 13-14 7. Sliding Window Face Reference Management Sliding window face refers to a reference management strategy for face biometric profiles where historical embedding vectors are dynamically updated or rotated using a rolling window mechanism (FACE_SLIDING_REFERENCES_ROOT). Implementation: Rather than relying strictly on a single static enrollment image, the sliding window approach maintains a bounded set of reference embeddings, accommodating gradual changes in appearance, lighting, or angles over time while bounding storage growth. Sources: docs/ASPNET_CUTOVER.md 46-47 8. Exponential Moving Average (EMA) Keystroke Profile An EMA keystroke profile utilizes an Exponential Moving Average algorithm to continuously adapt and update a user's typing rhythm baseline (keydown / keyup hold and flight times) across authentication sessions. Data Flow: Each successful authentication updates the user's keystroke feature vector by blending historical profile weights with the incoming sample measurements via exponential weighting, allowing the system to adapt to natural variations in typing behavior over time. Sources: README.md 9-10 9. Reference Roots Reference roots (Face__AllowedReferenceRoots__0, Card__AllowedReferenceRoots__0) are explicit filesystem directory whitelists configured in ASP.NET Core (appsettings.json or environment variables) that restrict where the API can read or write biometric reference images and OCR templates. Security Role: Enforces strict filesystem sandboxing, ensuring that biometric storage paths cannot be manipulated via path-traversal attacks through request payloads. Sources: docs/ASPNET_CUTOVER.md 57-59 10. Worker Bridge The worker bridge is the inter-process communication layer where C# verification services invoke isolated Python worker processes (CardPython, FacePython, VoicePython, KeystrokePython) via standard input/output (stdin/stdout) CLI contracts and temporary file exchanges. Data Flow: C# services serialize input payloads or pass temporary file paths to specialized Python worker scripts, enforce strict execution timeouts (VOICE_PYTHON_TIMEOUT_MS, CARD_PYTHON_TIMEOUT_MS), manage process-tree termination, and parse structured JSON responses returned via stdout. Diyagramı büyütmek için seçin ↗ Sources: README.md NaN-NaN",
+      "diagrams": [
+        "7-glossary-1.svg",
+        "7-glossary-2.svg",
+        "7-glossary-3.svg",
+        "7-glossary-4.svg"
+      ],
+      "words": 817
+    }
+  ]
+}

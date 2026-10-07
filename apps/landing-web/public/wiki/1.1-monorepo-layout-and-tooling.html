@@ -1,0 +1,83 @@
+<h1 id="monorepo-layout-and-tooling">Monorepo Layout and Tooling</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>This page details the structural layout, workspace organization, and script tooling of the SecureKit multi-modal biometric authentication toolkit monorepo. It covers <code>pnpm</code> workspace definitions, root <code>package.json</code> task orchestration, build/typecheck/test pipelines, and the physical directory layout (<code>apps/</code>, <code>packages/</code>, <code>python/</code>, and <code>scripts/</code>).</p>
+<hr>
+<h2 id="workspace-layout-and-directory-structure">Workspace Layout and Directory Structure</h2>
+<p>The SecureKit monorepo is managed via <code>pnpm</code> workspaces <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a> The project layout segregates backend APIs, frontend/client SDKs, Python biometric microservices, and orchestration scripts.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Documentation table"><table><thead><tr><th>Directory / Workspace</th><th>Target / Role</th><th>Key References</th></tr></thead><tbody><tr><td><code>apps/securekit-api/</code></td><td>ASP.NET Core 10 backend API</td><td><code>SecureKit.slnx</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L19-L19" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 19</a></td></tr><tr><td><code>apps/demo-web/</code></td><td>React 19 demonstration playground (<code>demo-web</code>)</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 1-18</a></td></tr><tr><td><code>packages/node-auth/</code></td><td>Legacy Express API and parity test harness (<code>@securekit/node-auth</code>)</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-18</a></td></tr><tr><td><code>packages/core/</code></td><td>Shared biometric risk policies, contracts, and orchestrators (<code>@securekit/core</code>)</td><td>Referenced by workspaces</td></tr><tr><td><code>packages/web-sdk/</code></td><td>Browser SDK for client-side capture and transport (<code>@securekit/web-sdk</code>)</td><td>Referenced by workspaces</td></tr><tr><td><code>python/</code></td><td>Python biometric verification pipelines (face, voice, card, IP)</td><td>Invoked via process bridges</td></tr><tr><td><code>scripts/</code></td><td>Monorepo orchestration, preflight, acceptance, and parity scripts</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L10-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 10-21</a></td></tr></tbody></table></div>
+<h3 id="diagram-workspace-layout-to-code-entities">Diagram: Workspace Layout to Code Entities</h3>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/1.1-monorepo-layout-and-tooling-1.svg" alt="Monorepo Layout and Tooling — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>*Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 1-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> *</p>
+<hr>
+<h2 id="root-tooling-and-object-object-configuration">Root Tooling and <code>package.json</code> Configuration</h2>
+<p>The root <code>package.json</code> specifies strict engine requirements and package manager versions, enforcing Node <code>&gt;=22.12.0</code> and <code>pnpm@9.15.9</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L32-L35" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 32-35</a> Workspace globs cover all subdirectories under <code>packages/*</code> and <code>apps/*</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a></p>
+<h3 id="root-script-definitions">Root Script Definitions</h3>
+<p>Root scripts drive the primary development, building, and validation lifecycles:</p>
+<ul>
+<li><strong>Build</strong>: <code>&quot;pnpm -r build&quot;</code> recursively builds all packages <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 9</a></li>
+<li><strong>Development</strong>: <code>&quot;node scripts/dev.mjs&quot;</code> and <code>&quot;node scripts/dev.mjs node&quot;</code> manage local orchestrations <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L10-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 10-11</a></li>
+<li><strong>Typechecking</strong>: <code>&quot;pnpm -r --if-present typecheck&quot;</code> evaluates TypeScript types across workspaces <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 13</a></li>
+<li><strong>Testing</strong>: Scoped workspace test filters target specific verification modules, such as <code>@securekit/node-auth</code> and <code>@securekit/web-sdk</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L14-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 14</a></li>
+<li><strong>Parity &amp; Acceptance</strong>: Integration tests build the .NET solution (<code>SecureKit.slnx</code>) and execute Node-based runners like <code>scripts/aspnet-parity.mjs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L19-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 19-21</a></li>
+</ul>
+<hr>
+<h2 id="build-parity-and-test-pipelines">Build, Parity, and Test Pipelines</h2>
+<p>The test and parity tooling bridges Node.js orchestration scripts with .NET and Python executables. For instance, <code>scripts/aspnet-parity.mjs</code> systematically executes stage-by-stage parity verification between the legacy Node/Express API and the modern ASP.NET Core backend.</p>
+<p>The parity script spawns each stage script (from stage <code>one</code> to <code>seven</code>) using <code>tsx</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L11-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 11-14</a> captures output logs <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L17-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 17-22</a> extracts comparison summaries <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L24-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 24</a> and persists structured JSON reports into <code>.run-logs/aspnet-parity.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L7-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 7</a></p>
+<h3 id="diagram-parity-test-pipeline-architecture">Diagram: Parity Test Pipeline Architecture</h3>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/1.1-monorepo-layout-and-tooling-2.svg" alt="Monorepo Layout and Tooling — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L20-L20" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 20</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L11-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 11-17</a></em></p>

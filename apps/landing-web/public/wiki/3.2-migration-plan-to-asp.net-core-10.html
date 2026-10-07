@@ -1,0 +1,80 @@
+<h1 id="migration-plan-to-aspnet-core-10">Migration Plan to ASP.NET Core 10</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>The purpose of this document is to define the architectural migration plan for transitioning the legacy Node.js Express API located in <code>packages/node-auth</code> to a modern, high-performance ASP.NET Core 10 API located in <code>apps/securekit-api</code> (<code>net10.0</code>), ensuring complete contract compatibility without modifying client-facing applications <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-6</a></p>
+<p>The scope explicitly preserves the following components during the initial transition:</p>
+<ul>
+<li>The React/Vite demo application (<code>apps/demo-web</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-10</a></li>
+<li>The TypeScript web SDK (<code>packages/web-sdk</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-11</a></li>
+<li>Python workers for face, voice, card, IP, and fixed-text keystroke validation <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L12" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-12</a></li>
+<li>Existing HTTP routes, request/response payload schemas, and error structures <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-13</a></li>
+</ul>
+<p>Python workers are integrated via a controlled process bridge managed directly by C# services <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 15</a> Database transitions, password security enhancements, and advanced authentication strategy shifts are treated as independent efforts separate from this API compatibility migration <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 16-17</a></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-18</a></p>
+<hr>
+<h2 id="target-architecture-and-core-components">Target Architecture and Core Components</h2>
+<p>The target system is structured around modern .NET 10 conventions utilizing ASP.NET Core Controllers, xUnit testing with <code>WebApplicationFactory</code>, and robust JSON file-based storage adapters that match the legacy Node.js behavioral contracts <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L19-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 19-33</a></p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/3.2-migration-plan-to-asp.net-core-10-1.svg" alt="Migration Plan to ASP.NET Core 10 — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 1: Migration architectural mapping from natural language concepts to concrete code entities in the monorepo.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L19-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 19-33</a></p>
+<hr>
+<h2 id="migration-principles-and-methodology">Migration Principles and Methodology</h2>
+<p>The migration adheres to a strict zero-regression rule set, ensuring that the legacy Node API remains operational until the corresponding C# modules pass all validation gates <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-42</a></p>
+<ol>
+<li><strong>Fallback Preservation:</strong> The Node API (<code>packages/node-auth</code>) is preserved until every C# module passes all test harnesses <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L36" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-36</a></li>
+<li><strong>Incremental Commits:</strong> Every migration step consists of small, independent, and revertible commits <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L37-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 37</a></li>
+<li><strong>Contract-First Development:</strong> Schemas and tests are established prior to implementation <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L38-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 38</a></li>
+<li><strong>Strict Parity:</strong> Routes, HTTP methods, status codes, and JSON field definitions remain unaltered <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L39-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 39</a></li>
+<li><strong>Dual-Run Validation:</strong> Identical endpoints are executed against both Node and C# environments to verify payload parity <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L40-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 40</a></li>
+<li><strong>Gate-Enforced Progression:</strong> Progression to subsequent stages is blocked until current stage test gates pass <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L41-L41" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 41</a></li>
+</ol>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-42</a></p>
+<hr>
+<h2 id="migration-stages-and-status">Migration Stages and Status</h2>
+<p>The migration plan is partitioned into sequential stages, starting from core scaffolding and progressing through domain services, biometric verification bridges, and acceptance harnesses.</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/3.2-migration-plan-to-asp.net-core-10-2.svg" alt="Migration Plan to ASP.NET Core 10 — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 2: Sequential migration stages governed by automated test gates.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L43-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 43-166</a></p>
+<h3 id="stage-summary-and-implementation-status">Stage Summary and Implementation Status</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Documentation table"><table><thead><tr><th>Stage</th><th>Focus Areas</th><th>Key Code Entities &amp; Artifacts</th><th>Status</th></tr></thead><tbody><tr><td><strong>Stage 0</strong></td><td>Scaffold, CORS, JSON, Health Check</td><td><code>Program.cs</code>, <code>apps/securekit-api.tests</code>, <code>/health</code></td><td><strong>Completed</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L45-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 45-51</a></td></tr><tr><td><strong>Stage 1</strong></td><td>Challenge, Consent, Profiles</td><td><code>POST /challenge/text</code>, <code>POST /consent</code>, <code>GET /user/{userId}/profiles</code>, <code>DELETE /user/biometrics</code></td><td><strong>Completed</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L74-L81" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 74-81</a></td></tr><tr><td><strong>Stage 2</strong></td><td>Users &amp; Session Workflow</td><td><code>GET /auth/users</code>, <code>POST /auth/register</code>, <code>POST /auth/login</code>, <code>POST /session/start</code>, <code>POST /verify/session</code></td><td><strong>Completed</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L113-L118" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 113-118</a></td></tr><tr><td><strong>Stage 3</strong></td><td>Network, Location &amp; Legacy</td><td>Network verification, IP check, legacy proxy routes</td><td><strong>Completed</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L164-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 164-166</a></td></tr></tbody></table></div>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L43-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 43-166</a></p>

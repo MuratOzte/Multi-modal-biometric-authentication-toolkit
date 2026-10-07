@@ -1,0 +1,56 @@
+<h1 id="ip-check-and-environment-setup">IP Check and Environment Setup</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>This page details the environment setup, dependency management, virtual environments (<code>.venv-face</code>, <code>.venv-voice</code>, <code>.venv-card</code>), GPU/CUDA configuration, FFmpeg integration, and network/IP check infrastructure (including VPNAPI signals and <code>ip_check.py</code>) for SecureKit&#x27;s Python biometric and intelligence workers. It explains how system preflight checks validate these dependencies before runtime execution.</p>
+<hr>
+<h2 id="1-python-virtual-environments-and-dependency-isolation">1. Python Virtual Environments and Dependency Isolation</h2>
+<p>SecureKit segregates Python dependencies into dedicated virtual environments per biometric modality (<code>.venv-face</code>, <code>.venv-voice</code>, <code>.venv-card</code>). This isolation prevents library version conflicts and Windows DLL collision issues—such as those occurring when PyTorch is imported alongside PaddleOCR.</p>
+<p>The preflight module validator defines explicit dependency requirements for each modality:</p>
+<ul>
+<li><strong>Face</strong>: <code>numpy</code>, <code>PIL</code>, <code>torch</code>, <code>torchvision</code>, <code>facenet_pytorch</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-9</a></li>
+<li><strong>Voice</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
+<li><strong>Card</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
+</ul>
+<pre></pre>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-14</a></p>
+<hr>
+<h2 id="2-preflight-probing-architecture">2. Preflight Probing Architecture</h2>
+<p>The preflight runner <code>scripts/biometric-preflight.mjs</code> orchestrates environment probing by spawning isolated Python subprocesses executing <code>scripts/biometric-preflight.py</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-37</a></p>
+<h3 id="probing-data-flow">Probing Data Flow</h3>
+<ol>
+<li><strong>Node Launcher</strong>: <code>biometric-preflight.mjs</code> checks environment variables (<code>*_PYTHON_BIN</code>), local <code>.venv-*</code> paths, and system <code>python3</code> or <code>py</code> launchers <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L40-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 40-48</a></li>
+<li><strong>Subprocess Spawn</strong>: Spawns <code>python scripts/biometric-preflight.py &lt;module&gt;</code> with isolated stdio and safety timeouts (45 seconds) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L20" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-20</a></li>
+<li><strong>Import Safety</strong>: <code>biometric-preflight.py</code> captures stdout/stderr during <code>importlib.import_module()</code> calls to prevent leaking local configuration paths or throwing unhandled import side-effects <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 21-25</a></li>
+<li><strong>Report Generation</strong>: Results are parsed from JSON output and written to <code>.run-logs/biometric-preflight.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L30-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 30-58</a></li>
+</ol>
+<pre></pre>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-37</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L15-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 15-26</a></p>
+<hr>
+<h2 id="3-hardware-requirements-gpucuda-and-ffmpeg">3. Hardware Requirements: GPU/CUDA and FFmpeg</h2>
+<h3 id="gpu-and-cuda-validation">GPU and CUDA Validation</h3>
+<p>For face and voice modalities, <code>biometric-preflight.py</code> inspects PyTorch CUDA availability (<code>torch.cuda.is_available()</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L27-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 27-33</a></p>
+<ul>
+<li>Configuration parameters like <code>FACE_DEVICE</code>, <code>FACE_REQUIRE_GPU</code>, or <code>Face__RequireGpu</code> dictate whether GPU acceleration is strictly required <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L30-L31" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 30-31</a></li>
+<li>If <code>REQUIRE_GPU</code> is enabled, preflight checks fail if CUDA is absent.</li>
+</ul>
+<h3 id="ffmpeg-requirements">FFmpeg Requirements</h3>
+<p>Voice verification relies heavily on audio preprocessing via FFmpeg. The preflight check verifies FFmpeg availability using <code>shutil.which(&quot;ffmpeg&quot;)</code>, with an automatic fallback to binaries bundled by <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L34-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 34-44</a></p>
+<pre></pre>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L27-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 27-44</a></p>
+<hr>
+<h2 id="4-ip-check-and-vpnapi-signals">4. IP Check and VPNAPI Signals</h2>
+<p>Network verification and IP intelligence modules (<code>ip_check.py</code>) evaluate client connection metadata to assess fraud risk during authentication sessions.</p>
+<h3 id="key-signal-categories">Key Signal Categories</h3>
+<ul>
+<li><strong>VPN / Proxy Detection</strong>: Queries IP intelligence providers (such as VPNAPI) to flag commercial VPN exits, data centers, and anonymous proxy ranges.</li>
+<li><strong>Geolocation Risk</strong>: Validates client IP geographic origin against expected user profiles or session bounds.</li>
+<li><strong>Threat Scoring</strong>: Computes aggregate risk scores incorporated into <code>SessionRiskEvaluator</code>.</li>
+</ul>
+<pre></pre>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L1-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 1-49</a></p>

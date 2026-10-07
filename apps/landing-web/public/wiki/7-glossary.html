@@ -1,0 +1,89 @@
+<h1 id="glossary">Glossary</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>This page defines core terminology specific to the SecureKit multi-modal biometric authentication toolkit. It details the technical implementation, data flows, configuration parameters, and architectural patterns behind each concept, linking them directly to code entities across the monorepo.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L1-L145" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 1-145</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L1-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 1-110</a></p>
+<hr>
+<h2 id="1-parity-stage-and-parity-harness">1. Parity Stage and Parity Harness</h2>
+<p><strong>Parity stages</strong> (<code>stage-one</code> through <code>stage-seven</code>) represent incremental milestones used during the migration and contractual verification between the legacy Node/Express API (<code>packages/node-auth</code>) and the default ASP.NET Core 10 API (<code>apps/securekit-api</code>). The parity harness (<code>aspnet-parity.mjs</code> and related scripts) executes sequential HTTP contract comparisons against both backend implementations using automated fixtures.</p>
+<ul>
+<li><strong>Data Flow</strong>: The test runner issues identical HTTP payloads across both backend endpoints, recording response structures, status codes, and headers into <code>.run-logs/aspnet-parity.json</code>.</li>
+<li><strong>Key Functions/Classes</strong>: Parity validation runner scripts located in <code>packages/node-auth/scripts/</code> and C# integration test suites under <code>apps/securekit-api.tests</code>.</li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-1.svg" alt="Glossary — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L76-L102" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 76-102</a></p>
+<hr>
+<h2 id="2-biometric-manifest">2. Biometric Manifest</h2>
+<p>A <strong>manifest</strong> is a JSON configuration structure (<code>manifest.json</code>) utilized by the biometric acceptance testing framework to declare paths, sample metadata, and verification parameters for face, voice, and card evaluation pipelines without exposing raw personally identifiable information (PII) or embedding vectors to the Git repository.</p>
+<ul>
+<li><strong>Implementation</strong>: Managed via preparation scripts (<code>scripts/biometric-acceptance-prepare.mjs</code>) and validated by the acceptance engine (<code>scripts/biometric-acceptance.mjs</code>).</li>
+<li><strong>Data Flow</strong>: The manifest specifies file locations under <code>.run-logs/acceptance/samples</code>. The runner loads these samples, initializes an isolated temporary C# API instance, and validates HTTP contract responses against predefined success criteria.</li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-2.svg" alt="Glossary — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-128</a></p>
+<hr>
+<h2 id="3-biometric-preflight">3. Biometric Preflight</h2>
+<p><strong>Preflight</strong> refers to the environment verification phase executed prior to real biometric acceptance tests (<code>scripts/biometric-preflight.mjs</code> and <code>.py</code>). It checks runtime dependencies, CUDA availability, binary path resolutions, and FFmpeg integration.</p>
+<ul>
+<li><strong>Implementation</strong>: Performs non-destructive dependency checking (e.g., verifying Python imports for FaceNet, Whisper, SpeechBrain, and PaddleOCR) without downloading model weights or parsing raw user images.</li>
+<li><strong>Key Files</strong>: <code>scripts/biometric-preflight.mjs</code>, producing output logs at <code>.run-logs/biometric-preflight.json</code>.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L8-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 8-39</a></p>
+<hr>
+<h2 id="4-model-and-hardware-acceptance">4. Model and Hardware Acceptance</h2>
+<p><strong>Model and hardware acceptance</strong> designates the phase of verification where actual deep-learning models (MTCNN, FaceNet, Whisper, SpeechBrain, OpenCLIP, PaddleOCR) and host hardware accelerators (CPU, CUDA GPUs) execute real inference pipelines.</p>
+<ul>
+<li><strong>Distinction</strong>: Unlike protocol fixture tests (<code>apps/securekit-api.tests</code>), which validate JSON serialization and routing contracts, model acceptance evaluates numerical embedding similarity, liveness detection, optical character recognition accuracy, and hardware throughput under constraints defined by <code>FACE_DEVICE</code>, <code>VOICE_DEVICE</code>, and timeout configurations.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md NaN-NaN</a></p>
+<hr>
+<h2 id="5-challenge-ttl-and-challenge-store">5. Challenge TTL and Challenge Store</h2>
+<p><strong>Challenge TTL</strong> (Time-To-Live) and the <strong>Challenge Store</strong> manage time-sensitive, single-use authentication challenges (such as speech verification challenge phrases or cryptographic nonces).</p>
+<ul>
+<li><strong>Implementation</strong>: Challenges are generated server-side, assigned an expiration timestamp (TTL), stored in an in-memory or session-backed repository (<code>ChallengeStore</code>), and invalidated immediately upon verification attempt or timeout.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md NaN-NaN</a></p>
+<hr>
+<h2 id="6-step-up-authentication-object-object">6. Step-Up Authentication (<code>step_up</code>)</h2>
+<p><code>step_up</code> is an intermediary authentication decision outcome generated by the risk evaluation engine when baseline multi-factor signals are insufficient, ambiguous, or indicate elevated risk.</p>
+<ul>
+<li><strong>Decision Model</strong>: The risk engine evaluates aggregated signals (keystroke dynamics, face match score, IP/network reputation) to produce one of three outcomes: <code>allow</code>, <code>step_up</code>, or <code>deny</code>. A <code>step_up</code> result forces the client SDK to prompt for an additional biometric modality (e.g., voice or card verification) before session promotion.</li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-3.svg" alt="Glossary — diagram 3" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 13-14</a></p>
+<hr>
+<h2 id="7-sliding-window-face-reference-management">7. Sliding Window Face Reference Management</h2>
+<p><strong>Sliding window face</strong> refers to a reference management strategy for face biometric profiles where historical embedding vectors are dynamically updated or rotated using a rolling window mechanism (<code>FACE_SLIDING_REFERENCES_ROOT</code>).</p>
+<ul>
+<li><strong>Implementation</strong>: Rather than relying strictly on a single static enrollment image, the sliding window approach maintains a bounded set of reference embeddings, accommodating gradual changes in appearance, lighting, or angles over time while bounding storage growth.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L46-L47" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 46-47</a></p>
+<hr>
+<h2 id="8-exponential-moving-average-ema-keystroke-profile">8. Exponential Moving Average (EMA) Keystroke Profile</h2>
+<p>An <strong>EMA keystroke profile</strong> utilizes an Exponential Moving Average algorithm to continuously adapt and update a user&#x27;s typing rhythm baseline (<code>keydown</code> / <code>keyup</code> hold and flight times) across authentication sessions.</p>
+<ul>
+<li><strong>Data Flow</strong>: Each successful authentication updates the user&#x27;s keystroke feature vector by blending historical profile weights with the incoming sample measurements via exponential weighting, allowing the system to adapt to natural variations in typing behavior over time.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L9-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 9-10</a></p>
+<hr>
+<h2 id="9-reference-roots">9. Reference Roots</h2>
+<p><strong>Reference roots</strong> (<code>Face__AllowedReferenceRoots__0</code>, <code>Card__AllowedReferenceRoots__0</code>) are explicit filesystem directory whitelists configured in ASP.NET Core (<code>appsettings.json</code> or environment variables) that restrict where the API can read or write biometric reference images and OCR templates.</p>
+<ul>
+<li><strong>Security Role</strong>: Enforces strict filesystem sandboxing, ensuring that biometric storage paths cannot be manipulated via path-traversal attacks through request payloads.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L57-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 57-59</a></p>
+<hr>
+<h2 id="10-worker-bridge">10. Worker Bridge</h2>
+<p>The <strong>worker bridge</strong> is the inter-process communication layer where C# verification services invoke isolated Python worker processes (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>) via standard input/output (stdin/stdout) CLI contracts and temporary file exchanges.</p>
+<ul>
+<li><strong>Data Flow</strong>: C# services serialize input payloads or pass temporary file paths to specialized Python worker scripts, enforce strict execution timeouts (<code>VOICE_PYTHON_TIMEOUT_MS</code>, <code>CARD_PYTHON_TIMEOUT_MS</code>), manage process-tree termination, and parse structured JSON responses returned via stdout.</li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-4.svg" alt="Glossary — diagram 4" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md NaN-NaN</a></p>

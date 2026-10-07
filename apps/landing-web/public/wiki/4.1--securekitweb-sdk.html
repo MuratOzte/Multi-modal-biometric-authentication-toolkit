@@ -1,0 +1,33 @@
+<h1 id="securekitweb-sdk">@securekit/web-sdk</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+</ul>
+</details>
+<p>The <code>@securekit/web-sdk</code> package (<code>packages/web-sdk</code>) serves as the primary browser-side client library for SecureKit. It provides modular utilities for capturing biometric keystroke dynamics, collecting contextual browser and location signals, communicating with the SecureKit API transport layer, and maintaining backward compatibility through legacy client surfaces.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<h2 id="client-initialization-and-core-architecture-object-object">Client Initialization and Core Architecture (<code>client.ts</code>)</h2>
+<p>The core entry point of <code>@securekit/web-sdk</code> is responsible for initializing the authentication client, managing configuration options (such as API base URLs, timeouts, and headers), and orchestrating the registration of biometric collectors. The client instance acts as a facade that aggregates transport mechanisms, keystroke monitoring bindings, and environmental signal collectors.</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/4.1--securekitweb-sdk-1.svg" alt="@securekit/web-sdk — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 1: Client initialization and component wiring flow bridging browser events to transport.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L86-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 86-88</a></p>
+<h2 id="transport-layer-and-adapters">Transport Layer and Adapters</h2>
+<p>The transport layer handles HTTP communication between the browser SDK and the backend API (<code>apps/securekit-api</code> or legacy <code>packages/node-auth</code>). It abstracts request serialization, authentication headers, error handling, and endpoint resolution based on environment variables like <code>VITE_SECUREKIT_BASE_URL</code> and <code>VITE_SECUREKIT_API_BACKEND</code>.</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/4.1--securekitweb-sdk-2.svg" alt="@securekit/web-sdk — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Figure 2: Transport routing and adapter selection for target backend APIs.</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L75-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 75-88</a></p>
+<h2 id="keystroke-collectors">Keystroke Collectors</h2>
+<p>The keystroke collector captures real-time user typing rhythm by listening to <code>keydown</code> and <code>keyup</code> DOM events on designated input fields or forms. It records hold times (dwell time) and flight times (latency between consecutive keystrokes) to construct biometric profiles.</p>
+<ul>
+<li><strong>Dwell Time:</strong> Duration between <code>keydown</code> and corresponding <code>keyup</code> events for a single key.</li>
+<li><strong>Flight Time:</strong> Duration between <code>keyup</code> of a preceding key and <code>keydown</code> of the succeeding key.</li>
+<li><strong>Dynamic/Fixed Scoring:</strong> Prepares raw event streams to be validated against both free-text dynamic typing models and fixed-text biometric templates.</li>
+</ul>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 9</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<h2 id="location-and-context-signals">Location and Context Signals</h2>
+<p>To support risk evaluation and device fingerprinting, the web SDK includes location and environment collectors. These modules gather contextual signals such as timezone offset, screen resolution, browser language, and optional geolocation coordinates (subject to user permission prompts), which are bundled into authentication challenge payloads.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 13-14</a></p>
+<h2 id="legacy-client-surface">Legacy Client Surface</h2>
+<p>To maintain compatibility with older applications or during migration phases between legacy Express endpoints (<code>packages/node-auth</code>) and ASP.NET Core controllers (<code>apps/securekit-api</code>), the SDK provides a legacy client surface. This adapter layer exposes backwards-compatible method signatures that map legacy request payloads to the updated API contracts without requiring client code rewrites.</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L22-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 22</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L57-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 57-61</a></p>

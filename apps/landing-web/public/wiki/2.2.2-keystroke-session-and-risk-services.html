@@ -1,0 +1,65 @@
+<h1 id="keystroke-session-and-risk-services">Keystroke, Session and Risk Services</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Purpose and Scope</h2>
+<p>This section details the backend verification, state management, and risk evaluation components implemented within the ASP.NET Core API (<code>apps/securekit-api</code>). Specifically, this covers dynamic and fixed keystroke biometric parsing, Exponential Moving Average (EMA) user profiles, session state persistence (<code>SessionStore</code>), challenge lifecycle management (<code>ChallengeStore</code>), multi-signal risk decision logic (<code>SessionRiskEvaluator</code>), and network/IP verification (<code>IpCheckService</code>).</p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L111-L147" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 111-147</a></p>
+<hr>
+<h2 id="state-and-challenge-stores">State and Challenge Stores</h2>
+<p>Session and challenge data are maintained in-memory using thread-safe singleton services configured at bootstrap.</p>
+<h3 id="challengestore">ChallengeStore</h3>
+<p>The <code>ChallengeStore</code> manages timed, single-use authentication and biometric challenges.</p>
+<ul>
+<li><strong>TTL</strong>: Challenges enforce a default Time-To-Live (typically 120 seconds).</li>
+<li><strong>Consumption</strong>: Challenges support strict single-use semantics; once consumed during verification or registration, subsequent validation attempts fail.</li>
+<li><strong>Registration</strong>: Registered as a singleton service in <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10</a></li>
+</ul>
+<h3 id="sessionstore">SessionStore</h3>
+<p>The <code>SessionStore</code> tracks active user sessions.</p>
+<ul>
+<li><strong>TTL</strong>: Sessions enforce a default sliding or absolute timeout (e.g., 15 minutes as described in <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L119-L119" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 119</a>).</li>
+<li><strong>State Merging</strong>: Signals and intermediate biometric verifications are accumulated across session lifecycle calls.</li>
+<li><strong>Registration</strong>: Registered as a singleton service in <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 13</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2.2-keystroke-session-and-risk-services-1.svg" alt="Keystroke, Session and Risk Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Diagram 1: Natural Language Space to Code Entity Space for Challenge and Session Stores</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10-13</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L74-L79" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 74-79</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L118-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 118-124</a></p>
+<hr>
+<h2 id="keystroke-verification-and-ema-profiles">Keystroke Verification and EMA Profiles</h2>
+<p>Keystroke dynamics validation spans both dynamic behavioral typing analysis and fixed-text template matching via Python worker bridges.</p>
+<h3 id="dynamic-keystroke-and-session-verification">Dynamic Keystroke and Session Verification</h3>
+<ul>
+<li><strong>SessionKeystrokeVerifier</strong>: Evaluates dynamic typing patterns submitted during session checks against established user baselines.</li>
+<li><strong>Metrics &amp; EMA Profiles</strong>: Calculates timing metrics (dwell time, flight time) and updates user behavioral templates using Exponential Moving Average (EMA) profile updates <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L125-L126" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 125-126</a></li>
+</ul>
+<h3 id="fixed-keystroke-and-python-bridge">Fixed Keystroke and Python Bridge</h3>
+<ul>
+<li><strong>FixedKeystrokeStore</strong>: Manages storage and retrieval of fixed-text keystroke enrollment templates.</li>
+<li><strong>KeystrokePython</strong>: Interfaces with the underlying Python keystroke verification worker <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L17-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 17-18</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2.2-keystroke-session-and-risk-services-2.svg" alt="Keystroke, Session and Risk Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Diagram 2: Keystroke Pipeline Architecture and Code Entity Mapping</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L15-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 15-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L125-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 125-128</a></p>
+<hr>
+<h2 id="risk-evaluation-and-network-verification">Risk Evaluation and Network Verification</h2>
+<p>Risk evaluation aggregates multi-modal signals (keystrokes, face, voice, card, and network telemetry) to determine access outcomes.</p>
+<h3 id="sessionriskevaluator">SessionRiskEvaluator</h3>
+<p>The <code>SessionRiskEvaluator</code> processes accumulated verification signals against configured security policies:</p>
+<ul>
+<li><strong>Outcomes</strong>: Returns decision states including <code>allow</code>, <code>step_up</code> (or <code>step-up</code>), and <code>deny</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L121-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 121-124</a></li>
+<li><strong>Policy Checks</strong>: Evaluates risk scores, country restrictions, VPN/proxy flags, and step-up authentication order requirements.</li>
+<li><strong>Registration</strong>: Registered as a singleton in <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14</a></li>
+</ul>
+<h3 id="network-verification-ipcheckservice">Network Verification (IpCheckService)</h3>
+<p>The <code>IIpCheckService</code> / <code>IpCheckService</code> evaluates client IP addresses against known VPN, data center, and geolocation databases to feed risk telemetry into the evaluation pipeline.</p>
+<ul>
+<li><strong>Registration</strong>: Registered as a singleton in <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L16-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 16</a></li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2.2-keystroke-session-and-risk-services-3.svg" alt="Keystroke, Session and Risk Services — diagram 3" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p><em>Diagram 3: Risk Evaluation and Network Verification Data Flow</em></p>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14-16</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L119-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 119-124</a></p>

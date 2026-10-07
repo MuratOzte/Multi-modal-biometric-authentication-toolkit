@@ -1,0 +1,39 @@
+<h1 id="net-test-suite">.NET Test Suite</h1>
+<details>
+<summary>Relevant source files</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs</a></li>
+</ul>
+</details>
+<p>The <code>.NET Test Suite</code> (<code>apps/securekit-api.tests</code>) is the integration and unit testing framework for the SecureKit ASP.NET Core API (<code>apps/securekit-api</code>). It validates controller endpoints, service layers, biometric Python process bridges, error translation contracts, and health monitors against expected behaviors and legacy Node.js API parity.</p>
+<hr>
+<h2 id="test-architecture-and-support-infrastructure">Test Architecture and Support Infrastructure</h2>
+<p>The test suite relies heavily on <code>Microsoft.AspNetCore.Mvc.Testing</code> to spin up in-memory instances of the API using <code>WebApplicationFactory&lt;TEntryPoint&gt;</code>. Custom test fixtures and helpers like <code>ContractAssert</code> validate JSON response shapes, HTTP status codes, and error structures.</p>
+<p>For stage-specific tests, such as card verification integration (<code>StageSevenTests</code>), tests instantiate specialized web application factories that isolate file system operations, mock Python script execution paths, and override configuration keys (such as <code>SECUREKIT_PROFILE_STORE</code>, <code>Card:ReferenceDirectory</code>, and <code>Card:ScriptPath</code>).</p>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/6.3-.net-test-suite-1.svg" alt=".NET Test Suite — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs#L13-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs 13-37</a></p>
+<hr>
+<h2 id="stage-seven-and-card-verification-tests">Stage Seven and Card Verification Tests</h2>
+<p><code>StageSevenTests</code> provides comprehensive coverage for card enrollment, reference listing, threshold validation, and Python worker bridge error mappings. The test factory sets up temporary storage roots and maps stub Python scripts (<code>card-stage7.py</code>) to simulate various success and failure conditions.</p>
+<p>Key test behaviors implemented in <code>StageSevenTests</code>:</p>
+<ul>
+<li><strong>Reference Listing &amp; Humanization</strong>: Ensures only valid image formats are listed and labels are properly formatted [apps/securekit-api.tests/StageSevenTests.cs:58-65].</li>
+<li><strong>Protocol &amp; Decision Flow</strong>: Tests verification matches, best-match decisions, and automatic temporary file cleanup [apps/securekit-api.tests/StageSevenTests.cs:66-74].</li>
+<li><strong>Enrollment Normalization</strong>: Tests user ID sanitization, reference file replacement, and stored reference usage [apps/securekit-api.tests/StageSevenTests.cs:75-85].</li>
+<li><strong>Worker Error Mapping</strong>: Translates invalid outputs, schema failures, timeouts, and process errors into standard HTTP status codes (<code>502</code>, <code>504</code>, <code>404</code>) and error codes (<code>PYTHON_OUTPUT_INVALID</code>, <code>PYTHON_TIMEOUT</code>, <code>REFERENCE_NOT_FOUND</code>) [apps/securekit-api.tests/StageSevenTests.cs:86-100].</li>
+<li><strong>Input Validation</strong>: Rejects out-of-range thresholds (<code>NaN</code>, <code>Infinity</code>, <code>-1</code>, <code>2</code>) and malformed file uploads [apps/securekit-api.tests/StageSevenTests.cs:101-112].</li>
+</ul>
+<figure class="wiki-diagram"><img src="./wiki/diagrams/6.3-.net-test-suite-2.svg" alt=".NET Test Suite — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs#L86-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs 86-100</a></p>
+<hr>
+<h2 id="health-and-basic-contract-tests">Health and Basic Contract Tests</h2>
+<p><code>HealthTests</code> verifies basic service availability, contract parity with the legacy Node API, and boundary protections such as verifying that internal test endpoints remain hidden in production environments.</p>
+<p>The test class injects <code>ApiFactory</code> to test:</p>
+<ul>
+<li><strong>Health Endpoint Contract</strong>: Validates that GET <code>/health</code> returns an HTTP <code>200 OK</code> with the exact body <code>{&quot;ok&quot;:true}</code> matching legacy contract expectations [apps/securekit-api.tests/HealthTests.cs:8-15].</li>
+<li><strong>Route Validation</strong>: Ensures required multipart fields like <code>referenceImage</code> correctly trigger a <code>400 Bad Request</code> with structured error details when missing [apps/securekit-api.tests/HealthTests.cs:17-24].</li>
+<li><strong>Security Isolation</strong>: Confirms that internal infrastructure probe routes like <code>/__test/throw</code> are not exposed and correctly return <code>404 Not Found</code> [apps/securekit-api.tests/HealthTests.cs:27-32].</li>
+</ul>
+<pre></pre>
+<p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs#L8-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs 8-15</a></p>
