@@ -53,6 +53,65 @@ Remove-Item Env:SECUREKIT_FACE_REAL_IMAGE
 Bu test aynı görselle sözleşme/model entegrasyonunu kontrol eder; farklı
 kişi, ışık koşulları veya gerçek kamera kalitesinin kabulü ayrıca gerekir.
 
+## Gerçek ses/kart HTTP kabul aracı
+
+Sonraki kabul adımı için `scripts/biometric-acceptance.mjs` hazırdır.
+Araç gerçek C# API'yi boş, geçici depolarla ve rastgele bir yerel portta
+başlatır; üretim ses/kart Python işçilerini kullanır. Çalışan demo'ya veya
+mevcut kullanıcı/referans depolarına bağlanmaz. API kapanınca kendi geçici
+deposunu siler. Model ağırlıkları ilk kullanımda indirilebilir ve model
+önbellekleri kalır. Kamera/mikrofon testini bu araç yerine geçirmez.
+
+Yerel manifesti ve izinli örnekleri git'in yok saydığı dizinde hazırlayın:
+
+```powershell
+New-Item -ItemType Directory -Force .run-logs/acceptance/samples | Out-Null
+Copy-Item docs/biometric-acceptance.example.json .run-logs/acceptance/manifest.json
+# Örnekleri .run-logs/acceptance/samples altına koyun.
+# Manifestteki text değerleri kayıtlarda gerçekten okunan metinler olmalıdır.
+node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json --check
+
+dotnet build SecureKit.slnx
+$env:VOICE_PYTHON_BIN=(Resolve-Path .venv-voice/Scripts/python.exe).Path
+# Kart çalıştırıcısını kendi kurulu ortamınıza göre seçin; örneğin:
+$env:CARD_PYTHON_BIN="py -3.11"
+pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
+# pnpm kullanılamıyorsa:
+node scripts/biometric-acceptance.mjs .run-logs/acceptance/manifest.json
+```
+
+Manifestten `voice` veya `card` bölümünü kaldırarak tek modülü çalıştırabilirsiniz.
+Dosya yolları manifestin dizinine göre çözülür. `--check` yalnızca dosyaların
+varlığını, türünü, boyutunu ve metin alanlarını kontrol eder; model çalıştırmaz.
+Desteklenen ses uzantıları wav/webm/mp3/m4a/ogg, görseller jpg/jpeg/png/webp'dir.
+Ses sınırı 12 MiB, görsel sınırı 5 MiB'dir; API'deki daha düşük yükleme sınırları
+ayrıca geçerlidir. İşçi süreleri için `VOICE_PYTHON_TIMEOUT_MS` ve
+`CARD_PYTHON_TIMEOUT_MS` geçerlidir; aracın HTTP istek sınırı 660 saniyedir.
+
+Ses için aynı kişiden üç ayrı enrollment kaydı ve yeni bir olumlu kayıt,
+başka bir izinli kişiden bir olumsuz kayıt gerekir. Her istekte yeni challenge
+oluşturulur; kayıt metni manifestten alınır. Yanlış metin kontrolünde olumlu
+kayıt farklı bir challenge metniyle tekrar gönderilir. Ayrı dosyalar gereklidir;
+dosya adlarını değiştirerek aynı kaydı çoğaltmak kabul örneği sayılmaz.
+Enrollment hedefi üç örnektir; diğer eşikler mevcut API ayarlarından alınır
+ve test tarafından gevşetilmez. Doğrulama sırasında profil güncellenmez.
+
+Kart için referans, aynı kartın yeni çekimi ve farklı kartın çekimi gerekir.
+`same` / `different` kararları, OCR ve CLIP backend'lerinin erişilebilir olması
+aranır; `uncertain` veya backend hatası kabulü geçirmez. Farklı konuşmacı
+kontrolü doğru metin ve `deny`, yanlış metin kontrolü metin uyuşmazlığı ve
+`deny` gerektirir; `step_up` olumlu kabul sayılmaz.
+
+`.run-logs/biometric-acceptance.json` yalnızca tarih, seçilen modüller,
+sabit kontrol adları ve geçti/kaldı bilgisi içerir. Ham yanıtlar, kayıt metni,
+OCR alanları, embedding ve dosya yolları yazılmaz. Başarı
+`passed-for-selected-samples` olarak kaydedilir; bu sonuç yalnızca seçilen
+örnekler ve modüller için geçerlidir. Donanım kabulü `pending` kalır.
+Başarısız kontrol çıkış kodu 1 verir. Manifest geçersizse yeni rapor yazılmaz;
+önceki bir raporu güncel sonuç olarak kullanmayın. `pnpm test:biometric-tools`
+aracın testlerini derleme sonrası çalıştırır; bu testler gerçek model kalite
+kabulünü tamamlamaz.
+
 ## Manuel kabul kaydı
 
 Gerçek Python ortamlarını ayarlayıp `pnpm dev` ile `auth.html` açın.

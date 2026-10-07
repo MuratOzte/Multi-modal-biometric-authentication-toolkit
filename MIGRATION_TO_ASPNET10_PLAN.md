@@ -499,3 +499,10 @@ backend'leri yüklendi; iki yerel örneğin sonucu `uncertain` olduğundan
 olumlu kart kalite kabulü tamamlanmış sayılmaz. Yerel ses örneği ve manuel
 kamera/mikrofon kabulü bekliyor. Ayrıntılar ve kalan kontrol tablosu
 [biyometrik kabul yönergesindedir](docs/BIOMETRIC_ACCEPTANCE.md).
+
+Sonraki adım hazırlığı: gerçek ses/kart örnekleri için
+`pnpm test:biometric-acceptance <yerel-manifest.json>` aracı eklendi.
+Üç ses enrollment örneği, aynı/farklı konuşmacı, yanlış metin ve
+aynı/farklı kart HTTP kontrolleri ayrı geçici C# depolarında çalışır.
+Örnek manifest ve çalıştırma sırası kabul yönergesindedir. Araç testleri
+geçti; gerçek örneklerle kalite ve manuel donanım kabulü halen bekliyor.

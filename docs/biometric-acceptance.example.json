@@ -1,0 +1,17 @@
+{
+  "voice": {
+    "enrollment": [
+      { "file": "samples/enroll-1.wav", "text": "Bugün hava güzel ve açık." },
+      { "file": "samples/enroll-2.wav", "text": "Güvenli giriş için sesimi kullanıyorum." },
+      { "file": "samples/enroll-3.wav", "text": "Yeni bir doğrulama örneği kaydediyorum." }
+    ],
+    "sameSpeaker": { "file": "samples/same-speaker.wav", "text": "Bu kayıt bana ait bir ses örneğidir." },
+    "differentSpeaker": { "file": "samples/different-speaker.wav", "text": "Bu kayıt bana ait bir ses örneğidir." },
+    "wrongText": "Kırmızı tren gece yarısı istasyondan ayrıldı."
+  },
+  "card": {
+    "reference": { "file": "samples/card-reference.jpg" },
+    "sameCard": { "file": "samples/card-new-capture.jpg" },
+    "differentCard": { "file": "samples/different-card.jpg" }
+  }
+}
