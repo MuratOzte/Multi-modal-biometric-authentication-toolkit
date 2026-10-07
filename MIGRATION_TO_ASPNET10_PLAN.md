@@ -438,6 +438,34 @@ pnpm --filter @securekit/node-auth test:aspnet-stage7
 
 ## Aşama 8 — Paralel doğrulama ve kesintisiz geçiş
 
+**Durum (7 Ekim 2026): Kod geçişi ve otomatik kabul kontrolleri uygulandı.**
+Vite varsayılan hedefi C# API (3002) oldu; `VITE_SECUREKIT_API_BACKEND=node`
+veya açık proxy hedefi ile Node seçilebilir. `pnpm dev` C# API ve demo'yu,
+`pnpm dev:node` geri dönüş API'si ve demo'yu birlikte başlatır. Başlatıcı
+seçilen backend'in proxy hedefini sağlar; terminaldeki açık hedef önceliklidir.
+Eski yerel `.env` hedefleri bağımsız Vite kullanımında öncelikli kalır.
+
+`pnpm test:aspnet-parity` yedi gruptaki 578 canlı Node/C# karşılaştırmasını
+çalıştırır, grup sonuçlarını `.run-logs/aspnet-parity.json` içinde saklar.
+Tam JSON yanıtları mevcut karşılaştırma araçlarında normalize edilerek
+karşılaştırılır; rapora kişisel veri veya worker çıktısı yazılmaz.
+`pnpm test:aspnet-demo` gerçek Vite proxy ve değişmeyen web SDK üzerinden
+kayıt/giriş/rıza, oturum, ağ/konum, dinamik klavye/replay, yüz/kayan pencere,
+ses, kart, sabit metin route prefix'i ve profil silmeyi doğrular. Depolar
+geçicidir; biyometrik işçiler model gerektirmeyen protokol fixture'larıdır.
+
+Doğrulama: 239 C# testi, Node'da 102 ve SDK'da 36 test; solution ve pnpm build,
+TypeScript kontrolü geçti. İsteğe bağlı Node sabit metin Python testi atlandı
+(Aşama 4 karşılaştırması gerçek Python işçisini çalıştırır). Headless Edge'de
+`auth.html` kayıt/rıza, hatalı/başarılı giriş, oturum ve arka plan ağ/konum
+HTTP 200 yanıtlarıyla kontrol edildi. Her iki ortak başlatıcının sağlık/proxy
+yanıtları ve C# başlatıcısının Ctrl+C sonrası kapanması ayrıca doğrulandı.
+
+Gerçek kamera/mikrofonla tüm biyometrik adımların manuel kabulü ve gerçek
+SpeechBrain/Whisper/PaddleOCR/OpenCLIP kontrolü henüz tamamlanmadı. Node paketi
+korunur; kaldırılması bu kabul tamamlandıktan sonra ayrı değişikliktir.
+Mevcut depoların geçişi ve geri dönüş [yönergede](docs/ASPNET_CUTOVER.md) yer alır.
+
 ### Yapılacaklar
 
 - Demo uygulamasının API hedefini ortam değişkeniyle Node veya ASP.NET API'ye
@@ -459,6 +487,7 @@ pnpm --filter @securekit/node-auth test:aspnet-stage7
 
 ## Başlama sırası
 
-**Aşama 0–7 tamamlandı.** Sıradaki kodlama görevi **Aşama 8 —
-Paralel doğrulama ve kesintisiz geçiş**tir. Sonraki aşamalara ilgili test kapıları
-geçildikten sonra sırayla devam edilir.
+**Aşama 0–7 tamamlandı; Aşama 8 kod geçişi ve otomatik kabulü tamamlandı.**
+Sonraki adım gerçek donanım/model ortamında manuel biyometrik kabulüdür.
+Bu kabul tamamlandıktan sonra Node API paketinin kaldırılması ayrı bir
+değişiklikte ele alınacaktır.

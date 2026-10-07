@@ -33,6 +33,8 @@ if (backend === "aspnet") {
 }
 else launch(process.execPath, ["--import", "tsx", "--watch", "src/server.ts"], path.join(root, "packages/node-auth"));
 launch(process.execPath, [path.join(root, "apps/demo-web/node_modules/vite/bin/vite.js")], path.join(root, "apps/demo-web"),
-  { ...process.env, VITE_SECUREKIT_API_BACKEND: backend });
+  { ...process.env, VITE_SECUREKIT_API_BACKEND: backend,
+    VITE_SECUREKIT_DEV_PROXY_TARGET: process.env.VITE_SECUREKIT_DEV_PROXY_TARGET?.trim() ||
+      (backend === "aspnet" ? "http://localhost:3002" : "http://localhost:3001") });
 process.once("SIGINT", () => stop());
 process.once("SIGTERM", () => stop());

@@ -2,7 +2,7 @@
 
 **Biyometrik ve bağlamsal sinyalleri bir araya getiren çok faktörlü kimlik doğrulama prototipi.**
 
-SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini ortak bir doğrulama akışında değerlendirmek için geliştirilmiş bir bitirme projesidir. TypeScript tabanlı API ve tarayıcı SDK'sı, Python doğrulama modülleri ve React demo arayüzü aynı monorepo içinde yer alır.
+SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini ortak bir doğrulama akışında değerlendirmek için geliştirilmiş bir bitirme projesidir. ASP.NET Core 10 API, TypeScript tarayıcı SDK'sı, Python doğrulama modülleri ve React demo arayüzü aynı monorepo içinde yer alır. Express API geçiş sonrası geri dönüş için korunur.
 
 ## Özellikler
 
@@ -19,10 +19,10 @@ SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini or
 | Dizin | İçerik |
 | --- | --- |
 | `packages/core` | Ortak sözleşmeler, risk politikaları ve klavye skorlama |
-| `packages/node-auth` | Express API, profil depolama ve Python köprüleri |
+| `packages/node-auth` | Geri dönüş için Express API ve Node/C# karşılaştırma testleri |
 | `packages/web-sdk` | Tarayıcı istemcisi ve klavye olay toplayıcısı |
 | `apps/demo-web` | React + Vite demo uygulaması |
-| `apps/securekit-api` | ASP.NET Core 10 API: altyapı, challenge, rıza, profiller, kullanıcı, oturum, ağ, konum, klavye, yüz ve ses akışı (Aşama 0–6) |
+| `apps/securekit-api` | Varsayılan ASP.NET Core 10 API; tüm endpoint grupları (Aşama 0–8) |
 | `apps/securekit-api.tests` | xUnit + WebApplicationFactory HTTP sözleşme testleri |
 | `python/face_verification` | FaceNet / MTCNN yüz doğrulama işçileri |
 | `python/voice_verification` | Whisper / SpeechBrain ses doğrulama işçisi |
@@ -31,7 +31,7 @@ SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini or
 
 ## Hızlı başlangıç
 
-Node.js **22.12+** ve **pnpm 9.15.9** gerekir. Python modülleri için ayrı sanal ortamlar önerilir; yüz modülünün sabitlenmiş bağımlılıkları için Python **3.11** kullanın.
+**.NET 10 SDK**, Node.js **22.12+** ve **pnpm 9.15.9** gerekir. Python modülleri için ayrı sanal ortamlar önerilir; yüz modülünün sabitlenmiş bağımlılıkları için Python **3.11** kullanın.
 
 ```powershell
 corepack enable
@@ -50,8 +50,15 @@ pnpm dev
 
 - Playground: `http://localhost:5173`
 - Kayıt / giriş demosu: `http://localhost:5173/auth.html`
-- API: `http://localhost:3001`
-- API sağlık kontrolü: `http://localhost:3001/health`
+- API: `http://localhost:3002`
+- API sağlık kontrolü: `http://localhost:3002/health`
+
+`pnpm dev` C# API'yi derleyip demo ile birlikte başlatır. API kodunu değiştirdikten
+sonra komutu yeniden başlatın. Node'a geri dönmek için önce çalışan komutu
+Ctrl+C ile durdurun, ardından `pnpm dev:node` çalıştırın (API portu 3001).
+Başlatıcı demo proxy'sini seçilen API'ye bağlar; terminaldeki açık
+`VITE_SECUREKIT_DEV_PROXY_TARGET` değeri önceliklidir. Mevcut verilerle geçiş
+ve kabul kontrolleri [geçiş yönergesinde](docs/ASPNET_CUTOVER.md) açıklanır.
 
 Vite, port doluysa başka bir port seçebilir; terminaldeki adresi kullanın. Kamera, mikrofon ve konum özellikleri için tarayıcı izni gerekir. Uzak sunucuda bu özellikler HTTPS gerektirir.
 
@@ -67,7 +74,8 @@ Copy-Item apps/demo-web/.env.example apps/demo-web/.env
 
 | Değişken | Amaç |
 | --- | --- |
-| `PORT` | API portu; varsayılan `3001` |
+| `ASPNETCORE_URLS` | C# API adresi; demo başlatıcısında varsayılan `http://localhost:3002` |
+| `PORT` | Geri dönüş Node API portu; varsayılan `3001` |
 | `MOCK_IP_CHECK` | `1`: yerel ağ simülasyonu; `0`: gerçek IP sorgusu |
 | `VPNAPI_KEY` | Gerçek IP sorgusu için sunucu tarafı anahtarı |
 | `PYTHON_CMD` | IP sorgusunda kullanılacak Python çalıştırıcısı |
@@ -76,7 +84,8 @@ Copy-Item apps/demo-web/.env.example apps/demo-web/.env
 | `FACE_DEVICE` / `VOICE_DEVICE` | `auto`, `cpu` veya `cuda` |
 | `FACE_REQUIRE_GPU` / `VOICE_REQUIRE_GPU` | GPU zorunluluğu |
 | `VITE_SECUREKIT_BASE_URL` | Web API yolu; varsayılan `/api/securekit` |
-| `VITE_SECUREKIT_DEV_PROXY_TARGET` | Vite proxy hedefi; varsayılan `http://localhost:3001` |
+| `VITE_SECUREKIT_API_BACKEND` | `aspnet` (varsayılan, 3002) veya `node` (3001) |
+| `VITE_SECUREKIT_DEV_PROXY_TARGET` | İsteğe bağlı açık Vite proxy hedefi; backend seçiminden öncelikli |
 
 API anahtarlarını `VITE_` değişkenlerine koymayın; bu değişkenler tarayıcıya aktarılır.
 
@@ -95,7 +104,7 @@ $env:PYTHON_CMD=$env:PYTHON_BIN
 # Gerçek IP sorgusu isteğe bağlıdır.
 $env:VPNAPI_KEY="YOUR_API_KEY"
 $env:MOCK_IP_CHECK="0"
-pnpm --filter @securekit/node-auth dev
+pnpm dev
 ```
 
 ### Yüz doğrulama
@@ -167,7 +176,7 @@ Yüz, ses ve kart dosyaları ilgili endpoint'lere `multipart/form-data` ile gön
 
 ## Geliştirme ve test
 
-### ASP.NET Core 10 geçişi — Aşama 0–7
+### ASP.NET Core 10 geçişi — Aşama 0–8
 
 .NET **10 SDK** gerekir. `global.json` kararlı 10.0 SDK feature band'lerini
 kabul eder. Yeni API Controllers tabanlıdır; `GET /health`,
@@ -206,6 +215,11 @@ pnpm --filter @securekit/node-auth test:aspnet-stage5
 pnpm --filter @securekit/node-auth test:aspnet-stage6
 pnpm --filter @securekit/node-auth test:aspnet-stage7
 
+# Tüm yedi endpoint grubunu derle ve karşılaştır; özet .run-logs/aspnet-parity.json
+pnpm test:aspnet-parity
+# Gerçek Vite proxy + web SDK; geçici depolar ve model gerektirmeyen fixture'lar
+pnpm test:aspnet-demo
+
 dotnet run --project apps/securekit-api
 Invoke-RestMethod http://localhost:3002/health
 ```
@@ -223,7 +237,7 @@ protokol fixture'ı kullanır; gerçek model kontrolü için `FACE_PYTHON_BIN` v
 Test host'u gerçek port gerektirmez. Aşama 3 süreç köprüsü testleri Windows'ta
 `py`, diğer sistemlerde `python3` kullanır; ek Python paketleri veya API
 anahtarı gerektirmez. İlk testte NuGet paketleri
-indirilir. Node API ve mevcut demo akışı port 3001'i kullanmaya devam eder.
+indirilir. Varsayılan demo C# API'ye (3002), `pnpm dev:node` ise Node API'ye (3001) bağlanır.
 
 C# rıza/profil deposu varsayılan olarak `apps/securekit-api/.securekit/user-profiles.json`
 dosyasındadır. `SECUREKIT_PROFILE_STORE` veya `Storage__ProfileStorePath` ile
@@ -243,20 +257,21 @@ Oturum TTL'i `SESSION_TTL_SECONDS` / `Session__TtlSeconds` ile ayarlanır;
 varsayılan 900 saniyedir. Oturumlar bellektedir ve yeniden başlatmada silinir.
 Risk kararları `allow`, `step-up`, `deny` biçimindedir.
 
-Demo'nun hesap başlangıcını C# API üzerinden denemek için API'yi ayrı
-terminalde çalıştırıp web terminalinde şunu kullanın:
+API'yi ayrı terminalde çalıştırırken yalnızca demo'yu başlatmak için:
 
 ```powershell
-$env:VITE_SECUREKIT_DEV_PROXY_TARGET="http://localhost:3002"
+$env:VITE_SECUREKIT_API_BACKEND="aspnet"
 pnpm --filter demo-web dev
 # Tarayıcıda Vite adresi/auth.html
 ```
 
 Bu aşamada kayıt/rıza, giriş/oturum başlangıcı, ağ/konum ve klavye kontrolü çalışır.
 Yerel ağ testi için C# API terminalinde `$env:MOCK_IP_CHECK="1"` ayarlayın.
-Yüz, ses ve kart endpoint'leri de taşındı. Tam demo akışının C# hedefiyle kabul
-kontrolü ve varsayılan hedef değişikliği Aşama 8'de yapılacaktır. React arayüzü,
-web SDK ve üretim Python modülleri bu aşamada değiştirilmedi.
+Yüz, ses ve kart endpoint'leri de taşındı. Aşama 8'de C# varsayılan hedef oldu;
+proxy/SDK akışları ve tarayıcıdaki hesap/ağ akışı doğrulandı. Biyometrik smoke
+testleri model gerektirmeyen fixture'lar kullanır; gerçek kamera/mikrofon ve
+SpeechBrain/Whisper/PaddleOCR/OpenCLIP kalite kabulü ayrıca yapılmalıdır.
+React arayüzü, web SDK ve üretim Python modülleri değiştirilmedi.
 
 C# IP sorgusu `PYTHON_CMD` / `IpCheck:PythonCommand` ile çalıştırıcı,
 `VPNAPI_KEY` / `IpCheck:ApiKey` ile anahtar,
