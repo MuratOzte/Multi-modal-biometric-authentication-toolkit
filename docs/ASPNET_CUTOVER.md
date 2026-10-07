@@ -105,3 +105,6 @@ Manuel kabul için gerçek Python ortamlarıyla `auth.html` üzerinde yüz, kart
 tamamlayıp sonuç ekranını doğrulayın. Playground'da negatif biyometrik örnek
 ve rıza/profil silmeyi de deneyin. Bu donanım/model kabulü tamamlanana kadar
 Node paketini kaldırmayın; paket kaldırma ayrı bir değişikliktir.
+
+Ortam ön kontrolü, gerçek FaceNet karşılaştırma komutu ve kalan manuel
+kabul tablosu [biyometrik kabul yönergesinde](BIOMETRIC_ACCEPTANCE.md) yer alır.

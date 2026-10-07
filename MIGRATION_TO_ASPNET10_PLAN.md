@@ -491,3 +491,11 @@ Mevcut depoların geçişi ve geri dönüş [yönergede](docs/ASPNET_CUTOVER.md)
 Sonraki adım gerçek donanım/model ortamında manuel biyometrik kabulüdür.
 Bu kabul tamamlandıktan sonra Node API paketinin kaldırılması ayrı bir
 değişiklikte ele alınacaktır.
+
+7 Ekim 2026 ek kontrolü: `pnpm test:biometric-preflight` komutu eklendi;
+yüz/ses/kart bağımlılıkları ve FFmpeg geçti. Gerçek yerel FaceNet ile 8
+Node/C# HTTP karşılaştırması yeniden geçti. Gerçek kart CPU OCR/OpenCLIP
+backend'leri yüklendi; iki yerel örneğin sonucu `uncertain` olduğundan
+olumlu kart kalite kabulü tamamlanmış sayılmaz. Yerel ses örneği ve manuel
+kamera/mikrofon kabulü bekliyor. Ayrıntılar ve kalan kontrol tablosu
+[biyometrik kabul yönergesindedir](docs/BIOMETRIC_ACCEPTANCE.md).

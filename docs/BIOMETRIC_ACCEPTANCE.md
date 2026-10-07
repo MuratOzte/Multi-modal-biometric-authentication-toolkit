@@ -74,3 +74,23 @@ Sonuçları aşağıdaki sırayla yerel bir kayıt üzerinde geçti/kaldı olara
 Sonuca tarih, CPU/GPU seçimi ve kullanılan model adlarını ekleyin.
 Gerçek SpeechBrain/Whisper ve PaddleOCR/OpenCLIP ile olumlu/olumsuz örnekler
 ve bu tablo tamamlanmadan Node geri dönüş paketini kaldırmayın.
+
+## Yerel kontrol sonucu — 7 Ekim 2026
+
+| Kontrol | Sonuç |
+| --- | --- |
+| .NET solution derlemesi | 0 hata, 0 uyarı |
+| Yüz bağımlılıkları | Geçti; CUDA erişilebilir |
+| Ses bağımlılıkları / FFmpeg | Geçti; CUDA erişilebilir |
+| Kart bağımlılıkları | Sistem Python 3.11.4 ile geçti; isteğe bağlı eski `clip` modülü yok |
+| Gerçek FaceNet Node/C# | 8 HTTP karşılaştırması, kalıcı depo uyumu ve geçici dosya temizliği geçti |
+| Gerçek kart modelleri | CPU OCR ve OpenCLIP ağırlıkları yüklendi; iki yerel örnek `uncertain` verdi |
+| Gerçek ses örneği | Python dizininde ses dosyası bulunamadığından yapılmadı |
+| Kamera/mikrofon, tam oturum ve olumlu/olumsuz kalite kabulü | Bekliyor |
+
+Kart kontrolünde OCR/OpenCLIP backend'leri erişilebilir ve backend hata
+alanları boştu. `uncertain` sonucu olumlu kart kabulü sayılmaz; farklı
+çekimlerle kalite kontrolü tamamlanmalıdır. İlk ön kontrol Paddle'ı
+Torch'tan önce yüklediğinde Windows DLL hatası verdi; gerçek işçi gibi
+Torch önce yüklendiğinde üç ortamın ön kontrolü geçti. Ön kontrol bu sırayı
+kullanır. Hiçbir görsel, OCR alanı veya embedding commit'e eklenmedi.

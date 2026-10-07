@@ -8,7 +8,9 @@ import sys
 MODULES = {
     "face": ["numpy", "PIL", "torch", "torchvision", "facenet_pytorch"],
     "voice": ["numpy", "torch", "torchaudio", "whisper", "speechbrain", "imageio_ffmpeg"],
-    "card": ["numpy", "PIL", "cv2", "yaml", "rapidfuzz", "skimage", "paddle", "paddleocr", "torch", "open_clip"],
+    # main.py tries the legacy CLIP module (which imports torch) before OCR.
+    # Paddle-first imports can cause Windows DLL collisions with torch.
+    "card": ["numpy", "PIL", "cv2", "yaml", "rapidfuzz", "skimage", "torch", "open_clip", "paddle", "paddleocr"],
 }
 module = sys.argv[1]
 checks = []
