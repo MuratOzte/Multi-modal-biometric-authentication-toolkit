@@ -17,7 +17,7 @@
 <li><strong>Voice</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
 <li><strong>Card</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
 </ul>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-14</a></p>
 <hr>
 <h2 id="2-preflight-probing-architecture">2. Preflight Probing Architecture</h2>
@@ -29,7 +29,7 @@
 <li><strong>Import Safety</strong>: <code>biometric-preflight.py</code> captures stdout/stderr during <code>importlib.import_module()</code> calls to prevent leaking local configuration paths or throwing unhandled import side-effects <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 21-25</a></li>
 <li><strong>Report Generation</strong>: Results are parsed from JSON output and written to <code>.run-logs/biometric-preflight.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L30-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 30-58</a></li>
 </ol>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-37</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L15-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 15-26</a></p>
 <hr>
 <h2 id="3-hardware-requirements-gpucuda-and-ffmpeg">3. Hardware Requirements: GPU/CUDA and FFmpeg</h2>
@@ -41,7 +41,7 @@
 </ul>
 <h3 id="ffmpeg-requirements">FFmpeg Requirements</h3>
 <p>Voice verification relies heavily on audio preprocessing via FFmpeg. The preflight check verifies FFmpeg availability using <code>shutil.which(&quot;ffmpeg&quot;)</code>, with an automatic fallback to binaries bundled by <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L34-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 34-44</a></p>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L27-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 27-44</a></p>
 <hr>
 <h2 id="4-ip-check-and-vpnapi-signals">4. IP Check and VPNAPI Signals</h2>
@@ -52,5 +52,5 @@
 <li><strong>Geolocation Risk</strong>: Validates client IP geographic origin against expected user profiles or session bounds.</li>
 <li><strong>Threat Scoring</strong>: Computes aggregate risk scores incorporated into <code>SessionRiskEvaluator</code>.</li>
 </ul>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L1-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 1-49</a></p>

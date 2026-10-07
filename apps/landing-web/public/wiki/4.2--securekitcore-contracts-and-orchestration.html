@@ -16,7 +16,7 @@
 <li><strong>Challenges</strong>: Structures governing challenge generation, including language parameters (<code>lang</code>), string lengths (<code>length</code>), dynamic word counts (<code>wordCount</code>), and strict time-to-live (<code>CHALLENGE_TTL_SECONDS</code>) constraints.</li>
 <li><strong>Session Lifecycle</strong>: Time-bound session handles (<code>sessionId</code>) tracking expiration windows (<code>SESSION_TTL_SECONDS</code>), accumulated signal states, and evaluation outcomes.</li>
 </ul>
-<pre></pre>
+
 <p><em>Figure 1: Contract Validation and Orchestration Flow</em></p>
 <p>Sources: <code>README.md:19-21</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:30-52</code></p>
 <hr>
@@ -27,7 +27,7 @@
 <li><strong>Facial and Voice Signals</strong>: Embeddings, reference image paths, liveness indicators, and speech-to-text verification payloads evaluated by external Python subprocesses.</li>
 <li><strong>Network and Location Signals</strong>: IP metadata structures containing flags for VPN, proxy, Tor, or relay usage, alongside geographic drift calculations and country-code allowances (<code>allowedCountries</code>).</li>
 </ul>
-<pre></pre>
+
 <p><em>Signal Processing and Module Mapping to Code Entities</em></p>
 <p>Sources: <code>README.md:9-14</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:69-76</code></p>
 <hr>
@@ -50,6 +50,6 @@
 <li>Invokes the risk evaluation service (<code>SessionRiskEvaluator</code>) against the active policy profile (<code>defaultPolicy</code>).</li>
 <li>Generates a unified decision (<code>decision</code>), computes the resulting <code>riskScore</code>, and compiles any required step-up actions (<code>requiredSteps</code>) or diagnostic reasons (<code>reasons</code>).</li>
 </ol>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/4.2--securekitcore-contracts-and-orchestration-1.svg" alt="@securekit/core Contracts and Orchestration — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/4.2--securekitcore-contracts-and-orchestration-1.svg" alt="@securekit/core Contracts and Orchestration — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Orchestration and Policy Evaluation Pipeline</em></p>
 <p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md:59-76</code></p>

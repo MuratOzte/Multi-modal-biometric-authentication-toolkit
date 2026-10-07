@@ -80,6 +80,14 @@ function App() {
   const moduleRows = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const id = window.location.hash.slice(1);
+      if (id && !id.startsWith("/")) document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -150,6 +158,7 @@ function App() {
             <a href="#modules">Yetenekler</a>
             <a href="#flow">Nasıl çalışır?</a>
             <a href="#developers">Geliştiriciler</a>
+            <a href="#/wiki/1-overview">Kaynak Wiki</a>
             <a
               className="nav-cta"
               href={repository}
@@ -480,6 +489,24 @@ function App() {
             </div>
           </div>
         </section>
+        <section className="resources-section section container" id="resources">
+          <div className="resources-intro reveal">
+            <p className="eyebrow">04 / KAYNAK WIKI</p>
+            <h2>Projenin içine<br />biraz daha yakından bakın.</h2>
+            <p>Mimariden API sözleşmelerine, biyometrik işçilerden kabul testlerine. SecureKit’in teknik kaynakları tek bir yerde.</p>
+            <a className="button primary" href="#/wiki/1-overview">Wiki’yi keşfet <span>↗</span></a>
+            <span className="resources-note">27 sayfa · 7 konu grubu · Kaynak kod referansları</span>
+          </div>
+          <div className="resource-topics reveal">
+            {[
+              ["01", "Mimari & başlangıç", "Monorepo, kurulum ve kimlik doğrulama karar modeli", "1-overview"],
+              ["02", "API & entegrasyon", "ASP.NET Core, SDK, sözleşmeler ve geçiş süreci", "2-securekit-asp.net-core-api"],
+              ["03", "Biyometrik işçiler", "Yüz, ses, kart doğrulama ve Python ortamları", "5-python-biometric-workers"],
+              ["04", "Test & kabul", "Preflight, parity kontrolleri ve kabul araçları", "6-testing-and-acceptance-tooling"],
+            ].map(([number, title, description, slug]) => <a key={number} href={`#/wiki/${slug}`}><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div><span>↗</span></a>)}
+            <div className="resources-source">DeepWiki içeriği ve iç sayfaları · 7 Ekim 2026 arşivi</div>
+          </div>
+        </section>
         <section className="principles container reveal">
           <div>
             <span className="principle-line" />
@@ -527,6 +554,7 @@ function App() {
         </a>
         <span>Biyometrik kimlik doğrulama araç seti.</span>
         <div>
+          <a href="#/wiki/1-overview">Kaynak Wiki</a>
           <a href={repository} target="_blank" rel="noreferrer">
             GitHub ↗
           </a>

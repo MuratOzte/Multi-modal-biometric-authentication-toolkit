@@ -26,7 +26,14 @@
 <h2 id="2-requestresponse-contracts-and-error-envelopes">2. Request/Response Contracts and Error Envelopes</h2>
 <p>Endpoints communicate via JSON (<code>application/json</code>) or multipart form data (<code>multipart/form-data</code>) for file uploads (such as ID cards, face images, or voice samples).</p>
 <p>Standard errors are wrapped in a consistent JSON envelope containing an error code, message, and optional details:</p>
-<pre><pre><code>{  &quot;error&quot;: {    &quot;code&quot;: &quot;INVALID_REQUEST&quot;,    &quot;message&quot;: &quot;referenceImage is required.&quot;,    &quot;details&quot;: null  }}</code></pre></pre>
+<pre><code>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_REQUEST&quot;,
+    &quot;message&quot;: &quot;referenceImage is required.&quot;,
+    &quot;details&quot;: null
+  }
+}
+</code></pre>
 <p>If an upload payload exceeds the configured maximum body size (<code>CardOptions.MaxUploadBytes</code>), the controllers catch <code>BadHttpRequestException</code> or <code>InvalidDataException</code> and return a <code>413 Payload Too Large</code> status with an <code>IMAGE_TOO_LARGE</code> code <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L36-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 36-88</a></p>
 <p>Sources: <code>[apps/securekit-api/Controllers/CardController.cs:25-89]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:18-24]</code></p>
 <hr>
@@ -46,10 +53,10 @@
 <li><code>POST /enroll/card/reference</code>: Accepts a <code>multipart/form-data</code> payload containing a <code>userId</code> string and a <code>referenceImage</code> file (<code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L20-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 20-61</a></li>
 <li><code>POST /verify/card</code>: Accepts a probe image (<code>probeImage</code>), optional <code>referenceId</code>, <code>userId</code>, and <code>threshold</code>, returning match scores and verification outcomes <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L22-L80" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 22-80</a></li>
 </ul>
-<pre></pre>
+
 <p>Sources: <code>[apps/securekit-api/Controllers/CardController.cs:11-89]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:18-24]</code></p>
 <hr>
 <h2 id="4-api-request-pipeline-and-flow-diagram">4. API Request Pipeline and Flow Diagram</h2>
 <p>The following diagram illustrates how incoming HTTP requests flow through the ASP.NET Core middleware pipeline into the respective controllers and service layers.</p>
-<pre></pre>
+
 <p>Sources: <code>[apps/securekit-api/Controllers/CardController.cs:1-90]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:1-34]</code>, <code>[MIGRATION_TO_ASPNET10_PLAN.md:43-125]</code></p>

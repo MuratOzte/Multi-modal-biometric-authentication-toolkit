@@ -41,7 +41,7 @@
 <p>The script also includes basic liveness detection by checking for a single, well-defined face in the image. If multiple faces are detected or no face is found, it returns an error.</p>
 <h3 id="data-flow">Data Flow</h3>
 <p>The ASP.NET Core API invokes the <code>face_verification.py</code> script as a child process.</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/5.1-face-and-voice-workers-1.svg" alt="Face and Voice Workers — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/5.1-face-and-voice-workers-1.svg" alt="Face and Voice Workers — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><strong>Diagram 1: Face Verification Worker Data Flow</strong></p>
 <p>Sources:</p>
 <ul>
@@ -63,7 +63,7 @@
 </ul>
 <h2 id="voice-verification-worker">Voice Verification Worker</h2>
 <p>The voice verification worker, located at <code>python/voice_verification/voice_verification.py</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a> handles voice enrollment and verification. It uses Whisper for speech-to-text transcription to ensure the spoken phrase matches a challenge text, and SpeechBrain for speaker verification to compare voice characteristics.</p>
-<h3 id="implementation-details">Implementation Details</h3>
+<h3 id="implementation-details-2">Implementation Details</h3>
 <p>The <code>voice_verification.py</code> script supports two primary operations:</p>
 <ol>
 <li><strong>Enrollment</strong>: Takes an audio file and a challenge text, transcribes the audio using Whisper, verifies it against the challenge, and then extracts a speaker embedding using SpeechBrain.</li>
@@ -93,16 +93,16 @@
 </li>
 </ul>
 <p>The script ensures that the transcribed text matches the provided challenge text, adding a layer of liveness and intent verification.</p>
-<h3 id="data-flow">Data Flow</h3>
+<h3 id="data-flow-2">Data Flow</h3>
 <p>Similar to the face worker, the ASP.NET Core API communicates with the <code>voice_verification.py</code> script via a process bridge.</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/5.1-face-and-voice-workers-2.svg" alt="Face and Voice Workers — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/5.1-face-and-voice-workers-2.svg" alt="Face and Voice Workers — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><strong>Diagram 2: Voice Verification Worker Data Flow</strong></p>
 <p>Sources:</p>
 <ul>
 <li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a></li>
 <li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-166</a></li>
 </ul>
-<h3 id="configuration">Configuration</h3>
+<h3 id="configuration-2">Configuration</h3>
 <p>Environment variables for the voice worker:</p>
 <ul>
 <li><code>VOICE_PYTHON_BIN</code>: Specifies the Python executable for the voice worker <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L83" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83</a></li>

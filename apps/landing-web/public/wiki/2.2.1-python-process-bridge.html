@@ -11,7 +11,7 @@
 <h2 id="1-worker-discovery-and-environment-resolution">1. Worker Discovery and Environment Resolution</h2>
 <p>The C# orchestration layer discovers and launches Python runtimes dynamically based on configuration parameters and local workspace conventions. The <code>CardOptions</code> class resolves paths for the script, temporary directories, and fallback search paths [apps/securekit-api/Services/CardOptions.cs:12-25].</p>
 <p>The <code>CardPython</code> implementation iterates through a prioritized list of runtime candidate locations (<code>Candidates()</code>), evaluating virtual environments (<code>.venv-card</code>, <code>.venv</code>) before falling back to system-level interpreters (<code>py -3</code>, <code>python3</code>, <code>python</code>) [apps/securekit-api/Services/CardPython.cs:22-43]. If a dependency failure occurs (such as a missing Python package), the process bridge captures standard error output and translates the exception into a structured HTTP-mapped failure response [apps/securekit-api/Services/CardPython.cs:27-31, 80-87].</p>
-<pre></pre>
+
 <p><em>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L18-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 18-43</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardOptions.cs#L12-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardOptions.cs 12-25</a></em></p>
 <hr>
 <h2 id="2-cli-contracts-and-stdinstdout-json-lines-protocol">2. CLI Contracts and Stdin/Stdout JSON-Lines Protocol</h2>
@@ -21,7 +21,7 @@
 <li><strong>Readiness Phase</strong>: The C# process reads stdout until it receives an event where <code>event</code> equals <code>ready</code> and <code>ok</code> is <code>true</code> [apps/securekit-api/Services/CardPython.cs:115-120].</li>
 <li><strong>Conversation Phase</strong>: Upon receiving readiness, the C# process writes the payload request object (assigned <code>id: &quot;1&quot;</code>) to standard input (<code>process.StandardInput</code>) and awaits the matching response line on standard output [apps/securekit-api/Services/CardPython.cs:102-127].</li>
 </ol>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2.1-python-process-bridge-1.svg" alt="Python Process Bridge — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/2.2.1-python-process-bridge-1.svg" alt="Python Process Bridge — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L45-L76" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 45-76</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L99-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 99-128</a></em></p>
 <hr>
 <h2 id="3-timeouts-error-handling-and-process-tree-termination">3. Timeouts, Error Handling, and Process-Tree Termination</h2>
@@ -31,7 +31,7 @@
 <li><strong>Process-Tree Kill</strong>: <code>ProcessJob.Attach(process)</code> registers the child process within a job object [apps/securekit-api/Services/CardPython.cs:68]. In the <code>finally</code> cleanup block, if the process has not exited, <code>process.Kill(true)</code> is invoked recursively to terminate the entire process tree, preventing orphaned Python sub-processes [apps/securekit-api/Services/CardPython.cs:88-96].</li>
 <li><strong>Stderr Drainage</strong>: Standard error is drained asynchronously via <code>DrainError</code> to prevent pipe deadlocks when stderr buffers fill up during exceptions or warnings [apps/securekit-api/Services/CardPython.cs:69].</li>
 </ul>
-<pre></pre>
+
 <p><em>Sources: [apps/securekit-api/Services/CardPython.cs:60-96]</em></p>
 <hr>
 <h2 id="4-temporary-files-and-data-flow">4. Temporary Files and Data Flow</h2>

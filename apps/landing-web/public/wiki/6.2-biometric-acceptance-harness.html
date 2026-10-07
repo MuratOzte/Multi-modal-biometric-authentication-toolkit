@@ -22,7 +22,7 @@
 <p>Before executing biometric acceptance tests, the workspace must be initialized using preparation scripts that copy template files and establish git-ignored local directories.</p>
 <h3 id="preparation-flow-object-object">Preparation Flow (<code>scripts/biometric-acceptance-prepare.mjs</code>)</h3>
 <p>The preparation script copies example manifests and manual logs into <code>.run-logs/acceptance/</code>, ensuring exclusive creation semantics (<code>COPYFILE_EXCL</code>) so that existing user captures or observations are never overwritten on subsequent runs <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L8-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 8-26</a></p>
-<pre></pre>
+
 <p><em>Figure 1: Preparation Workflow Architecture linking CLI commands to <code>prepareAcceptance</code> in <code>scripts/biometric-acceptance-prepare.mjs</code>.</em></p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 1-48</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.test.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.test.mjs 1-48</a></p>
 <h3 id="status-verification-object-object">Status Verification (<code>scripts/biometric-acceptance-status.mjs</code>)</h3>
@@ -31,7 +31,7 @@
 <hr>
 <h2 id="manifest-schema-validation-and-distinct-sample-checks">Manifest Schema, Validation, and Distinct Sample Checks</h2>
 <p>The acceptance manifest (<code>manifest.json</code>) defines file references and spoken texts for face, voice, and card evaluation modules <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L65-L73" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 65-73</a> Validation logic resides in <code>validateManifest()</code> inside <code>scripts/biometric-acceptance.mjs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L21-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 21-58</a></p>
-<pre></pre>
+
 <p><em>Figure 2: Manifest parsing and validation pipeline bridging natural language manifest configuration to <code>validateManifest</code> and <code>requireDistinct</code> functions.</em></p>
 <h3 id="validation-rules-and-constraints">Validation Rules and Constraints</h3>
 <ul>
@@ -46,12 +46,25 @@
 <p>To prevent pollution of existing profile stores and test against clean state, the test runner spawns an isolated instance of the ASP.NET Core API (<code>SecureKit.Api.dll</code>) on a randomized ephemeral port (<code>http://127.0.0.1:0</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L63" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-63</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a></p>
 <h3 id="process-isolation-and-storage-overrides">Process Isolation and Storage Overrides</h3>
 <p>The <code>startApi()</code> function configures environment variables that route file persistence, user databases, and worker temp directories to ephemeral subdirectories inside an isolated temporary directory <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L98" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-98</a></p>
-<pre><pre><code>// Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98ASPNETCORE_ENVIRONMENT = &quot;Testing&quot;MOCK_IP_CHECK = &quot;1&quot;SECUREKIT_PROFILE_STORE = &quot;&lt;temp-dir&gt;/profiles.json&quot;SECUREKIT_USERS_FILE = &quot;&lt;temp-dir&gt;/users.json&quot;SECUREKIT_KEYSTROKE_STORE = &quot;&lt;temp-dir&gt;/keystroke&quot;Face__TempRoot = &quot;&lt;temp-dir&gt;/face-temp&quot;Face__ReferenceDirectory = &quot;&lt;temp-dir&gt;/face-references&quot;Voice__TempRoot = &quot;&lt;temp-dir&gt;/voice-temp&quot;Card__TempRoot = &quot;&lt;temp-dir&gt;/card-temp&quot;FACE_PYTHON_SCRIPT_PATH = &quot;python/face_verification/face_verification.py&quot;VOICE_PYTHON_SCRIPT_PATH = &quot;python/voice_verification/voice_worker.py&quot;CARD_PYTHON_SCRIPT_PATH = &quot;python/card_verification/main.py&quot;</code></pre></pre>
+<pre><code>// Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98
+ASPNETCORE_ENVIRONMENT = &quot;Testing&quot;
+MOCK_IP_CHECK = &quot;1&quot;
+SECUREKIT_PROFILE_STORE = &quot;&lt;temp-dir&gt;/profiles.json&quot;
+SECUREKIT_USERS_FILE = &quot;&lt;temp-dir&gt;/users.json&quot;
+SECUREKIT_KEYSTROKE_STORE = &quot;&lt;temp-dir&gt;/keystroke&quot;
+Face__TempRoot = &quot;&lt;temp-dir&gt;/face-temp&quot;
+Face__ReferenceDirectory = &quot;&lt;temp-dir&gt;/face-references&quot;
+Voice__TempRoot = &quot;&lt;temp-dir&gt;/voice-temp&quot;
+Card__TempRoot = &quot;&lt;temp-dir&gt;/card-temp&quot;
+FACE_PYTHON_SCRIPT_PATH = &quot;python/face_verification/face_verification.py&quot;
+VOICE_PYTHON_SCRIPT_PATH = &quot;python/voice_verification/voice_worker.py&quot;
+CARD_PYTHON_SCRIPT_PATH = &quot;python/card_verification/main.py&quot;
+</code></pre>
 <p>When the test run concludes (whether passing or failing), the child process is terminated via signal or process-tree cleanup, and the temporary directory is purged <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L61-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 61</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L101-L101" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 101</a></p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-64</a></p>
 <hr>
 <p>Title: Acceptance Pass Criteria and Privacy-Safe Reporting Architecture</p>
-<pre></pre>
+
 <p><em>Figure 3: Acceptance decision and privacy-safe reporting flow illustrating the <code>accepted</code> function in <code>scripts/biometric-acceptance.mjs</code>.</em></p>
 <h3 id="pass-criteria-rules-object-object">Pass Criteria Rules (<code>accepted</code>)</h3>
 <p>The <code>accepted(name, result)</code> function evaluates API response payloads against strict success definitions for each check type <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L61-L77" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 61-77</a></p>

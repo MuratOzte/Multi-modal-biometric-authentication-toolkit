@@ -17,7 +17,7 @@
 <li><strong>Payload Limits</strong>: JSON body parser size is capped at <code>2mb</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 13-14</a></li>
 <li><strong>Error Envelope</strong>: Non-parser route failures return structured JSON matching <code>{&quot;error&quot;:{&quot;code&quot;:&quot;...&quot;,&quot;message&quot;:&quot;...&quot;,&quot;details&quot;:{}}}</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L14-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 14-16</a></li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-1.svg" alt="node-auth Routes and Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-1.svg" alt="node-auth Routes and Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Figure 1: Natural Language to Code Entity Space — Middleware and Router Dispatch Pipeline.</em></p>
 <p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>, <code>packages/node-auth/package.json</code></p>
 <hr>
@@ -46,7 +46,7 @@
 <li><code>POST /session/start</code>: Initializes a session with a default 900-second TTL <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L66-L69" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 66-69</a></li>
 <li><code>POST /verify/session</code>: Evaluates risk scores, policy compliance, and signal aggregations (location, network, voice, keystroke), yielding decisions of <code>allow</code>, <code>step-up</code>, or <code>deny</code> along with <code>requiredSteps</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L67-L75" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 67-75</a></li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-2.svg" alt="node-auth Routes and Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/3.1-node-auth-routes-and-services-2.svg" alt="node-auth Routes and Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Figure 2: Natural Language to Code Entity Space — Session Verification and Risk Evaluation Flow.</em></p>
 <p>Sources: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code></p>
 <hr>

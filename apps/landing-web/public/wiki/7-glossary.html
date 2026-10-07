@@ -17,7 +17,7 @@
 <li><strong>Data Flow</strong>: The test runner issues identical HTTP payloads across both backend endpoints, recording response structures, status codes, and headers into <code>.run-logs/aspnet-parity.json</code>.</li>
 <li><strong>Key Functions/Classes</strong>: Parity validation runner scripts located in <code>packages/node-auth/scripts/</code> and C# integration test suites under <code>apps/securekit-api.tests</code>.</li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-1.svg" alt="Glossary — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/7-glossary-1.svg" alt="Glossary — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L76-L102" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 76-102</a></p>
 <hr>
 <h2 id="2-biometric-manifest">2. Biometric Manifest</h2>
@@ -26,7 +26,7 @@
 <li><strong>Implementation</strong>: Managed via preparation scripts (<code>scripts/biometric-acceptance-prepare.mjs</code>) and validated by the acceptance engine (<code>scripts/biometric-acceptance.mjs</code>).</li>
 <li><strong>Data Flow</strong>: The manifest specifies file locations under <code>.run-logs/acceptance/samples</code>. The runner loads these samples, initializes an isolated temporary C# API instance, and validates HTTP contract responses against predefined success criteria.</li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-2.svg" alt="Glossary — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/7-glossary-2.svg" alt="Glossary — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-128</a></p>
 <hr>
 <h2 id="3-biometric-preflight">3. Biometric Preflight</h2>
@@ -56,7 +56,7 @@
 <ul>
 <li><strong>Decision Model</strong>: The risk engine evaluates aggregated signals (keystroke dynamics, face match score, IP/network reputation) to produce one of three outcomes: <code>allow</code>, <code>step_up</code>, or <code>deny</code>. A <code>step_up</code> result forces the client SDK to prompt for an additional biometric modality (e.g., voice or card verification) before session promotion.</li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-3.svg" alt="Glossary — diagram 3" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 3: büyüt"><img src="./wiki/diagrams/7-glossary-3.svg" alt="Glossary — diagram 3" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 13-14</a></p>
 <hr>
 <h2 id="7-sliding-window-face-reference-management">7. Sliding Window Face Reference Management</h2>
@@ -85,5 +85,5 @@
 <ul>
 <li><strong>Data Flow</strong>: C# services serialize input payloads or pass temporary file paths to specialized Python worker scripts, enforce strict execution timeouts (<code>VOICE_PYTHON_TIMEOUT_MS</code>, <code>CARD_PYTHON_TIMEOUT_MS</code>), manage process-tree termination, and parse structured JSON responses returned via stdout.</li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/7-glossary-4.svg" alt="Glossary — diagram 4" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 4: büyüt"><img src="./wiki/diagrams/7-glossary-4.svg" alt="Glossary — diagram 4" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md NaN-NaN</a></p>

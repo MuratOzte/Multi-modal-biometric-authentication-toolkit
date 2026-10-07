@@ -12,25 +12,25 @@
 <hr>
 <h2 id="testing-architecture-and-tooling-flow">Testing Architecture and Tooling Flow</h2>
 <p>Title: Testing and Acceptance Tooling Architecture</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/6-testing-and-acceptance-tooling-1.svg" alt="Testing and Acceptance Tooling — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/6-testing-and-acceptance-tooling-1.svg" alt="Testing and Acceptance Tooling — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L8-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 8-22</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a></p>
 <hr>
 <h2 id="61-biometric-preflight">6.1 Biometric Preflight</h2>
 <p>The biometric preflight utility (<code>scripts/biometric-preflight.mjs</code>) evaluates local environment health before executing biometric workloads <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L8-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 8-21</a> It verifies Python dependencies, CUDA availability for face and voice workers, and FFmpeg tooling for audio processing without invoking full weight downloads <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L16-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 16-21</a> Binary resolution prioritizes environment variables like <code>*_PYTHON_BIN</code>, local virtual environments (<code>.venv-*</code>), and system paths <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L23-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 23-26</a></p>
-<p>For details, see Biometric Preflight.</p>
+<p>For details, see <a href="#/wiki/6.1-biometric-preflight">Biometric Preflight</a>.</p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L8-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 8-39</a></p>
 <hr>
 <h2 id="62-biometric-acceptance-harness">6.2 Biometric Acceptance Harness</h2>
 <p>The biometric acceptance harness (<code>scripts/biometric-acceptance.mjs</code>) orchestrates end-to-end black-box testing against an isolated, temporary instance of the ASP.NET Core API <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-64</a> It relies on manifest-driven configuration (<code>prepare:biometric-acceptance</code>, <code>status:biometric-acceptance</code>) to validate face, voice, and card pipelines while maintaining privacy-safe reporting and zero git pollution of local biometric samples <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L65-L140" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 65-140</a></p>
-<p>For details, see Biometric Acceptance Harness.</p>
+<p>For details, see <a href="#/wiki/6.2-biometric-acceptance-harness">Biometric Acceptance Harness</a>.</p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L140" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-140</a></p>
 <hr>
 <h2 id="63-net-test-suite">6.3 .NET Test Suite</h2>
 <p>The <code>.NET</code> test suite (<code>apps/securekit-api.tests</code>) provides automated verification for controllers, verification service logic, dependency injection, and health endpoints. It ensures that the modern ASP.NET Core backend preserves the required API contracts and business logic expected by the SDK and verification bridges.</p>
-<p>For details, see .NET Test Suite.</p>
+<p>For details, see <a href="#/wiki/6.3-.net-test-suite">.NET Test Suite</a>.</p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L19-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 19-21</a></p>
 <hr>
 <h2 id="test-pyramid-and-verification-bridge">Test Pyramid and Verification Bridge</h2>
 <p>Title: Test Pyramid and Verification Bridge</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/6-testing-and-acceptance-tooling-2.svg" alt="Testing and Acceptance Tooling — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/6-testing-and-acceptance-tooling-2.svg" alt="Testing and Acceptance Tooling — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L14-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 14-22</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-139</a></p>

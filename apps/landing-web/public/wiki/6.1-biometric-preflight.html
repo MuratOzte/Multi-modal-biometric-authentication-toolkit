@@ -18,7 +18,7 @@
 <li><strong>Local Virtual Environments</strong>: Checks if a local workspace virtual environment exists at <code>.venv-face</code>, <code>.venv-voice</code>, or <code>.venv-card</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L42-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 42</a></li>
 <li><strong>System Fallbacks</strong>: Defaults to platform-specific system Python (<code>py</code> on Windows, <code>python3</code> on POSIX systems) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 45</a></li>
 </ol>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/6.1-biometric-preflight-1.svg" alt="Biometric Preflight — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/6.1-biometric-preflight-1.svg" alt="Biometric Preflight — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Figure 1: Python binary resolution and subprocess spawning flow in <code>scripts/biometric-preflight.mjs</code>.</em></p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L39-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 39-50</a></p>
 <hr>
@@ -30,7 +30,7 @@
 <li><strong>Voice</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
 <li><strong>Card</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
 </ul>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/6.1-biometric-preflight-2.svg" alt="Biometric Preflight — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/6.1-biometric-preflight-2.svg" alt="Biometric Preflight — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Figure 2: Module verification pipeline executed inside <code>scripts/biometric-preflight.py</code>.</em></p>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-49</a></p>
 <hr>

@@ -21,7 +21,7 @@
 <li>Spawns the Vite development server for <code>apps/demo-web</code>, injecting proxy environment variables that point to the active backend <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/dev.mjs#L35-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/dev.mjs 35-38</a></li>
 <li>Listens for termination signals (<code>SIGINT</code>, <code>SIGTERM</code>) to cleanly terminate all spawned child processes via process-tree traversal <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/dev.mjs#L10-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/dev.mjs 10-40</a></li>
 </ol>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/dev.mjs#L1-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/dev.mjs 1-40</a></p>
 <hr>
 <h2 id="port-allocations-and-vite-proxy-resolution">Port Allocations and Vite Proxy Resolution</h2>
@@ -38,13 +38,17 @@
 <li><strong><code>VITE_SECUREKIT_API_BACKEND</code></strong>: If set to <code>aspnet</code>, it targets <code>http://localhost:3002</code>; if set to <code>node</code>, it targets <code>http://localhost:3001</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L22-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 22</a></li>
 <li><strong>Default Fallback</strong>: If neither is defined, it defaults to the ASP.NET Core API at <code>http://localhost:3002</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 23</a></li>
 </ol>
-<pre></pre>
+
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L18-L30" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 18-30</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/dev.mjs#L35-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/dev.mjs 35-38</a></p>
 <hr>
 <h2 id="environment-variables-and-configuration">Environment Variables and Configuration</h2>
 <p>Configuration for local development can be managed via <code>.env</code> files in specific packages (such as <code>apps/demo-web/.env.example</code>) or via terminal environment variables passed to the orchestrator <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L25-L27" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 25-27</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/.env.example#L1-L4" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/.env.example 1-4</a></p>
 <h3 id="example-environment-configuration-object-object">Example Environment Configuration (<code>apps/demo-web/.env.example</code>)</h3>
-<pre><pre><code>VITE_SECUREKIT_BASE_URL=/api/securekitVITE_SECUREKIT_API_BACKEND=aspnet# Optional explicit target (takes precedence over API_BACKEND):# VITE_SECUREKIT_DEV_PROXY_TARGET=http://localhost:3002</code></pre></pre>
+<pre><code>VITE_SECUREKIT_BASE_URL=/api/securekit
+VITE_SECUREKIT_API_BACKEND=aspnet
+# Optional explicit target (takes precedence over API_BACKEND):
+# VITE_SECUREKIT_DEV_PROXY_TARGET=http://localhost:3002
+</code></pre>
 <p>Sources: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/.env.example#L1-L4" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/.env.example 1-4</a></p>
 <h3 id="runtime-environment-variables-for-data-migration">Runtime Environment Variables for Data Migration</h3>
 <p>When transitioning between the legacy Node backend and the ASP.NET Core backend while preserving local user stores and biometric reference folders, specific environment variables must be exposed in the terminal session before executing <code>pnpm dev</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L39-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 39-51</a>:</p>

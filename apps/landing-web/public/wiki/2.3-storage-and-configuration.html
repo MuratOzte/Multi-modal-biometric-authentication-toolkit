@@ -19,7 +19,7 @@
 <li><strong><code>FixedKeystrokeStore</code></strong>: Manages fixed keystroke templates and reference inputs, tracked via <code>SECUREKIT_KEYSTROKE_STORE</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 45</a></li>
 </ul>
 <p>To prevent race conditions and partial writes during concurrent requests, the storage layer employs atomic write patterns and process-level file locking.</p>
-<pre></pre>
+
 <p>Sources: <code>docs/ASPNET_CUTOVER.md:34-49</code></p>
 <hr>
 <h2 id="configuration-architecture-object-object">Configuration Architecture (<code>appsettings.json</code>)</h2>
@@ -32,7 +32,7 @@
 <li><strong><code>Card</code></strong>: Defines OCR timeouts, upload limits, and default matching thresholds <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L27-L31" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 27-31</a></li>
 <li><strong><code>Cors</code></strong>: Manages allowed cross-origin resource sharing policies <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L32-L34" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 32-34</a></li>
 </ul>
-<pre></pre>
+
 <p>Sources: <code>apps/securekit-api/appsettings.json:1-35</code></p>
 <hr>
 <h2 id="environment-variable-overrides-and-reference-roots">Environment Variable Overrides and Reference Roots</h2>

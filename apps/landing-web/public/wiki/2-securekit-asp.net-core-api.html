@@ -18,7 +18,7 @@
 <hr>
 <h2 id="architecture-and-bootstrap">Architecture and Bootstrap</h2>
 <p>The API initializes via <code>apps/securekit-api/Program.cs</code>, where core infrastructure, state stores, verification engines, and Python bridge services are registered as singletons in the ASP.NET Core IoC container <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a> Configuration parameters for biometric limits, timeouts, and hardware execution options are driven by <code>apps/securekit-api/appsettings.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L1-L35" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 1-35</a></p>
-<pre></pre>
+
 <p><em>Figure 2.1: SecureKit ASP.NET Core Bootstrap and Configuration Flow</em></p>
 <p>Sources:</p>
 <ul>
@@ -28,7 +28,7 @@
 <hr>
 <h2 id="21-http-endpoints-and-controllers">2.1 HTTP Endpoints and Controllers</h2>
 <p>The API exposes a comprehensive set of controller classes corresponding to the functional capabilities of the authentication workflow: user lifecycle management, challenge issuance, consent tracking, session evaluation, and multi-modal biometric verification (face, voice, ID card, dynamic and fixed keystrokes, network/IP checks, and health monitoring).</p>
-<p>For detailed information on route definitions, input validation rules, and JSON request/response contracts, see HTTP Endpoints and Controllers.</p>
+<p>For detailed information on route definitions, input validation rules, and JSON request/response contracts, see <a href="#/wiki/2.1-http-endpoints-and-controllers">HTTP Endpoints and Controllers</a>.</p>
 <p>Sources:</p>
 <ul>
 <li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 21-25</a></li>
@@ -36,7 +36,7 @@
 <hr>
 <h2 id="22-verification-services">2.2 Verification Services</h2>
 <p>The service layer encapsulates core security logic, multi-modal signal scoring, and Python worker execution bridges. Services such as <code>FaceVerification</code>, <code>VoiceVerification</code>, <code>CardVerification</code>, and <code>SessionKeystrokeVerifier</code> process raw inputs and interact with external Python scripts through stdin/stdout subprocess wrappers (<code>FacePython</code>, <code>VoicePython</code>, <code>CardPython</code>, <code>KeystrokePython</code>).</p>
-<p>For a detailed breakdown of service implementations, risk calculation policies, and Python process inter-op, see Verification Services. For low-level details on subprocess execution, see Python Process Bridge, and for scoring algorithms, see Keystroke, Session and Risk Services.</p>
+<p>For a detailed breakdown of service implementations, risk calculation policies, and Python process inter-op, see <a href="#/wiki/2.2-verification-services">Verification Services</a>. For low-level details on subprocess execution, see <a href="#/wiki/2.2.1-python-process-bridge">Python Process Bridge</a>, and for scoring algorithms, see <a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Keystroke, Session and Risk Services</a>.</p>
 <p>Sources:</p>
 <ul>
 <li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L27" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14-27</a></li>
@@ -45,14 +45,14 @@
 <hr>
 <h2 id="23-storage-and-configuration">2.3 Storage and Configuration</h2>
 <p>SecureKit uses file-based JSON storage adapters (<code>FileUserStore</code>, <code>FileProfileStorage</code>, <code>FixedKeystrokeStore</code>) alongside in-memory stores (<code>SessionStore</code>, <code>ChallengeStore</code>) to manage user credentials, biometric profiles, active tokens, and single-use challenges. State mutations are protected by atomic file write patterns and thread synchronization primitives to prevent corruption under concurrent requests.</p>
-<p>For details on schema layouts, atomic locking strategies, and environment variable overrides, see Storage and Configuration.</p>
+<p>For details on schema layouts, atomic locking strategies, and environment variable overrides, see <a href="#/wiki/2.3-storage-and-configuration">Storage and Configuration</a>.</p>
 <p>Sources:</p>
 <ul>
 <li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10-17</a></li>
 <li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L27-L30" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 27-30</a></li>
 </ul>
 <hr>
-<pre></pre>
+
 <p><em>Figure 2.2: End-to-End Request Routing and Biometric Verification Architecture</em></p>
 <p>Sources:</p>
 <ul>

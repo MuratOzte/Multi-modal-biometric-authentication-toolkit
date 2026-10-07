@@ -10,6 +10,7 @@ import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urljoin
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "apps/landing-web/public/wiki"
@@ -90,6 +91,8 @@ def build(capture):
     for page in capture:
         slug = urls[page["url"]]
         diagrams = []
+        headings = []
+        heading_ids = {}
 
         def render(node):
             if isinstance(node, str):
@@ -102,17 +105,27 @@ def build(capture):
                 name = f"{slug}-{len(diagrams) + 1}.svg"
                 (OUT / "diagrams" / name).write_text(svg_html(node), encoding="utf-8")
                 diagrams.append(name)
-                return f'<figure class="wiki-diagram"><img src="./wiki/diagrams/{name}" alt="{html.escape(page["title"], quote=True)} — diagram {len(diagrams)}" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>'
+                return f'<figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram {len(diagrams)}: büyüt"><img src="./wiki/diagrams/{name}" alt="{html.escape(page["title"], quote=True)} — diagram {len(diagrams)}" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>'
             body = "".join(render(c) for c in node.children)
+            if node.tag == "div" and "whitespace-pre" in node.attrs.get("class", ""):
+                return body + "\n"
             if node.tag not in SAFE_TAGS:
                 return body
             if node.tag == "pre" and '<figure class="wiki-diagram">' in body:
                 return body
+            if node.tag == "pre" and (not body.strip() or body.startswith("<pre>")):
+                return body
             attrs = {}
             if re.fullmatch(r"h[1-4]", node.tag) and node.attrs.get("id"):
-                attrs["id"] = node.attrs["id"]
+                original_id = node.attrs["id"]
+                heading_ids[original_id] = heading_ids.get(original_id, 0) + 1
+                occurrence = heading_ids[original_id]
+                attrs["id"] = original_id if occurrence == 1 else f"{original_id}-{occurrence}"
+                headings.append(dict(id=attrs["id"], title=text_content(node).strip(), level=int(node.tag[1])))
             if node.tag == "a":
                 href = node.attrs.get("href", "")
+                if href.startswith("/"):
+                    href = urljoin(page["url"], href)
                 base, _, fragment = href.partition("#")
                 if base in urls:
                     href = f'#/wiki/{urls[base]}' + (f'?section={fragment}' if fragment else "")
@@ -135,7 +148,6 @@ def build(capture):
 
         content = render(Tree(page["html"]).root)
         (OUT / f"{slug}.html").write_text(content, encoding="utf-8")
-        headings = [{**h, "title": h["title"].strip()} for h in page["headings"]]
         # Search uses source text; diagrams remain available as separate SVG assets.
         search = re.sub(r"\s+", " ", text_content(Tree(content).root)).strip()
         pages.append(dict(slug=slug, title=page["title"], source=page["url"],

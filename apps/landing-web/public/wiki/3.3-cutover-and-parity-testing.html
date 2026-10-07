@@ -19,17 +19,30 @@
 <li><code>VITE_SECUREKIT_DEV_PROXY_TARGET</code>: Explicit URL override that takes precedence over <code>VITE_SECUREKIT_API_BACKEND</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L20-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 20-21</a></li>
 <li>Port defaults: The C# ASP.NET Core API binds to port <code>3002</code>, the Node/Express API binds to port <code>3001</code>, and the Vite dev server runs on port <code>5173</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 8-10</a></li>
 </ul>
-<pre></pre>
+
 <p><em>Sources: <code>docs/ASPNET_CUTOVER.md:6-31</code>, <code>package.json:8-22</code></em></p>
 <hr>
 <h2 id="parity-runner-object-object">Parity Runner (<code>aspnet-parity.mjs</code>)</h2>
 <p>The parity testing harness is orchestrated by <code>scripts/aspnet-parity.mjs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> It sequentially executes parity test scripts for stages one through seven using <code>tsx</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L11-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 11-14</a> Each stage spins up both the legacy Express application instance and the ASP.NET Core API binary, forwarding identical HTTP requests and asserting structural and behavioral contract parity.</p>
 <h3 id="execution-flow">Execution Flow</h3>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/3.3-cutover-and-parity-testing-1.svg" alt="Cutover and Parity Testing — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/3.3-cutover-and-parity-testing-1.svg" alt="Cutover and Parity Testing — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Sources: <code>scripts/aspnet-parity.mjs:1-38</code>, <code>packages/node-auth/scripts/stage-seven-parity.ts:1-34</code></em></p>
 <h3 id="run-logs-output-structure">Run-Logs Output Structure</h3>
 <p>Results are serialized into <code>.run-logs/aspnet-parity.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L7-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 7-9</a> The schema records overall success, timestamps, and individual stage metrics:</p>
-<pre><pre><code>{  &quot;startedAt&quot;: &quot;2026-10-07T00:00:00.000Z&quot;,  &quot;passed&quot;: true,  &quot;stages&quot;: [    {      &quot;stage&quot;: &quot;one&quot;,      &quot;passed&quot;: true,      &quot;durationMs&quot;: 1250,      &quot;summary&quot;: &quot;124 comparisons passed&quot;    }  ],  &quot;finishedAt&quot;: &quot;2026-10-07T00:00:05.000Z&quot;}</code></pre></pre>
+<pre><code>{
+  &quot;startedAt&quot;: &quot;2026-10-07T00:00:00.000Z&quot;,
+  &quot;passed&quot;: true,
+  &quot;stages&quot;: [
+    {
+      &quot;stage&quot;: &quot;one&quot;,
+      &quot;passed&quot;: true,
+      &quot;durationMs&quot;: 1250,
+      &quot;summary&quot;: &quot;124 comparisons passed&quot;
+    }
+  ],
+  &quot;finishedAt&quot;: &quot;2026-10-07T00:00:05.000Z&quot;
+}
+</code></pre>
 <p><em>Sources: <code>scripts/aspnet-parity.mjs:7-37</code></em></p>
 <hr>
 <h2 id="stage-one-through-seven-parity-scripts">Stage-One through Seven Parity Scripts</h2>
@@ -41,7 +54,18 @@
 </ul>
 <h3 id="normalization-and-assertion-logic">Normalization and Assertion Logic</h3>
 <p>Because underlying storage paths, system-generated temporary directories, and volatile timestamps (<code>enrolledAt</code>, <code>updatedAt</code>) differ between Node and .NET runtimes, parity scripts normalize responses prior to deep comparison <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/stage-seven-parity.ts#L46-L57" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/stage-seven-parity.ts 46-57</a></p>
-<pre><pre><code>// Normalization logic mapping volatile paths and datesconst normalize = (value: any, key = &quot;&quot;): any =&gt; {  if (Array.isArray(value)) return value.map(v =&gt; normalize(v));  if (value &amp;&amp; typeof value === &quot;object&quot;) return Object.fromEntries(Object.entries(value).map(([k, v]) =&gt; [k, normalize(v, k)]));  if ([&quot;updatedAt&quot;, &quot;enrolledAt&quot;, &quot;cardReferenceEnrolledAt&quot;].includes(key)) return &quot;&lt;time&gt;&quot;;  if (typeof value === &quot;string&quot;) {    for (const [name, replacement] of variablePaths) value = value.split(name).join(replacement);    value = value.replace(/[^\s&quot;&#x27;]*securekit-card-[^/\\\s&quot;&#x27;]+[\\/]/g, &quot;&lt;temp&gt;/&quot;).replaceAll(&quot;\\&quot;, &quot;/&quot;);  }  return value;};</code></pre></pre>
+<pre><code>// Normalization logic mapping volatile paths and dates
+const normalize = (value: any, key = &quot;&quot;): any =&gt; {
+  if (Array.isArray(value)) return value.map(v =&gt; normalize(v));
+  if (value &amp;&amp; typeof value === &quot;object&quot;) return Object.fromEntries(Object.entries(value).map(([k, v]) =&gt; [k, normalize(v, k)]));
+  if ([&quot;updatedAt&quot;, &quot;enrolledAt&quot;, &quot;cardReferenceEnrolledAt&quot;].includes(key)) return &quot;&lt;time&gt;&quot;;
+  if (typeof value === &quot;string&quot;) {
+    for (const [name, replacement] of variablePaths) value = value.split(name).join(replacement);
+    value = value.replace(/[^\s&quot;&#x27;]*securekit-card-[^/\\\s&quot;&#x27;]+[\\/]/g, &quot;&lt;temp&gt;/&quot;).replaceAll(&quot;\\&quot;, &quot;/&quot;);
+  }
+  return value;
+};
+</code></pre>
 <p><em>Sources: <code>packages/node-auth/scripts/stage-seven-parity.ts:46-57</code></em></p>
 <p><em>Sources: <code>packages/node-auth/scripts/stage-seven-parity.ts:1-94</code>, <code>scripts/aspnet-parity.mjs:1-38</code></em></p>
 <hr>
@@ -55,6 +79,15 @@
 <li><strong><code>stdout</code> / <code>stderr</code></strong>: Emits large payload buffers or error streams to validate output draining limits <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L19-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 19-24</a></li>
 <li><strong><code>dependency</code></strong>: Simulates missing python module exceptions (e.g. <code>No module named &#x27;paddleocr&#x27;</code>) <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L41-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 41-42</a></li>
 </ul>
-<pre><pre><code># Protocol event emission from card-stage7.pydef emit(value):    print(json.dumps(value), flush=True) emit({&quot;event&quot;: &quot;ready&quot;, &quot;ok&quot;: True})for line in sys.stdin:    request = json.loads(line)    mode = pathlib.Path(request[&quot;probeImagePath&quot;]).read_text()    # ... mode handling and score evaluation ...</code></pre></pre>
+<pre><code># Protocol event emission from card-stage7.py
+def emit(value):
+    print(json.dumps(value), flush=True)
+ 
+emit({&quot;event&quot;: &quot;ready&quot;, &quot;ok&quot;: True})
+for line in sys.stdin:
+    request = json.loads(line)
+    mode = pathlib.Path(request[&quot;probeImagePath&quot;]).read_text()
+    # ... mode handling and score evaluation ...
+</code></pre>
 <p><em>Sources: <code>packages/node-auth/scripts/fixtures/card-stage7.py:7-13</code></em></p>
 <p><em>Sources: <code>packages/node-auth/scripts/fixtures/card-stage7.py:1-54</code>, <code>packages/node-auth/scripts/stage-seven-parity.ts:15-16</code></em></p>

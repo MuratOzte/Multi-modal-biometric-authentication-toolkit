@@ -9,13 +9,13 @@
 <p>The service layer in <code>apps/securekit-api</code> orchestrates multi-modal biometric authentication, risk evaluation, session tracking, and network inspections. It acts as the business logic intermediary between HTTP controllers and underlying mechanisms such as file-based storage, network checkers, and isolated Python worker scripts.</p>
 <p>For detailed breakdowns of specific sub-systems, refer to the child pages:</p>
 <ul>
-<li>Python Process Bridge — Details on how C# services spawn and manage Python workers (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>).</li>
-<li>Keystroke, Session and Risk Services — Details on dynamic and fixed keystroke parsing, EMA profiling, session stores, and <code>SessionRiskEvaluator</code>.</li>
+<li><a href="#/wiki/2.2.1-python-process-bridge">Python Process Bridge</a> — Details on how C# services spawn and manage Python workers (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>).</li>
+<li><a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Keystroke, Session and Risk Services</a> — Details on dynamic and fixed keystroke parsing, EMA profiling, session stores, and <code>SessionRiskEvaluator</code>.</li>
 </ul>
 <hr>
 <h2 id="1-service-layer-architecture-and-responsibilities">1. Service Layer Architecture and Responsibilities</h2>
 <p>The verification service layer separates concerns across biometric verification pipelines, security evaluations, and state persistence. C# service classes encapsulate the validation rules, input preprocessing, and response normalization required before returning decisions to the HTTP endpoints.</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2-verification-services-1.svg" alt="Verification Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 1: büyüt"><img src="./wiki/diagrams/2.2-verification-services-1.svg" alt="Verification Services — diagram 1" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Figure 1: Service Layer Entity Mapping and Responsibilities.</em></p>
 <ul>
 <li><code>CardVerification</code>: Coordinates card image uploads, reference directory scans, and delegates visual/OCR comparisons to the python process bridge <code>ICardPython</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardVerification.cs#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardVerification.cs 8-10</a></li>
@@ -30,9 +30,9 @@
 <hr>
 <h2 id="2-python-process-bridge-integration">2. Python Process Bridge Integration</h2>
 <p>Biometric pipelines like PaddleOCR/OpenCLIP (card), MTCNN/FaceNet (face), and Whisper/SpeechBrain (voice) execute inside isolated Python environments. The ASP.NET Core service layer interacts with these workers through specialized bridge abstractions.</p>
-<figure class="wiki-diagram"><img src="./wiki/diagrams/2.2-verification-services-2.svg" alt="Verification Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagram 2: büyüt"><img src="./wiki/diagrams/2.2-verification-services-2.svg" alt="Verification Services — diagram 2" loading="lazy" /><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
 <p><em>Sequence 2: Verification Invocation and Normalization Flow.</em></p>
-<p>For deeper technical details regarding process spawning, CLI contracts, timeout management, process-tree termination, and temporary file isolation, see Python Process Bridge.</p>
+<p>For deeper technical details regarding process spawning, CLI contracts, timeout management, process-tree termination, and temporary file isolation, see <a href="#/wiki/2.2.1-python-process-bridge">Python Process Bridge</a>.</p>
 <p>Sources:</p>
 <ul>
 <li><code>apps/securekit-api/Services/CardVerification.cs</code></li>
@@ -46,7 +46,7 @@
 <li><strong>Session Risk Evaluation</strong>: The <code>SessionRiskEvaluator</code> combines signals from recent authentication attempts, anomaly detection, challenge verification status, and IP/network checking (<code>NetworkVerification</code>) to produce a composite risk score resulting in an <code>allow</code>, <code>step_up</code>, or <code>deny</code> decision.</li>
 <li><strong>State Stores</strong>: Transient challenges and active user sessions are managed via in-memory or file-backed stores (<code>ChallengeStore</code>, <code>SessionStore</code>).</li>
 </ul>
-<p>For comprehensive implementation details on keystroke feature extraction, profile storage, and risk scoring logic, see Keystroke, Session and Risk Services.</p>
+<p>For comprehensive implementation details on keystroke feature extraction, profile storage, and risk scoring logic, see <a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Keystroke, Session and Risk Services</a>.</p>
 <p>Sources:</p>
 <ul>
 <li><code>apps/securekit-api/Services/CardVerification.cs</code></li>
