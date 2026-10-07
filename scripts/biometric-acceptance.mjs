@@ -14,7 +14,7 @@ function requireValue(condition, code) { if (!condition) throw new Error(code); 
 
 export async function loadManifest(file) {
   const manifest = JSON.parse(await readFile(file, "utf8"));
-  requireValue(manifest && (manifest.voice || manifest.card), "MANIFEST_MODULE_REQUIRED");
+  requireValue(manifest && (manifest.face || manifest.voice || manifest.card), "MANIFEST_MODULE_REQUIRED");
   const base = path.dirname(path.resolve(file));
   const sample = async (value, kind) => {
     requireValue(value && typeof value.file === "string", "SAMPLE_FILE_REQUIRED");
@@ -27,6 +27,10 @@ export async function loadManifest(file) {
     return { file: filename, mime, text: value.text };
   };
   const result = {};
+  if (manifest.face) {
+    result.face = Object.fromEntries(await Promise.all(["reference", "samePerson", "differentPerson"].map(async key => [key, await sample(manifest.face[key], "image")])));
+    requireValue(new Set(Object.values(result.face).map(v => v.file)).size === 3, "FACE_DISTINCT_SAMPLES_REQUIRED");
+  }
   if (manifest.voice) {
     const voice = manifest.voice;
     requireValue(Array.isArray(voice.enrollment) && voice.enrollment.length === 3, "VOICE_THREE_SAMPLES_REQUIRED");
@@ -48,6 +52,9 @@ export function accepted(name, result) {
   if (result.status !== 200 || result.body?.ok !== true) return false;
   const body = result.body;
   switch (name) {
+    case "face-enrollment": return Boolean(body.reference);
+    case "face-same-person": return body.matched === true && Number.isFinite(body.score) && !body.failureCode;
+    case "face-different-person": return body.matched === false && Number.isFinite(body.score) && !body.failureCode;
     case "voice-enrollment": return body.enrollmentProgress?.complete === true && body.enrollmentProgress?.sampleCount >= 3;
     case "voice-same-speaker": return body.matched === true && body.decision === "allow" && body.transcript?.matched === true;
     case "voice-different-speaker": return body.matched === false && body.decision === "deny" && body.transcript?.matched === true;
@@ -70,10 +77,13 @@ async function startApi(directory) {
     env: { ...process.env, ASPNETCORE_ENVIRONMENT: "Testing", MOCK_IP_CHECK: "1",
       SECUREKIT_PROFILE_STORE: path.join(directory, "profiles.json"), SECUREKIT_USERS_FILE: path.join(directory, "users.json"),
       SECUREKIT_KEYSTROKE_STORE: path.join(directory, "keystroke"),
+      Face__TempRoot: path.join(directory, "face-temp"), Face__ReferenceDirectory: path.join(directory, "face-references"),
+      FACE_SLIDING_REFERENCES_ROOT: path.join(directory, "face-sliding"),
       Voice__TempRoot: path.join(directory, "voice-temp"), VOICE_MIN_ENROLLMENT_SAMPLES: "3",
       Card__TempRoot: path.join(directory, "card-temp"), Card__ReferenceDirectory: path.join(directory, "references"),
       Card__UserReferenceDirectory: path.join(directory, "user-references"),
       // Always use production workers; inherited fixture overrides must not pass as real acceptance.
+      FACE_PYTHON_SCRIPT_PATH: path.join(root, "python/face_verification/face_verification.py"),
       VOICE_PYTHON_SCRIPT_PATH: path.join(root, "python/voice_verification/voice_worker.py"),
       CARD_PYTHON_SCRIPT_PATH: path.join(root, "python/card_verification/main.py") },
   });
@@ -124,6 +134,12 @@ export async function runAcceptance(manifest) {
       requireValue(challenge.status === 200 && challenge.body.challengeId, "CHALLENGE_FAILED");
       return upload(route, sample, "audioSample", { userId: "acceptance", challengeId: challenge.body.challengeId, updateProfileOnAllow: "false" });
     };
+    if (manifest.face) {
+      if (check("face-enrollment", await upload("/enroll/face/reference", manifest.face.reference, "referenceImage", { userId: "acceptance" }))) {
+        check("face-same-person", await upload("/verify/face", manifest.face.samePerson, "probeImage", { userId: "acceptance" }));
+        check("face-different-person", await upload("/verify/face", manifest.face.differentPerson, "probeImage", { userId: "acceptance" }));
+      }
+    }
     if (manifest.voice) {
       const consent = await request("/consent", { userId: "acceptance", consentVersion: "acceptance-v1" });
       requireValue(consent.status === 200 && consent.body.ok === true, "CONSENT_FAILED");

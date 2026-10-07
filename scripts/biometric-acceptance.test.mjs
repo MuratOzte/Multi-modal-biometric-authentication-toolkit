@@ -5,6 +5,57 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { accepted, loadManifest, runAcceptance } from "./biometric-acceptance.mjs";
 
+test("face negatives need a successful model comparison, not a missing face or worker failure", () => {
+  const body = { ok: true, matched: false, score: 0.2 };
+  assert.equal(accepted("face-different-person", { status: 200, body }), true);
+  assert.equal(accepted("face-same-person", { status: 200, body }), false);
+  body.matched = true;
+  assert.equal(accepted("face-same-person", { status: 200, body }), true);
+  body.score = null;
+  assert.equal(accepted("face-same-person", { status: 200, body }), false);
+  assert.equal(accepted("face-different-person", { status: 200, body: { ok: false, matched: false, score: null, failureCode: "FACE_NOT_DETECTED" } }), false);
+});
+
+test("face-only manifest supports separate positive and negative captures", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "securekit-face-manifest-test-"));
+  try {
+    for (const name of ["reference.jpg", "same.jpg", "different.jpg"]) await writeFile(path.join(directory, name), name);
+    const manifest = { face: { reference: { file: "reference.jpg" }, samePerson: { file: "same.jpg" }, differentPerson: { file: "different.jpg" } } };
+    const file = path.join(directory, "manifest.json");
+    await writeFile(file, JSON.stringify(manifest));
+    assert.deepEqual(Object.keys(await loadManifest(file)), ["face"]);
+    manifest.face.samePerson.file = "reference.jpg";
+    await writeFile(file, JSON.stringify(manifest));
+    await assert.rejects(loadManifest(file), /FACE_DISTINCT_SAMPLES_REQUIRED/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test("face harness isolates references, refuses missing runtime and ignores fixture worker overrides", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "securekit-face-harness-test-"));
+  const before = new Set(await readdir(tmpdir()));
+  const previous = { runtime: process.env.FACE_PYTHON_BIN, script: process.env.FACE_PYTHON_SCRIPT_PATH };
+  try {
+    process.env.FACE_PYTHON_BIN = path.join(directory, "missing-python");
+    process.env.FACE_PYTHON_SCRIPT_PATH = path.join(directory, "fixture.py");
+    const file = path.join(directory, "private-face.jpg");
+    await writeFile(file, "test");
+    const sample = { file, mime: "image/jpeg" };
+    const report = await runAcceptance({ face: { reference: sample, samePerson: sample, differentPerson: sample } });
+    assert.deepEqual(report.checks, [
+      { name: "face-enrollment", passed: true }, { name: "face-same-person", passed: false }, { name: "face-different-person", passed: false },
+    ]);
+    assert.equal(report.modelAcceptance, "failed");
+    assert.equal(report.hardwareAcceptance, "pending");
+    assert.equal(JSON.stringify(report).includes(directory), false);
+    assert.deepEqual((await readdir(tmpdir())).filter(name => name.startsWith("securekit-biometric-acceptance-") && !before.has(name)), []);
+  } finally {
+    for (const [key, value] of [["FACE_PYTHON_BIN", previous.runtime], ["FACE_PYTHON_SCRIPT_PATH", previous.script]]) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
 test("uncertain cards and unavailable model backends cannot pass quality acceptance", () => {
   const body = { ok: true, matched: false, bestMatch: { decision: "uncertain", quality: { ocrAvailable: true }, visualDetails: { clipAvailable: true } } };
   assert.equal(accepted("card-different", { status: 200, body }), false);
