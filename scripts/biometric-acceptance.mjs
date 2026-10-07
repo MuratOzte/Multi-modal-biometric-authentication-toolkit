@@ -15,6 +15,10 @@ function requireValue(condition, code) { if (!condition) throw new Error(code); 
 
 export async function loadManifest(file) {
   const manifest = JSON.parse(await readFile(file, "utf8"));
+  return validateManifest(manifest, file);
+}
+
+export async function validateManifest(manifest, file) {
   requireValue(manifest && (manifest.face || manifest.voice || manifest.card), "MANIFEST_MODULE_REQUIRED");
   const base = path.dirname(path.resolve(file));
   const sample = async (value, kind) => {
