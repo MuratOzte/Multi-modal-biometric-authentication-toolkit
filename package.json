@@ -7,11 +7,13 @@
   ],
   "scripts": {
     "build": "pnpm -r build",
-    "dev": "pnpm --parallel --filter @securekit/node-auth --filter demo-web dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:node": "node scripts/dev.mjs node",
     "lint": "echo \"(todo)\"",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --filter @securekit/node-auth --filter @securekit/web-sdk test",
-    "test:aspnet-parity": "dotnet build SecureKit.slnx && node scripts/aspnet-parity.mjs"
+    "test:aspnet-parity": "dotnet build SecureKit.slnx && node scripts/aspnet-parity.mjs",
+    "test:aspnet-demo": "dotnet build SecureKit.slnx && pnpm --filter demo-web test:aspnet-smoke"
   },
   "devDependencies": {
     "typescript": "^5.6.3",
