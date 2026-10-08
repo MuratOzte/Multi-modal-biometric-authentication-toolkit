@@ -21,7 +21,6 @@
 .resources-intro h2 { font-size:clamp(30px,3.4vw,44px); line-height:1.15; letter-spacing:-.045em; font-weight:500; margin:20px 0; }
 .resources-intro > p:not(.eyebrow) { color:var(--muted); font-size:14px; line-height:1.9; max-width:380px; margin-bottom:28px; }
 .resources-intro .button { display:inline-flex; }
-.resources-note { display:block; font-size:10px; color:var(--muted); margin-top:18px; }
 .resource-topics > a { display:flex; align-items:center; gap:20px; padding:25px 0; border-bottom:1px solid var(--line); }
 .resource-topics > a:first-child { padding-top:0; }
 .resource-topics > a > span { color:var(--violet); font-size:12px; }
@@ -406,43 +405,6 @@ button svg {
 }
 .hero-visual {
   animation-delay: 0.15s;
-}
-.signal-strip {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.signal-strip .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 90px;
-  gap: 24px;
-}
-.strip-label {
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  max-width: 130px;
-  line-height: 1.7;
-}
-.signal-strip a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-.signal-strip a svg {
-  width: 18px;
-  height: 18px;
-}
-.signal-strip a > span {
-  font-size: 12px;
-  color: #8c8d97;
-  margin-left: 10px;
-}
-.signal-strip a:hover {
-  color: var(--violet);
 }
 .section-heading {
   display: flex;
@@ -1082,20 +1044,6 @@ h2 {
   .hero-copy > p {
     font-size: 13px;
   }
-  .signal-strip .container {
-    gap: 15px;
-  }
-  .signal-strip a {
-    font-size: 10px;
-    gap: 7px;
-  }
-  .signal-strip a > span {
-    margin-left: 0;
-  }
-  .strip-label {
-    font-size: 8px;
-    max-width: 115px;
-  }
   .developers-section {
     gap: 55px;
   }
@@ -1202,25 +1150,6 @@ h2 {
   }
   .hero-visual-bottom > span {
     font-size: 6px;
-  }
-  .signal-strip .container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    padding-block: 20px;
-    gap: 16px;
-  }
-  .strip-label {
-    grid-column: 1/-1;
-    max-width: none;
-  }
-  .signal-strip a {
-    flex-direction: column;
-    align-items: start;
-    font-size: 9px;
-    gap: 7px;
-  }
-  .signal-strip a > span {
-    display: none;
   }
   .section {
     padding-block: 75px;
@@ -1374,12 +1303,6 @@ h2 {
   .brand > svg {
     width: 28px;
     height: 28px;
-  }
-  .signal-strip .container {
-    gap: 17px 10px;
-  }
-  .signal-strip a {
-    font-size: 8px;
   }
   .section-heading {
     display: block;

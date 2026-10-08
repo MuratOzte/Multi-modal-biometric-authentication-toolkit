@@ -196,12 +196,10 @@ test("both landing pages render full localized content and crawlable language li
   assert.match(english, /The many layers/);
   assert.match(english, /Your typing rhythm\./);
   assert.match(english, /Pause animations/);
-  assert.match(english, /Wiki content is in English\./);
   const visibleEnglish = english.replace(/<[^>]*>/g, " ");
   assert.doesNotMatch(visibleEnglish, /[çğıöşüÇĞİÖŞÜ]/);
   assert.match(turkish, /Kimliğin farklı/);
   assert.match(turkish, /Hareketleri duraklat/);
-  assert.match(turkish, /Wiki içeriği İngilizcedir\./);
 });
 
 test("production HTML contains localized content, metadata and reciprocal language alternates", async () => {

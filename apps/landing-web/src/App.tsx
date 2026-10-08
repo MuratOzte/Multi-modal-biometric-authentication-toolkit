@@ -210,26 +210,6 @@ function App({ locale }: { locale: Locale }) {
             </div>
           </div>
         </section>
-        <div className="signal-strip">
-          <div className="container">
-            <span className="strip-label">
-              {t("KİMLİĞİNİZİ OLUŞTURAN SİNYALLER")}
-            </span>
-            {[
-              t("Yazım ritmi"),
-              t("Yüz"),
-              t("Ses"),
-              t("Kart"),
-              t("Ağ & konum"),
-            ].map((label, i) => (
-              <a href={`#module-${i}`} key={t(label)}>
-                <Icon kind={i} />
-                {t(label)}
-                <span>↗</span>
-              </a>
-            ))}
-          </div>
-        </div>
         <section
           className="resources-section section"
           id="resources"
@@ -251,11 +231,6 @@ function App({ locale }: { locale: Locale }) {
                 {t("Kaynak Wiki’yi aç")}
                 <span>↗</span>
               </a>
-              <span className="resources-note">
-                {t("Wiki içeriği İngilizcedir.")}
-                <br />
-                {t("27 sayfa · 7 konu grubu · Kaynak kod referansları")}
-              </span>
             </div>
             <div className="resource-topics reveal">
               {[

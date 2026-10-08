@@ -21,7 +21,6 @@
   "Size ait tek bir iz.": "A trace uniquely yours.",
   "Hareketleri sürdür": "Resume animations",
   "Hareketleri duraklat": "Pause animations",
-  "KİMLİĞİNİZİ OLUŞTURAN SİNYALLER": "THE SIGNALS THAT MAKE UP YOUR IDENTITY",
   "Yazım ritmi": "Typing rhythm",
   "Yüz": "Face",
   "Ses": "Voice",
@@ -29,7 +28,6 @@
   "Ağ & konum": "Network & location",
   "01 / TEKNİK KAYNAKLAR": "01 / TECHNICAL RESOURCES",
   "Mimariden API sözleşmelerine, biyometrik işçilerden kabul testlerine. SecureKit’in teknik kaynakları tek bir yerde.": "From architecture and API contracts to biometric workers and acceptance tests. SecureKit’s technical resources, all in one place.",
-  "27 sayfa · 7 konu grubu · Kaynak kod referansları": "27 pages · 7 topic groups · Source code references",
   "Mimari & başlangıç": "Architecture & getting started",
   "Monorepo, kurulum ve kimlik doğrulama karar modeli": "Monorepo, setup and authentication decision model",
   "API & entegrasyon": "API & integration",
@@ -115,6 +113,5 @@
   "Ses biyometrisini temsil eden sabit ses dalgaları": "Sound waves representing voice biometrics",
   "Belge doğrulamayı temsil eden sade kimlik kartı": "An identity card representing document verification",
   "Ağ ve konumu temsil eden sade küre çizimi": "A globe representing network and location",
-  "Dil seçimi": "Language selection",
-  "Wiki içeriği İngilizcedir.": "Wiki content is in English."
+  "Dil seçimi": "Language selection"
 }
