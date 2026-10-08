@@ -1,3 +1,5 @@
+import { translator, type Locale } from "./locale";
+
 export function Mark({ small = false }: { small?: boolean }) {
   return (
     <svg
@@ -17,13 +19,13 @@ export function Mark({ small = false }: { small?: boolean }) {
   );
 }
 
-export function IdentityTrace() {
+export function IdentityTrace({ label }: { label: string }) {
   return (
     <svg
       className="identity-trace"
       viewBox="0 0 600 480"
       role="img"
-      aria-label="Kimliğin kişiye özgü izini temsil eden sade parmak izi çizimi"
+      aria-label={label}
       fill="none"
       stroke="currentColor"
       strokeWidth="2.5"
@@ -36,7 +38,10 @@ export function IdentityTrace() {
       <path d="M216 337c30-39 4-94 4-132 0-49 32-85 80-85 47 0 80 33 80 80 0 78-16 137-50 185" />
       <path d="M239 351c29-46-5-102-5-146 0-42 27-71 66-71 38 0 66 28 66 66 0 87-21 149-58 193" />
       <path d="M259 320c0-42-11-77-11-115 0-33 21-57 52-57 30 0 52 22 52 52 0 94-24 157-65 194" />
-      <path className="identity-trace-accent" d="M274 302c0-34-12-65-12-97 0-26 15-43 38-43s38 16 38 38c0 97-29 158-71 189" />
+      <path
+        className="identity-trace-accent"
+        d="M274 302c0-34-12-65-12-97 0-26 15-43 38-43s38 16 38 38c0 97-29 158-71 189"
+      />
       <path d="M289 280c0-25-13-48-13-75 0-18 9-29 24-29s24 10 24 24c0 77-19 129-48 162" />
       <path d="M300 200c0 36 14 67 5 107" />
     </svg>
@@ -86,7 +91,14 @@ export function Icon({ kind }: { kind: number }) {
 }
 
 // Static line illustrations share the hero's ink and violet accent.
-export function SignalVisual({ active }: { active: number }) {
+export function SignalVisual({
+  active,
+  locale,
+}: {
+  active: number;
+  locale: Locale;
+}) {
+  const t = translator(locale);
   const labels = [
     "Yazım ritmini temsil eden tuşlar ve çizgiler",
     "Yüz biyometrisini temsil eden sade yüz çizimi",
@@ -99,7 +111,14 @@ export function SignalVisual({ active }: { active: number }) {
       <path d="M164 169h44m24 0h88m24 0h92M164 185h76m24 0h40m24 0h108M164 201h28m24 0h92m24 0h104" />
       <rect x="145" y="239" width="64" height="64" rx="10" />
       <rect x="227" y="239" width="64" height="64" rx="10" />
-      <rect className="signal-accent" x="309" y="239" width="64" height="64" rx="10" />
+      <rect
+        className="signal-accent"
+        x="309"
+        y="239"
+        width="64"
+        height="64"
+        rx="10"
+      />
       <rect x="391" y="239" width="64" height="64" rx="10" />
       <path d="M164 327h272M166 352h268" />
       <path className="signal-accent" d="M324 271h34" />
@@ -141,7 +160,7 @@ export function SignalVisual({ active }: { active: number }) {
       className="signal-illustration"
       viewBox="0 0 600 480"
       role="img"
-      aria-label={labels[active]}
+      aria-label={t(labels[active])}
       fill="none"
       stroke="currentColor"
       strokeWidth="2.5"

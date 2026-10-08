@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { translator, type Locale } from "./locale";
 import { IdentityTrace, Icon, Mark, SignalVisual } from "./Visuals";
 
 const repository =
@@ -62,7 +64,8 @@ const scenarios = [
   },
 ];
 
-function App() {
+function App({ locale }: { locale: Locale }) {
+  const t = translator(locale);
   const [scenario, setScenario] = useState(0);
   const [paused, setPaused] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -97,42 +100,45 @@ function App() {
   return (
     <div className={paused ? "site motion-paused" : "site"}>
       <a className="skip-link" href="#main">
-        İçeriğe geç
+        {t("İçeriğe geç")}
       </a>
       <div className="announcement">
-        <span className="spark">✳</span> Çok sinyalli kimlik doğrulama. Tek
-        araç seti.
+        <span className="spark">✳</span>
+        {t("Çok sinyalli kimlik doğrulama. Tek araç seti.")}
         <a href={repository} target="_blank" rel="noreferrer">
-          Projeyi keşfet <span>↗</span>
+          {t("Projeyi keşfet")}
+          <span>↗</span>
         </a>
       </div>
       <header className="header">
         <div className="container header-inner">
-          <a className="brand" href="#" aria-label="SecureKit ana sayfa">
+          <a className="brand" href="#" aria-label={t("SecureKit ana sayfa")}>
             <Mark />
             <span>
               SecureKit<span className="brand-dot">.</span>
             </span>
           </a>
+          <LanguageSwitcher locale={locale} />
           <button
             className="menu-toggle"
             aria-expanded={menuOpen}
             aria-controls="main-navigation"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? "Kapat ×" : "Menü ☰"}
+            {menuOpen ? t("Kapat ×") : t("Menü ☰")}
           </button>
           <nav
             id="main-navigation"
             className={menuOpen ? "nav open" : "nav"}
-            aria-label="Ana gezinme"
+            aria-label={t("Ana gezinme")}
             onClick={() => setMenuOpen(false)}
           >
-            <a href="#modules">Yetenekler</a>
-            <a href="#flow">Nasıl çalışır?</a>
-            <a href="#developers">Geliştiriciler</a>
+            <a href="#modules">{t("Yetenekler")}</a>
+            <a href="#flow">{t("Nasıl çalışır?")}</a>
+            <a href="#developers">{t("Geliştiriciler")}</a>
             <a className="nav-wiki" href="#/wiki/1-overview">
-              Kaynak Wiki <span aria-hidden="true">↗</span>
+              {t("Kaynak Wiki")}
+              <span aria-hidden="true">↗</span>
             </a>
             <a
               className="nav-cta"
@@ -140,7 +146,8 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              GitHub’da incele <span>↗</span>
+              {t("GitHub’da incele")}
+              <span>↗</span>
             </a>
           </nav>
         </div>
@@ -150,44 +157,51 @@ function App() {
           <div className="container hero-inner">
             <div className="hero-copy">
               <div className="eyebrow hero-enter">
-                <span className="status-dot" /> ÇOK SİNYALLİ KİMLİK DOĞRULAMA
+                <span className="status-dot" />
+                {t("ÇOK SİNYALLİ KİMLİK DOĞRULAMA")}
               </div>
               <h1 className="hero-enter">
                 SecureKit<span className="brand-dot">.</span>
                 <span className="hero-heading">
-                  Kimliğin farklı
+                  {t("Kimliğin farklı")}
                   <br />
-                  katmanları.
+                  {t("katmanları.")}
                 </span>
               </h1>
               <p className="hero-enter">
-                Yüzünüz, sesiniz, yazım ritminiz.
+                {t("Yüzünüz, sesiniz, yazım ritminiz.")}
                 <br />
-                Size ait sinyaller, ortak bir doğrulama akışında.
+                {t("Size ait sinyaller, ortak bir doğrulama akışında.")}
               </p>
               <div className="button-row hero-enter">
                 <a className="button primary wiki-cta" href="#/wiki/1-overview">
-                  Kaynak Wiki’yi aç <span>↗</span>
+                  {t("Kaynak Wiki’yi aç")}
+                  <span>↗</span>
                 </a>
                 <a className="button secondary" href="#flow">
-                  Nasıl çalışır? <span>↓</span>
+                  {t("Nasıl çalışır?")}
+                  <span>↓</span>
                 </a>
               </div>
               <div className="hero-footnote hero-enter">
-                <span className="tiny-cross">+</span> Biyometrik ve bağlamsal
-                doğrulama prototipi
+                <span className="tiny-cross">+</span>
+                {t("Biyometrik ve bağlamsal doğrulama prototipi")}
               </div>
             </div>
             <div className="hero-visual hero-enter">
-              <IdentityTrace />
+              <IdentityTrace
+                label={t(
+                  "Kimliğin kişiye özgü izini temsil eden sade parmak izi çizimi",
+                )}
+              />
               <div className="hero-visual-bottom">
-                <span>Size ait tek bir iz.</span>
+                <span>{t("Size ait tek bir iz.")}</span>
                 <button
                   className="motion-control"
                   onClick={() => setPaused(!paused)}
                   aria-pressed={paused}
                   aria-label={
-                    paused ? "Hareketleri sürdür" : "Hareketleri duraklat"
+                    paused ? t("Hareketleri sürdür") : t("Hareketleri duraklat")
                   }
                 >
                   {paused ? "▷" : "Ⅱ"}
@@ -198,16 +212,22 @@ function App() {
         </section>
         <div className="signal-strip">
           <div className="container">
-            <span className="strip-label">KİMLİĞİNİZİ OLUŞTURAN SİNYALLER</span>
-            {["Yazım ritmi", "Yüz", "Ses", "Kart", "Ağ & konum"].map(
-              (label, i) => (
-                <a href={`#module-${i}`} key={label}>
-                  <Icon kind={i} />
-                  {label}
-                  <span>↗</span>
-                </a>
-              ),
-            )}
+            <span className="strip-label">
+              {t("KİMLİĞİNİZİ OLUŞTURAN SİNYALLER")}
+            </span>
+            {[
+              t("Yazım ritmi"),
+              t("Yüz"),
+              t("Ses"),
+              t("Kart"),
+              t("Ağ & konum"),
+            ].map((label, i) => (
+              <a href={`#module-${i}`} key={t(label)}>
+                <Icon kind={i} />
+                {t(label)}
+                <span>↗</span>
+              </a>
+            ))}
           </div>
         </div>
         <section
@@ -217,59 +237,64 @@ function App() {
         >
           <div className="container resources-inner">
             <div className="resources-intro reveal">
-              <p className="eyebrow">01 / TEKNİK KAYNAKLAR</p>
+              <p className="eyebrow">{t("01 / TEKNİK KAYNAKLAR")}</p>
               <h2 id="resources-title">
-                Kaynak Wiki<span className="brand-dot">.</span>
+                {t("Kaynak Wiki")}
+                <span className="brand-dot">.</span>
               </h2>
               <p>
-                Mimariden API sözleşmelerine, biyometrik işçilerden kabul
-                testlerine. SecureKit’in teknik kaynakları tek bir yerde.
+                {t(
+                  "Mimariden API sözleşmelerine, biyometrik işçilerden kabul testlerine. SecureKit’in teknik kaynakları tek bir yerde.",
+                )}
               </p>
               <a className="button primary" href="#/wiki/1-overview">
-                Kaynak Wiki’yi aç <span>↗</span>
+                {t("Kaynak Wiki’yi aç")}
+                <span>↗</span>
               </a>
               <span className="resources-note">
-                27 sayfa · 7 konu grubu · Kaynak kod referansları
+                {t("Wiki içeriği İngilizcedir.")}
+                <br />
+                {t("27 sayfa · 7 konu grubu · Kaynak kod referansları")}
               </span>
             </div>
             <div className="resource-topics reveal">
               {[
                 [
                   "01",
-                  "Mimari & başlangıç",
-                  "Monorepo, kurulum ve kimlik doğrulama karar modeli",
+                  t("Mimari & başlangıç"),
+                  t("Monorepo, kurulum ve kimlik doğrulama karar modeli"),
                   "1-overview",
                 ],
                 [
                   "02",
-                  "API & entegrasyon",
-                  "ASP.NET Core, SDK, sözleşmeler ve geçiş süreci",
+                  t("API & entegrasyon"),
+                  t("ASP.NET Core, SDK, sözleşmeler ve geçiş süreci"),
                   "2-securekit-asp.net-core-api",
                 ],
                 [
                   "03",
-                  "Biyometrik işçiler",
-                  "Yüz, ses, kart doğrulama ve Python ortamları",
+                  t("Biyometrik işçiler"),
+                  t("Yüz, ses, kart doğrulama ve Python ortamları"),
                   "5-python-biometric-workers",
                 ],
                 [
                   "04",
-                  "Test & kabul",
-                  "Preflight, parity kontrolleri ve kabul araçları",
+                  t("Test & kabul"),
+                  t("Preflight, parity kontrolleri ve kabul araçları"),
                   "6-testing-and-acceptance-tooling",
                 ],
               ].map(([number, title, description, slug]) => (
                 <a key={number} href={`#/wiki/${slug}`}>
                   <span>{number}</span>
                   <div>
-                    <h3>{title}</h3>
-                    <p>{description}</p>
+                    <h3>{t(title)}</h3>
+                    <p>{t(description)}</p>
                   </div>
                   <span>↗</span>
                 </a>
               ))}
               <div className="resources-source">
-                DeepWiki içeriği ve iç sayfaları · 7 Ekim 2026 arşivi
+                {t("DeepWiki içeriği ve iç sayfaları · 7 Ekim 2026 arşivi")}
               </div>
             </div>
           </div>
@@ -277,39 +302,40 @@ function App() {
         <section className="modules-section section container" id="modules">
           <div className="section-heading reveal">
             <div>
-              <p className="eyebrow">02 / YETENEKLER</p>
+              <p className="eyebrow">{t("02 / YETENEKLER")}</p>
               <h2>
-                Kimlik, tek bir
+                {t("Kimlik, tek bir")}
                 <br />
-                sinyalden ibaret değil.
+                {t("sinyalden ibaret değil.")}
               </h2>
             </div>
             <p>
-              Her modül farklı bir katmanı değerlendirir.
+              {t("Her modül farklı bir katmanı değerlendirir.")}
               <br />
-              Birlikte daha kapsamlı bir doğrulama akışı oluştururlar.
+              {t("Birlikte daha kapsamlı bir doğrulama akışı oluştururlar.")}
             </p>
           </div>
           <div className="capability-list">
             {modules.map((module, i) => (
               <article
                 id={`module-${i}`}
-                key={module.title}
+                key={t(module.title)}
                 className="capability-block"
               >
                 <div className="capability-copy">
                   <p className="capability-badge">
                     <span className="status-dot" />
-                    {module.tag}
+                    {t(module.tag)}
                   </p>
-                  <h3>{module.title}</h3>
-                  <p className="capability-description">{module.text}</p>
+                  <h3>{t(module.title)}</h3>
+                  <p className="capability-description">{t(module.text)}</p>
                   <a className="capability-link" href={module.href}>
-                    Teknik detaylar <span aria-hidden="true">→</span>
+                    {t("Teknik detaylar")}
+                    <span aria-hidden="true">→</span>
                   </a>
                 </div>
                 <div className="capability-art">
-                  <SignalVisual active={i} />
+                  <SignalVisual active={i} locale={locale} />
                 </div>
               </article>
             ))}
@@ -319,24 +345,24 @@ function App() {
           <div className="container">
             <div className="section-heading reveal">
               <div>
-                <p className="eyebrow">03 / BİRLEŞİK KARAR</p>
+                <p className="eyebrow">{t("03 / BİRLEŞİK KARAR")}</p>
                 <h2>
-                  Birden fazla sinyal.
+                  {t("Birden fazla sinyal.")}
                   <br />
-                  Tek karar.
+                  {t("Tek karar.")}
                 </h2>
               </div>
               <p>
-                Sinyallerinizi oturum politikanızda birleştirin.
+                {t("Sinyallerinizi oturum politikanızda birleştirin.")}
                 <br />
-                İzin verin, ek kontrol isteyin veya oturumu reddedin.
+                {t("İzin verin, ek kontrol isteyin veya oturumu reddedin.")}
               </p>
             </div>
             <div className="scenario-top">
-              <span className="example-label">ETKİLEŞİMLİ ÖRNEK</span>
+              <span className="example-label">{t("ETKİLEŞİMLİ ÖRNEK")}</span>
               <div
                 className="scenario-buttons"
-                aria-label="Örnek senaryo seçimi"
+                aria-label={t("Örnek senaryo seçimi")}
               >
                 {scenarios.map((item, i) => (
                   <button
@@ -344,26 +370,30 @@ function App() {
                     onClick={() => setScenario(i)}
                     aria-pressed={scenario === i}
                   >
-                    {item.label}
+                    {t(item.label)}
                   </button>
                 ))}
               </div>
             </div>
             <div className={`decision-diagram scenario-${scenario}`}>
               <div className="input-signals">
-                {["Yazım ritmi", "Yüz", "Ses", "Kart", "Ağ & konum"].map(
-                  (label, i) => (
-                    <div
-                      className={`input-signal ${scenarios[scenario].signals[i] === "Uyumlu" ? "" : "flagged"}`}
-                      key={label}
-                    >
-                      <Icon kind={i} />
-                      <span>{label}</span>
-                      <small>{scenarios[scenario].signals[i]}</small>
-                      <span className="signal-node" />
-                    </div>
-                  ),
-                )}
+                {[
+                  t("Yazım ritmi"),
+                  t("Yüz"),
+                  t("Ses"),
+                  t("Kart"),
+                  t("Ağ & konum"),
+                ].map((label, i) => (
+                  <div
+                    className={`input-signal ${scenarios[scenario].signals[i] === "Uyumlu" ? "" : "flagged"}`}
+                    key={t(label)}
+                  >
+                    <Icon kind={i} />
+                    <span>{t(label)}</span>
+                    <small>{t(scenarios[scenario].signals[i])}</small>
+                    <span className="signal-node" />
+                  </div>
+                ))}
               </div>
               <div className="connector" aria-hidden="true">
                 <span />
@@ -374,8 +404,8 @@ function App() {
               </div>
               <div className="policy-engine">
                 <Mark />
-                <strong>Politika katmanı</strong>
-                <span>Sinyaller + kurallar + eşikler</span>
+                <strong>{t("Politika katmanı")}</strong>
+                <span>{t("Sinyaller + kurallar + eşikler")}</span>
               </div>
               <div className="output-connector" aria-hidden="true">
                 →
@@ -385,18 +415,19 @@ function App() {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <span className="eyebrow">OTURUM KARARI</span>
-                <strong key={scenario}>{scenarios[scenario].result}</strong>
+                <span className="eyebrow">{t("OTURUM KARARI")}</span>
+                <strong key={scenario}>{t(scenarios[scenario].result)}</strong>
                 <code>{scenarios[scenario].code}</code>
               </div>
             </div>
             <div className="scenario-description" aria-live="polite">
               <span>0{scenario + 1}</span>
-              <p>{scenarios[scenario].description}</p>
+              <p>{t(scenarios[scenario].description)}</p>
             </div>
             <p className="disclaimer">
-              Bu gösterim örnek senaryolar kullanır; gerçek bir biyometrik
-              değerlendirme veya güven skoru üretmez.
+              {t(
+                "Bu gösterim örnek senaryolar kullanır; gerçek bir biyometrik değerlendirme veya güven skoru üretmez.",
+              )}
             </p>
           </div>
         </section>
@@ -405,15 +436,16 @@ function App() {
           id="developers"
         >
           <div className="developer-copy reveal">
-            <p className="eyebrow">04 / GELİŞTİRİCİLER İÇİN</p>
+            <p className="eyebrow">{t("04 / GELİŞTİRİCİLER İÇİN")}</p>
             <h2>
-              Akışınıza ekleyin.
+              {t("Akışınıza ekleyin.")}
               <br />
-              Kontrol sizde kalsın.
+              {t("Kontrol sizde kalsın.")}
             </h2>
             <p>
-              Tarayıcı SDK’sıyla sinyalleri toplayın. API üzerinden doğrulayın.
-              Kararı kendi oturum politikanızla şekillendirin.
+              {t(
+                "Tarayıcı SDK’sıyla sinyalleri toplayın. API üzerinden doğrulayın. Kararı kendi oturum politikanızla şekillendirin.",
+              )}
             </p>
             <a
               className="button secondary"
@@ -421,7 +453,8 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              Kaynak kodu incele <span>↗</span>
+              {t("Kaynak kodu incele")}
+              <span>↗</span>
             </a>
             <div className="tech-stack">
               <span>TypeScript</span>
@@ -432,15 +465,15 @@ function App() {
           </div>
           <div className="architecture reveal">
             <div className="architecture-header">
-              <span>SECUREKIT / MİMARİ</span>
+              <span>{t("SECUREKIT / MİMARİ")}</span>
               <span>↗</span>
             </div>
             <div className="architecture-row">
               <span className="architecture-symbol">⌘</span>
               <div>
-                <small>01 / TOPLA</small>
-                <h3>Tarayıcı SDK’sı</h3>
-                <p>Olaylar ve biyometrik örnekler</p>
+                <small>{t("01 / TOPLA")}</small>
+                <h3>{t("Tarayıcı SDK’sı")}</h3>
+                <p>{t("Olaylar ve biyometrik örnekler")}</p>
               </div>
               <code>TypeScript</code>
             </div>
@@ -448,9 +481,9 @@ function App() {
             <div className="architecture-row">
               <span className="architecture-symbol">↔</span>
               <div>
-                <small>02 / YÖNET</small>
+                <small>{t("02 / YÖNET")}</small>
                 <h3>ASP.NET Core API</h3>
-                <p>Oturum, rıza ve doğrulama akışı</p>
+                <p>{t("Oturum, rıza ve doğrulama akışı")}</p>
               </div>
               <code>C#</code>
             </div>
@@ -458,45 +491,57 @@ function App() {
             <div className="architecture-row">
               <span className="architecture-symbol">⌁</span>
               <div>
-                <small>03 / DEĞERLENDİR</small>
-                <h3>Doğrulama modülleri</h3>
-                <p>Yüz, ses, kart ve biyometrik analiz</p>
+                <small>{t("03 / DEĞERLENDİR")}</small>
+                <h3>{t("Doğrulama modülleri")}</h3>
+                <p>{t("Yüz, ses, kart ve biyometrik analiz")}</p>
               </div>
               <code>Python</code>
             </div>
             <div className="architecture-footer">
-              Bağımsız modüller. Ortak sözleşmeler.
+              {t("Bağımsız modüller. Ortak sözleşmeler.")}
             </div>
           </div>
         </section>
         <section className="principles container reveal">
           <div>
             <span className="principle-line" />
-            <h3>Çok katmanlı.</h3>
-            <p>Davranışsal, biyometrik ve bağlamsal sinyaller aynı akışta.</p>
-          </div>
-          <div>
-            <span className="principle-line" />
-            <h3>Modüler.</h3>
+            <h3>{t("Çok katmanlı.")}</h3>
             <p>
-              İhtiyacınız olan doğrulama adımlarını kendi akışınızda
-              birleştirin.
+              {t("Davranışsal, biyometrik ve bağlamsal sinyaller aynı akışta.")}
             </p>
           </div>
           <div>
             <span className="principle-line" />
-            <h3>İncelenebilir.</h3>
-            <p>Kaynak kodu, ortak sözleşmeler ve demo uygulaması tek depoda.</p>
+            <h3>{t("Modüler.")}</h3>
+            <p>
+              {t(
+                "İhtiyacınız olan doğrulama adımlarını kendi akışınızda birleştirin.",
+              )}
+            </p>
+          </div>
+          <div>
+            <span className="principle-line" />
+            <h3>{t("İncelenebilir.")}</h3>
+            <p>
+              {t(
+                "Kaynak kodu, ortak sözleşmeler ve demo uygulaması tek depoda.",
+              )}
+            </p>
           </div>
         </section>
         <section className="final-cta">
           <div className="container reveal">
             <div>
-              <p className="eyebrow">KİMLİK DOĞRULAMAYA YENİ BİR KATMAN</p>
+              <p className="eyebrow">
+                {t("KİMLİK DOĞRULAMAYA YENİ BİR KATMAN")}
+              </p>
               <h2>
-                SecureKit’i keşfedin<span className="brand-dot">.</span>
+                {t("SecureKit’i keşfedin")}
+                <span className="brand-dot">.</span>
               </h2>
-              <p>Sinyalleri tanıyın. Akışı inceleyin. Projenize uyarlayın.</p>
+              <p>
+                {t("Sinyalleri tanıyın. Akışı inceleyin. Projenize uyarlayın.")}
+              </p>
             </div>
             <a
               className="button primary"
@@ -504,7 +549,8 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              GitHub’da incele <span>↗</span>
+              {t("GitHub’da incele")}
+              <span>↗</span>
             </a>
           </div>
         </section>
@@ -514,9 +560,9 @@ function App() {
           <Mark small />
           <span>SecureKit.</span>
         </a>
-        <span>Biyometrik kimlik doğrulama araç seti.</span>
+        <span>{t("Biyometrik kimlik doğrulama araç seti.")}</span>
         <div>
-          <a href="#/wiki/1-overview">Kaynak Wiki</a>
+          <a href="#/wiki/1-overview">{t("Kaynak Wiki")}</a>
           <a href={repository} target="_blank" rel="noreferrer">
             GitHub ↗
           </a>
@@ -527,7 +573,7 @@ function App() {
           >
             DeepWiki ↗
           </a>
-          <a href="#main">Başa dön ↑</a>
+          <a href="#main">{t("Başa dön ↑")}</a>
         </div>
       </footer>
     </div>

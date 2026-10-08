@@ -22,7 +22,7 @@ SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini or
 | `packages/node-auth` | Geri dönüş için Express API ve Node/C# karşılaştırma testleri |
 | `packages/web-sdk` | Tarayıcı istemcisi ve klavye olay toplayıcısı |
 | `apps/demo-web` | React + Vite demo uygulaması |
-| `apps/landing-web` | Bağımsız Türkçe tanıtım sitesi; React + Vite |
+| `apps/landing-web` | Türkçe/İngilizce SEO uyumlu tanıtım sitesi; React + Vite |
 | `apps/securekit-api` | Varsayılan ASP.NET Core 10 API; tüm endpoint grupları (Aşama 0–8) |
 | `apps/securekit-api.tests` | xUnit + WebApplicationFactory HTTP sözleşme testleri |
 | `python/face_verification` | FaceNet / MTCNN yüz doğrulama işçileri |

@@ -1,12 +1,37 @@
 # SecureKit tanıtım sitesi
 
-Türkçe, bağımsız React + TypeScript + Vite tanıtım uygulaması.
+Türkçe ve İngilizce, bağımsız React + TypeScript + Vite tanıtım uygulaması.
 NEVERHACK stil referansının açık yüzey, koyu lacivert yazı, mor AI vurgusu,
 ince çizgiler ve yuvarlak buton dili SecureKit'e uyarlanmıştır.
 
 Repo kökünden `pnpm dev:landing` ile başlatın (`http://localhost:5174`).
 `pnpm build:landing` üretim çıktısını `apps/landing-web/dist` altında oluşturur.
 `pnpm --filter landing-web lint` kaynak kodunu kontrol eder.
+
+## Dil ve SEO
+
+- `/tr/` Türkçe, `/en/` İngilizce tanıtım sayfasıdır. Üretim derlemesi iki
+  sayfanın tam HTML içeriğini önceden oluşturur; JavaScript olmadan da okunabilir.
+- `/` adresinde önce kaydedilmiş TR/EN seçimi, sonra tarayıcının sıralı
+  `navigator.languages` tercihleri kullanılır. Desteklenmeyen diller için
+  İngilizce açılır. Doğrudan `/tr/` veya `/en/` açıldığında adresin dili korunur.
+- Üst menüdeki TR/EN bağlantıları mobilde de görünür; seçim hatırlanır,
+  mevcut bölüm ve sorgu parametreleri korunur. Depolama engelliyse site çalışır.
+- Her dilin kendine ait başlık, açıklama, `lang`, canonical, karşılıklı
+  `hreflang`, `x-default`, Open Graph ve Twitter meta etiketleri vardır.
+- Yayın adresini `apps/landing-web/.env.production` içinde
+  `VITE_SITE_URL=https://alan-adiniz.com` olarak veya derleme ortamında tanımlayın.
+  Derleme mutlak SEO bağlantılarını, `sitemap.xml` ve `robots.txt` dosyalarını üretir.
+  Alan adı ayarlanmadan yerel derleme çalışır, bağlantılar göreli kalır ve
+  geçersiz bir sitemap oluşturulmaz. Yayından önce gerçek alan adıyla derleyin.
+- Hosting, `dist/tr/index.html` ve `dist/en/index.html` dosyalarını ilgili
+  dizin adreslerinde sunmalıdır. Site alan adının köküne kurulur.
+- Wiki arşivi İngilizcedir; tanıtım sayfasındaki bağlantı yanında belirtilir.
+  Wiki hash rotaları ana sayfanın SEO metadatasını kullanır ve açıkken
+  istemci tarafında `noindex` işaretlenir; sitemap'e eklenmez.
+
+`pnpm --filter landing-web test:i18n` dil seçimini, dil bağlantılarını ve
+üretilmiş HTML/SEO çıktısını doğrular (önce `build:landing` çalıştırın).
 
 - Yüz nokta bulutu SVG ile deterministik üretilir; raster görsel gerektirmez.
 - Masaüstünde modül görseli kaydırmayla değişir; mobilde her modül kendi görselini taşır.

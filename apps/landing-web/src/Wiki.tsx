@@ -246,9 +246,6 @@ export default function Wiki({ hash }: { hash: string }) {
     : [];
   useEffect(() => {
     document.title = `${page?.title ?? "Sayfa bulunamadı"} · SecureKit Wiki`;
-    return () => {
-      document.title = "SecureKit — Çok Sinyalli Kimlik Doğrulama";
-    };
   }, [page]);
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
