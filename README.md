@@ -274,4 +274,4 @@ The [technical wiki](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authen
 - [ASP.NET Core API](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2-securekit-asp.net-core-api)
 - [Testing and acceptance](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6-testing-and-acceptance-tooling)
 
-Repository guides: [backend cutover](docs/ASPNET_CUTOVER.md), [migration plan](MIGRATION_TO_ASPNET10_PLAN.md), [API contracts](docs/NODE_API_CONTRACT_INVENTORY.md), and [biometric acceptance](docs/BIOMETRIC_ACCEPTANCE.md).
+Repository guides: [backend cutover](docs/ASPNET_CUTOVER.md), [API contracts](docs/NODE_API_CONTRACT_INVENTORY.md), and [biometric acceptance](docs/BIOMETRIC_ACCEPTANCE.md).
