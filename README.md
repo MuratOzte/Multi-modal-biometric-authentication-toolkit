@@ -1,127 +1,135 @@
 # SecureKit
 
-**Biyometrik ve bağlamsal sinyalleri bir araya getiren çok faktörlü kimlik doğrulama prototipi.**
+**A multimodal biometric authentication toolkit with contextual risk evaluation.**
 
-SecureKit; klavye kullanım ritmi, yüz, ses, kart, ağ ve konum sinyallerini ortak bir doğrulama akışında değerlendirmek için geliştirilmiş bir bitirme projesidir. ASP.NET Core 10 API, TypeScript tarayıcı SDK'sı, Python doğrulama modülleri ve React demo arayüzü aynı monorepo içinde yer alır. Express API geçiş sonrası geri dönüş için korunur.
+SecureKit brings face recognition, voice verification, keystroke dynamics, card comparison, and network context into a single application. It provides guided enrollment and sign-in, a verification playground, a typed browser SDK, and an HTTP API for exploring how multiple identity signals can support authentication decisions.
 
-## Özellikler
+Developed as a graduation project, SecureKit connects a React application to an ASP.NET Core 10 backend and Python verification workers. Its modular design supports independent verification checks and policy-based session evaluation.
 
-- **Klavye biyometrisi:** Gerçek `keydown` / `keyup` olayları, tuş basılı tutma ve geçiş süreleri üzerinden profil oluşturma; dinamik ve sabit metin doğrulaması.
-- **Yüz doğrulama:** MTCNN + FaceNet ile referans ve aday yüz karşılaştırması, tarayıcıda canlılık sinyalleri ve kayan pencere ile referans yönetimi.
-- **Ses doğrulama:** SpeechBrain ile konuşmacı benzerliği, Whisper ile challenge metninin kontrolü.
-- **Kart doğrulama:** Kart yakalama ve hizalama, PaddleOCR ile içerik çıkarımı, OpenCLIP ile görsel benzerlik değerlendirmesi.
-- **Ağ ve konum kontrolü:** IP, VPN / proxy / Tor / relay ve ülke sinyallerinin politika üzerinden değerlendirilmesi.
-- **Birleşik karar:** Oturum sinyalleri ve eşiklere göre `allow`, `step_up` veya `deny` sonucu.
-- **Demo arayüzü:** Kayıt, giriş, rıza, biyometrik profil oluşturma ve doğrulama akışlarını denemek için Playground.
+[Technical Wiki](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit) · [Getting Started](#getting-started) · [API Overview](#api-overview) · [Documentation](#documentation)
 
-## Teknolojiler ve yapı
+## What SecureKit Does
 
-| Dizin | İçerik |
+SecureKit supports two complementary workflows:
+
+- **Guided enrollment and sign-in:** create a local account, record biometric consent, enroll reference samples, and complete face, card, voice, and typing checks through the application.
+- **Verification playground:** exercise individual modules, inspect their results, and explore session policies with network, location, keystroke, and voice signals.
+
+Developers and researchers can study both the user experience of biometric authentication and its underlying verification contracts. Results include module-specific scores, decisions, and diagnostic information. Session evaluations also report risk scores, reason codes, and required additional checks.
+
+See the [application walkthrough](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.3-demo-web-application) for the frontend structure and integration flow.
+
+## Verification Capabilities
+
+| Capability | How it works | Supported workflows |
+| --- | --- | --- |
+| **Keystroke dynamics** | Measures key hold times and transitions using key press and release events. | Behavioral profile enrollment, dynamic-text verification, and a separate Python-based fixed-text workflow. |
+| **Face verification** | Uses MTCNN face detection and FaceNet embeddings for similarity comparison. | Reference enrollment, image comparison, capture sequences, and sliding-window reference management. |
+| **Voice verification** | Combines SpeechBrain speaker embeddings with Whisper transcription. | Multi-sample enrollment, speaker comparison, and verification of spoken challenge text. |
+| **Card verification** | Combines PaddleOCR text extraction with OpenCLIP visual similarity. | Reference enrollment, capture and alignment, extracted fields, and candidate comparison results. |
+| **Network assessment** | Queries IP context through a Python integration with VPNAPI. | VPN, proxy, Tor, relay, and related risk indicators; mock mode for local development. |
+| **Location policy** | Evaluates country context against configured rules. | Country restrictions and location signals in session evaluation. |
+
+Face and card comparisons are available through dedicated endpoints and application steps. The current session risk contract accepts **network, location, keystroke, and voice** signals. Face liveness metrics and legacy adapters are experimental components; biometric matching does not establish certified spoof resistance or document authenticity.
+
+Explore [verification services](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2-verification-services), [face and voice workers](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.1-face-and-voice-workers), and [card verification](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.2-card-verification-worker).
+
+## Authentication Flow
+
+1. **Create an account and record consent.** Associate enrollment data with a local user identifier.
+2. **Enroll reference samples.** Capture face and card references, record voice samples, and build a typing profile.
+3. **Submit verification samples.** Compare new captures against enrolled references. Voice and dynamic keystroke checks use short-lived, single-use text challenges.
+4. **Evaluate session context.** Submit supported signals and a policy to the session API.
+5. **Inspect the outcome.** Use the decision, reason codes, and required steps to drive the application flow.
+
+| Session decision | Meaning |
 | --- | --- |
-| `packages/core` | Ortak sözleşmeler, risk politikaları ve klavye skorlama |
-| `packages/node-auth` | Geri dönüş için Express API ve Node/C# karşılaştırma testleri |
-| `packages/web-sdk` | Tarayıcı istemcisi ve klavye olay toplayıcısı |
-| `apps/demo-web` | React + Vite demo uygulaması |
-| `apps/landing-web` | Türkçe/İngilizce SEO uyumlu tanıtım sitesi; React + Vite |
-| `apps/securekit-api` | Varsayılan ASP.NET Core 10 API; tüm endpoint grupları (Aşama 0–8) |
-| `apps/securekit-api.tests` | xUnit + WebApplicationFactory HTTP sözleşme testleri |
-| `python/face_verification` | FaceNet / MTCNN yüz doğrulama işçileri |
-| `python/voice_verification` | Whisper / SpeechBrain ses doğrulama işçisi |
-| `python/card_verification` | OCR ve görsel kart karşılaştırma araçları |
-| `python/ip_check.py` | VPNAPI üzerinden IP sorgulama |
+| `allow` | The supplied signals satisfy the current policy. |
+| `step-up` | Additional verification is required. |
+| `deny` | The current policy rejects the evaluation. |
 
-## Hızlı başlangıç
+Policies configure risk thresholds, permitted countries, minimum network scores, VPN handling, additional verification steps, and keystroke or voice checks. Individual biometric endpoints use their own decision formats; the SDK exposes the corresponding types.
 
-**.NET 10 SDK**, Node.js **22.12+** ve **pnpm 9.15.9** gerekir. Python modülleri için ayrı sanal ortamlar önerilir; yüz modülünün sabitlenmiş bağımlılıkları için Python **3.11** kullanın.
+Read the [authentication decision model](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.3-authentication-decision-model) and [session and risk services](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.2-keystroke-session-and-risk-services).
+
+## Architecture
+
+```mermaid
+flowchart LR
+    App[React Application] --> SDK[TypeScript Web SDK]
+    SDK --> API[ASP.NET Core 10 API]
+    API --> Profiles[Local Profiles and References]
+    API --> Risk[Session Risk Evaluation]
+    API --> Workers[Python Verification Workers]
+    Workers --> Models[FaceNet / SpeechBrain / Whisper / PaddleOCR / OpenCLIP]
+    Workers --> IP[VPNAPI]
+```
+
+The ASP.NET Core API handles HTTP requests, profile storage, challenge and session lifecycles, and worker execution. Python workers perform model inference. The browser SDK provides typed API methods and keystroke capture utilities. The original Express backend remains available for compatibility testing and rollback.
+
+| Path | Responsibility |
+| --- | --- |
+| `apps/demo-web` | React + Vite application, guided authentication, and verification playground. |
+| `apps/securekit-api` | Default ASP.NET Core 10 HTTP API. |
+| `apps/securekit-api.tests` | xUnit HTTP, infrastructure, and contract tests. |
+| `packages/web-sdk` | TypeScript browser client, transport, and keystroke recorders. |
+| `packages/core` | Shared contracts, biometric scoring, policies, and orchestration. |
+| `packages/node-auth` | Legacy Express backend, fixed-text worker, and API parity tooling. |
+| `python` | Face, voice, card, and IP verification modules. |
+| `scripts` | Development launcher, parity checks, and biometric acceptance tooling. |
+| `docs` | API contracts, backend cutover instructions, and acceptance guides. |
+| `apps/landing-web` | Project website and searchable technical wiki. |
+
+See the [monorepo layout](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.1-monorepo-layout-and-tooling) and [Python process bridge](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.1-python-process-bridge).
+
+## Getting Started
+
+### Requirements
+
+- **Node.js 22.12 or later**
+- **pnpm 9.15.9**
+- **.NET 10 SDK**; SDK selection is defined in `global.json`
+- **Python 3.11** for the documented worker environments
+- A browser with camera and microphone access for capture workflows
+
+The following commands use PowerShell and run from the repository root. Separate Python environments are recommended for the biometric modules.
+
+### Install and Run
 
 ```powershell
+git clone https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit.git
+cd Multi-modal-biometric-authentication-toolkit
+
 corepack enable
 corepack prepare pnpm@9.15.9 --activate
 pnpm install --frozen-lockfile
 pnpm build
-```
 
-API ve web uygulamasını birlikte başlatın:
-
-```powershell
-# Yerel demo için dış IP servisini taklit eder.
+# Simulate IP assessment during local development.
 $env:MOCK_IP_CHECK="1"
 pnpm dev
 ```
 
-- Playground: `http://localhost:5173`
-- Kayıt / giriş demosu: `http://localhost:5173/auth.html`
-- API: `http://localhost:3002`
-- API sağlık kontrolü: `http://localhost:3002/health`
-
-`pnpm dev` C# API'yi derleyip demo ile birlikte başlatır. API kodunu değiştirdikten
-sonra komutu yeniden başlatın. Node'a geri dönmek için önce çalışan komutu
-Ctrl+C ile durdurun, ardından `pnpm dev:node` çalıştırın (API portu 3001).
-Başlatıcı demo proxy'sini seçilen API'ye bağlar; terminaldeki açık
-`VITE_SECUREKIT_DEV_PROXY_TARGET` değeri önceliklidir. Mevcut verilerle geçiş
-ve kabul kontrolleri [geçiş yönergesinde](docs/ASPNET_CUTOVER.md) açıklanır.
-
-Vite, port doluysa başka bir port seçebilir; terminaldeki adresi kullanın. Kamera, mikrofon ve konum özellikleri için tarayıcı izni gerekir. Uzak sunucuda bu özellikler HTTPS gerektirir.
-
-`MOCK_IP_CHECK=1` yalnızca ağ sorgusunu taklit eder. Yüz, ses ve kart doğrulaması için ilgili Python ortamı ayrıca kurulmalıdır. Klavye doğrulamasının TypeScript akışı Python gerektirmez; sabit metin akışı Python kullanır.
-
-## Yapılandırma
-
-### Tanıtım sitesi
-
-Tanıtım sitesi API veya Python modellerine ihtiyaç duymadan çalışır:
-
-```powershell
-pnpm dev:landing
-# Üretim derlemesi:
-pnpm build:landing
-```
-
-Yerel adres: `http://localhost:5174`. Site; beş doğrulama modülünü, temsili
-biyometrik görselleri ve üç etkileşimli oturum senaryosunu içerir. Bu senaryolar
-gerçek doğrulama yapmaz; kamera, mikrofon veya konum izni istemez.
-Hareketler hero'daki düğmeyle duraklatılabilir ve sistemin azaltılmış hareket
-tercihi desteklenir. Mevcut Playground ve kayıt/giriş demosu kendi adreslerinde
-çalışmaya devam eder.
-
-Menüdeki **Kaynak Wiki** ve ana sayfanın kaynaklar bölümünden projenin teknik
-wiki'sine ulaşabilirsiniz: `http://localhost:5174/#/wiki/1-overview`.
-DeepWiki'nin 7 Ekim 2026 arşivinden aktarılan 27 sayfa; tam metin arama,
-kaynak dosya referansları, sayfa içindekiler ve büyütülebilen 43 teknik
-diyagram içerir. Wiki statik dosyalarla çalışır ve API bağlantısı gerektirmez.
-İçerik arşivi otomatik güncellenmez; ayrıntılar
-[tanıtım sitesi yönergesinde](apps/landing-web/README.md#resource-wiki) bulunur.
-
-### Ortam değişkenleri
-
-`packages/node-auth/.env.example` API değişkenlerini, `apps/demo-web/.env.example` ise web değişkenlerini gösterir. API `.env` dosyasını otomatik yüklemez; değişkenleri API'yi başlattığınız terminalde tanımlayın. Vite için örnek dosyayı kopyalayabilirsiniz:
-
-```powershell
-Copy-Item apps/demo-web/.env.example apps/demo-web/.env
-```
-
-| Değişken | Amaç |
+| Service | Local address |
 | --- | --- |
-| `ASPNETCORE_URLS` | C# API adresi; demo başlatıcısında varsayılan `http://localhost:3002` |
-| `PORT` | Geri dönüş Node API portu; varsayılan `3001` |
-| `MOCK_IP_CHECK` | `1`: yerel ağ simülasyonu; `0`: gerçek IP sorgusu |
-| `VPNAPI_KEY` | Gerçek IP sorgusu için sunucu tarafı anahtarı |
-| `PYTHON_CMD` | IP sorgusunda kullanılacak Python çalıştırıcısı |
-| `PYTHON_BIN` | Sabit metin doğrulaması ve Python köprüleri için çalıştırıcı |
-| `FACE_PYTHON_BIN` / `VOICE_PYTHON_BIN` / `CARD_PYTHON_BIN` | Modüle özel Python çalıştırıcısı |
-| `FACE_DEVICE` / `VOICE_DEVICE` | `auto`, `cpu` veya `cuda` |
-| `FACE_REQUIRE_GPU` / `VOICE_REQUIRE_GPU` | GPU zorunluluğu |
-| `VITE_SECUREKIT_BASE_URL` | Web API yolu; varsayılan `/api/securekit` |
-| `VITE_SECUREKIT_API_BACKEND` | `aspnet` (varsayılan, 3002) veya `node` (3001) |
-| `VITE_SECUREKIT_DEV_PROXY_TARGET` | İsteğe bağlı açık Vite proxy hedefi; backend seçiminden öncelikli |
+| Verification playground | [localhost:5173](http://localhost:5173) |
+| Guided enrollment and sign-in | [localhost:5173/auth.html](http://localhost:5173/auth.html) |
+| ASP.NET Core API | [localhost:3002](http://localhost:3002) |
+| Health check | [localhost:3002/health](http://localhost:3002/health) |
 
-API anahtarlarını `VITE_` değişkenlerine koymayın; bu değişkenler tarayıcıya aktarılır.
+`pnpm dev` builds the API and starts it alongside the application. Restart it after changing API code. If Vite selects another port, use the terminal address. Camera, microphone, and geolocation features require browser permissions and HTTPS when accessed remotely.
 
-## Python modülleri
+Mock mode only replaces the external IP lookup. Face, voice, and card checks require their Python environments and models. Dynamic-text keystroke verification runs without Python; fixed-text verification requires a Python interpreter.
 
-Aşağıdaki PowerShell komutlarını repo kökünde çalıştırın. Çalıştırıcı yolları mutlak olarak tanımlandığından pnpm çalışma dizini değişikliklerinden etkilenmez. Ortam değişkenlerini ayarladıktan sonra API'yi aynı terminalde başlatın.
+To run separate processes, use `dotnet run --project apps/securekit-api` and `pnpm --filter demo-web dev` in separate terminals. To use the legacy backend, stop the launcher and run `pnpm dev:node`; its API listens on port `3001`.
 
-### IP ve sabit metin klavye doğrulaması
+See [local development](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.2-getting-started-and-local-development) and the [backend cutover guide](docs/ASPNET_CUTOVER.md).
+
+### Python Worker Setup
+
+Set interpreter variables in the terminal that will start the API. Absolute paths ensure workers resolve correctly across workspace directories.
+
+**IP assessment and fixed-text keystroke verification**
 
 ```powershell
 py -3.11 -m venv .venv
@@ -129,13 +137,14 @@ py -3.11 -m venv .venv
 $env:PYTHON_BIN=(Resolve-Path .\.venv\Scripts\python.exe).Path
 $env:PYTHON_CMD=$env:PYTHON_BIN
 
-# Gerçek IP sorgusu isteğe bağlıdır.
+# Optional: use live IP assessment instead of mock mode.
 $env:VPNAPI_KEY="YOUR_API_KEY"
 $env:MOCK_IP_CHECK="0"
-pnpm dev
 ```
 
-### Yüz doğrulama
+The fixed-text keystroke worker itself requires no additional Python packages.
+
+**Face verification**
 
 ```powershell
 py -3.11 -m venv .venv-face
@@ -144,13 +153,7 @@ $env:FACE_PYTHON_BIN=(Resolve-Path .\.venv-face\Scripts\python.exe).Path
 $env:FACE_DEVICE="auto"
 ```
 
-CLI ile iki görseli doğrudan karşılaştırmak için:
-
-```powershell
-.\.venv-face\Scripts\python.exe python/face_verification/face_verification.py --reference "reference.jpg" --probe "probe.jpg"
-```
-
-### Ses doğrulama
+**Voice verification**
 
 ```powershell
 py -3.11 -m venv .venv-voice
@@ -160,276 +163,115 @@ $env:VOICE_DEVICE="auto"
 $env:VOICE_WHISPER_MODEL="base"
 ```
 
-Whisper ses çözümleme için FFmpeg kullanır; bağımlılıklar arasında `imageio-ffmpeg` fallback'i bulunur. İlk kullanımda modeller indirilebilir.
+Whisper requires FFmpeg; the dependencies include an `imageio-ffmpeg` fallback. Model weights may download on first use.
 
-### Kart doğrulama
+**Card verification**
 
 ```powershell
 py -3.11 -m venv .venv-card
 .\.venv-card\Scripts\python.exe -m pip install -r python/card_verification/requirements.txt
-# PaddleOCR için ayrıca platformunuza uygun PaddlePaddle kurulumu gerekir.
 $env:CARD_PYTHON_BIN=(Resolve-Path .\.venv-card\Scripts\python.exe).Path
 ```
 
-Kart karşılaştırma ayarları `python/card_verification/config.yaml` ve CPU için `config.cpu.yaml` dosyalarındadır. CLI örneği:
+Install a PaddlePaddle build compatible with your platform for PaddleOCR. Card comparison settings are in `python/card_verification/config.yaml` and `config.cpu.yaml`. CPU execution is supported; GPU environments require compatible CUDA, PyTorch, and OCR packages.
 
-```powershell
-.\.venv-card\Scripts\python.exe python/card_verification/card_compare.py reference.jpg probe.jpg --json --config python/card_verification/config.cpu.yaml
-```
+After setup, run `pnpm test:biometric-preflight`, then start the API from the same terminal. Preflight checks validate dependencies; real model and hardware evaluation requires the [biometric acceptance workflow](docs/BIOMETRIC_ACCEPTANCE.md). See also [worker environment setup](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.3-ip-check-and-environment-setup).
 
-GPU kullanacaksanız Python ortamınızla uyumlu CUDA destekli PyTorch ve ilgili OCR paketlerini kurun. GPU, hızlı başlangıç için zorunlu değildir.
+## Configuration
 
-## Doğrulama akışı ve API
+The ASP.NET Core API reads `appsettings.json`, optional environment-specific settings, environment variables, and .NET User Secrets in Development. It does not automatically load the legacy API's `.env` file. For Vite settings, copy `apps/demo-web/.env.example` to `apps/demo-web/.env`.
 
-1. Demo üzerinden kullanıcı oluşturun ve biyometrik veri işleme rızasını kaydedin.
-2. İlgili modül için referans / profil kaydı oluşturun.
-3. Yeni bir örnekle doğrulama yapın.
-4. İsterseniz sinyalleri oturum doğrulamasında birleştirin.
-
-| Endpoint | İşlev |
+| Setting | Purpose |
 | --- | --- |
-| `POST /auth/register`, `POST /auth/login` | Yerel demo hesabı |
-| `POST /consent` | Kullanıcı rızası |
-| `POST /challenge/text` | TR / EN challenge metni |
-| `POST /enroll/keystroke`, `POST /verify/keystroke` | Dinamik metin klavye profili ve doğrulama |
-| `POST /api/securekit/keystroke/enroll`, `POST /api/securekit/keystroke/verify` | Sabit metin Python akışı |
-| `POST /enroll/face/reference`, `POST /verify/face` | Yüz referansı ve doğrulama |
-| `POST /enroll/voice`, `POST /verify/voice` | Ses profili ve doğrulama |
-| `GET /card/references`, `POST /enroll/card/reference`, `POST /verify/card` | Kart referansları ve doğrulama |
-| `POST /verify/network`, `POST /verify/location` | Ağ ve konum kontrolü |
-| `POST /session/start`, `POST /verify/session` | Birleşik oturum doğrulaması |
-| `GET /user/:userId/profiles`, `DELETE /user/biometrics` | Profil görüntüleme ve biyometrik veri silme |
+| `MOCK_IP_CHECK` | Set to `1` for simulated IP assessment. |
+| `VPNAPI_KEY` | Server-side key for live VPNAPI requests. |
+| `PYTHON_BIN` / `PYTHON_CMD` | Interpreters for fixed-text typing and IP assessment. |
+| `FACE_PYTHON_BIN` / `VOICE_PYTHON_BIN` / `CARD_PYTHON_BIN` | Module-specific Python interpreters. |
+| `FACE_DEVICE` / `VOICE_DEVICE` | Select `auto`, `cpu`, or `cuda`. |
+| `SECUREKIT_PROFILE_STORE` / `SECUREKIT_USERS_FILE` | Override local profile and account file paths. |
+| `SECUREKIT_KEYSTROKE_STORE` / `SECUREKIT_SERVER_SALT` | Fixed-text profile storage and user hashing salt. |
+| `CHALLENGE_TTL_SECONDS` / `SESSION_TTL_SECONDS` | Challenge and session lifetimes; defaults are 120 and 900 seconds. |
+| `VITE_SECUREKIT_BASE_URL` | Browser API base path; defaults to `/api/securekit`. |
+| `VITE_SECUREKIT_API_BACKEND` | Select `aspnet` or `node` for the development proxy. |
+| `VITE_SECUREKIT_DEV_PROXY_TARGET` | Override the development proxy target. |
+| `Cors__AllowedOrigins__0` | Set an allowed browser origin for the ASP.NET Core API. |
 
-Yüz, ses ve kart dosyaları ilgili endpoint'lere `multipart/form-data` ile gönderilir. İstek / yanıt tipleri `packages/core/src/contracts` içinde, istemci metotları `packages/web-sdk/src/client.ts` içindedir.
+Keep service keys in server-side configuration; Vite exposes `VITE_` variables to the browser. Worker thresholds, upload limits, and timeouts are defined by the API configuration sections and supported environment overrides.
 
-## Geliştirme ve test
+See [storage and configuration](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.3-storage-and-configuration), [API settings](apps/securekit-api/appsettings.json), and the [environment reference](packages/node-auth/.env.example).
 
-### ASP.NET Core 10 geçişi — Aşama 0–8
+## API Overview
 
-.NET **10 SDK** gerekir. `global.json` kararlı 10.0 SDK feature band'lerini
-kabul eder. Yeni API Controllers tabanlıdır; `GET /health`,
-`POST /challenge/text`, `POST /challenge/text/consume`, `POST /consent`,
-`GET /user/:userId/profiles`, `DELETE /user/biometrics`, `GET /auth/users`,
-`POST /auth/register`, `POST /auth/login`, `POST /session/start` ve
-`POST /verify/session`, `POST /verify/network`, `POST /verify/location`,
-`POST /verify/vpn:check`, `POST /verify/location:country`,
-`POST /verify/webauthn:passkey`, `POST /verify/face:liveness`,
-`POST /enroll/keystroke`, `POST /verify/keystroke`,
-`GET /api/securekit/keystroke/status`, `POST /api/securekit/keystroke/enroll`
-ve `POST /api/securekit/keystroke/verify`, `POST /enroll/face/reference`,
-`POST /verify/face`, `POST /verify/face-sliding`, `POST /enroll/voice` ve
-`POST /verify/voice`, `GET /card/references`, `POST /enroll/card/reference`
-ve `POST /verify/card` uygulanmıştır. Geçiş sırası
-[geçiş planında](MIGRATION_TO_ASPNET10_PLAN.md), mevcut Node endpoint'lerinin
-istek/yanıt ve hata sözleşmeleri [envanterde](docs/NODE_API_CONTRACT_INVENTORY.md)
-yer alır.
+These are backend paths. The application's Vite proxy maps `/api/securekit` to these routes and preserves the fixed-text keystroke prefix.
 
-Repo kökünden:
+| Area | Endpoints |
+| --- | --- |
+| Health | `GET /health` |
+| Local accounts | `POST /auth/register`, `POST /auth/login` |
+| Consent | `POST /consent` |
+| Text challenges | `POST /challenge/text`, `POST /challenge/text/consume` |
+| Dynamic keystrokes | `POST /enroll/keystroke`, `POST /verify/keystroke` |
+| Fixed-text keystrokes | `GET /api/securekit/keystroke/status`, `POST /api/securekit/keystroke/enroll`, `POST /api/securekit/keystroke/verify` |
+| Face | `POST /enroll/face/reference`, `POST /verify/face`, `POST /verify/face-sliding` |
+| Voice | `POST /enroll/voice`, `POST /verify/voice` |
+| Cards | `GET /card/references`, `POST /enroll/card/reference`, `POST /verify/card` |
+| Context | `POST /verify/network`, `POST /verify/location` |
+| Sessions | `POST /session/start`, `POST /verify/session` |
+| Profiles | `GET /user/{userId}/profiles`, `DELETE /user/biometrics` |
+
+Face, voice, and card uploads use `multipart/form-data`. Shared TypeScript contracts live in [packages/core/src/contracts](packages/core/src/contracts); browser methods are exposed by [SecureKitClient](packages/web-sdk/src/client.ts).
+
+For payloads, validation behavior, and compatibility details, consult the [endpoint wiki](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.1-http-endpoints-and-controllers) and [API contract inventory](docs/NODE_API_CONTRACT_INVENTORY.md).
+
+## Development and Validation
 
 ```powershell
-dotnet build apps/securekit-api
-dotnet test apps/securekit-api.tests
+# TypeScript workspaces
+pnpm build
+pnpm typecheck
+pnpm test
 
-# API ve test projelerini birlikte derle/test et
+# ASP.NET Core API and tests
 dotnet build SecureKit.slnx
 dotnet test SecureKit.slnx
 
-# Node/C# Aşama 1 HTTP sözleşme karşılaştırması (build sonrasında)
-pnpm --filter @securekit/node-auth test:aspnet-stage1
-pnpm --filter @securekit/node-auth test:aspnet-stage2
-pnpm --filter @securekit/node-auth test:aspnet-stage3
-pnpm --filter @securekit/node-auth test:aspnet-stage4
-pnpm --filter @securekit/node-auth test:aspnet-stage5
-pnpm --filter @securekit/node-auth test:aspnet-stage6
-pnpm --filter @securekit/node-auth test:aspnet-stage7
-
-# Tüm yedi endpoint grubunu derle ve karşılaştır; özet .run-logs/aspnet-parity.json
+# Backend HTTP parity and web SDK integration
 pnpm test:aspnet-parity
-# Gerçek Vite proxy + web SDK; geçici depolar ve model gerektirmeyen fixture'lar
 pnpm test:aspnet-demo
 
-# Gerçek biyometrik kabul öncesi Python import/CUDA/FFmpeg kontrolü
-pnpm test:biometric-preflight
-
-# Yerel örnek dizini, manifest ve manuel kayıt; mevcut dosyaları korur
-pnpm prepare:biometric-acceptance
-
-# Her modülün yerel örnek hazırlığını ayrı gösterir; model çalıştırmaz
-pnpm status:biometric-acceptance
-
-# Yerel izinli yüz/ses/kart örnekleriyle gerçek C# HTTP kabulü (manifest gerekir)
-pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
-# Kabul aracının kontrolleri; model ağırlıkları gerektirmez
-pnpm test:biometric-tools
-
-dotnet run --project apps/securekit-api
-Invoke-RestMethod http://localhost:3002/health
-```
-
-Launch profili C# API'yi `http://localhost:3002` üzerinde çalıştırır.
-Yüz rotaları mevcut FaceNet Python ortamını kullanır. `FACE_PYTHON_BIN`,
-`FACE_DEVICE`, `FACE_REQUIRE_GPU`, `FACE_UPLOAD_MAX_BYTES` ve
-`FACE_PYTHON_TIMEOUT_MS` Node ile ortak değişkenlerdir. C# referans deposu
-`Face__ReferenceDirectory`, kayan pencere deposu `FACE_SLIDING_REFERENCES_ROOT`
-ile ayarlanabilir. Varsayılan yükleme sınırı 5 MiB, Python timeout'u 30 saniye;
-geçici dosyalar hata/iptal dahil temizlenir. C# bu aşamada her istekte model
-yükleyen ayrı CLI süreci açar. `test:aspnet-stage5` model gerektirmeyen bir
-protokol fixture'ı kullanır; gerçek model kontrolü için `FACE_PYTHON_BIN` ve
-`SECUREKIT_FACE_REAL_IMAGE` (yerel bir yüz görselinin mutlak yolu) tanımlayın.
-Test host'u gerçek port gerektirmez. Aşama 3 süreç köprüsü testleri Windows'ta
-`py`, diğer sistemlerde `python3` kullanır; ek Python paketleri veya API
-anahtarı gerektirmez. İlk testte NuGet paketleri
-indirilir. Varsayılan demo C# API'ye (3002), `pnpm dev:node` ise Node API'ye (3001) bağlanır.
-
-C# rıza/profil deposu varsayılan olarak `apps/securekit-api/.securekit/user-profiles.json`
-dosyasındadır. `SECUREKIT_PROFILE_STORE` veya `Storage__ProfileStorePath` ile
-mutlak yol verilebilir. Node JSON dosya biçimi desteklenir; Node ve C# aynı
-dosyaya eşzamanlı yazmamalıdır (kilit tek süreç içindir). Challenge TTL'i
-`CHALLENGE_TTL_SECONDS` veya `Challenge__TtlSeconds` ile ayarlanır; varsayılan
-120 saniyedir ve challenge kayıtları API yeniden başlatıldığında silinir.
-Profil silme varsayılan olarak rızayı korur; `?deleteConsent=true` rızayı da siler.
-Bu endpoint, Node gibi profil kayıtlarını siler; harici referans görsellerini
-ve ayrı sabit metin klavye deposunu silmez. Karşılaştırma aracı iki geçici
-yerel sunucu ve ayrı geçici depolar kullanır, çıkışta bunları temizler.
-
-C# kullanıcı deposu `apps/securekit-api/.securekit/users.json` dosyasıdır;
-`SECUREKIT_USERS_FILE` veya `Storage__UsersFilePath` ile mevcut Node kullanıcı
-dosyasının mutlak yolu verilebilir. Mevcut prototipin parola biçimi korunur.
-Oturum TTL'i `SESSION_TTL_SECONDS` / `Session__TtlSeconds` ile ayarlanır;
-varsayılan 900 saniyedir. Oturumlar bellektedir ve yeniden başlatmada silinir.
-Risk kararları `allow`, `step-up`, `deny` biçimindedir.
-
-API'yi ayrı terminalde çalıştırırken yalnızca demo'yu başlatmak için:
-
-```powershell
-$env:VITE_SECUREKIT_API_BACKEND="aspnet"
-pnpm --filter demo-web dev
-# Tarayıcıda Vite adresi/auth.html
-```
-
-Bu aşamada kayıt/rıza, giriş/oturum başlangıcı, ağ/konum ve klavye kontrolü çalışır.
-Yerel ağ testi için C# API terminalinde `$env:MOCK_IP_CHECK="1"` ayarlayın.
-Yüz, ses ve kart endpoint'leri de taşındı. Aşama 8'de C# varsayılan hedef oldu;
-proxy/SDK akışları ve tarayıcıdaki hesap/ağ akışı doğrulandı. Biyometrik smoke
-testleri model gerektirmeyen fixture'lar kullanır; gerçek kamera/mikrofon ve
-SpeechBrain/Whisper/PaddleOCR/OpenCLIP kalite kabulü ayrıca yapılmalıdır.
-React arayüzü, web SDK ve üretim Python modülleri değiştirilmedi.
-
-Gerçek model ve donanım kabul adımları [biyometrik kabul yönergesinde](docs/BIOMETRIC_ACCEPTANCE.md)
-yer alır. Ön kontrolün geçmesi model/donanım kabulünün tamamlandığı anlamına gelmez.
-
-C# IP sorgusu `PYTHON_CMD` / `IpCheck:PythonCommand` ile çalıştırıcı,
-`VPNAPI_KEY` / `IpCheck:ApiKey` ile anahtar,
-`IP_CHECK_TIMEOUT_SECONDS` / `IpCheck:TimeoutSeconds` ile zaman aşımı
-(varsayılan 15 saniye) alır. `IpCheck:ScriptPath` isteğe bağlı mutlak
-işçi yoludur; varsayılan repo içindeki `python/ip_check.py` dosyasıdır.
-`MOCK_IP_CHECK=1` / `IpCheck:Mock=1` temiz ve riskli test sonuçlarını
-etkinleştirir. Gerçek sorgu için yukarıdaki IP Python ortamını kurun.
-
-C# dinamik klavye enrollment hedefleri `KEYSTROKE_ENROLL_MIN_ROUNDS` /
-`Keystroke:MinRounds` (10) ve `KEYSTROKE_ENROLL_MIN_KEYSTROKES` /
-`Keystroke:MinKeystrokes` (160) ile ayarlanır; hedeflerden biri tamamlanınca
-enrollment hazır olur. Doğrulama `/challenge/text` üzerinden alınan ID ve
-aynı `sample.expectedText` değerini gerektirir; challenge tek kullanımlıktır.
-
-Sabit metin deposu varsayılan `apps/securekit-api/.securekit/keystroke`
-dizinidir. `SECUREKIT_KEYSTROKE_STORE` / `Keystroke:StorePath` mutlak depo
-kökünü, `SECUREKIT_SERVER_SALT` / `Keystroke:ServerSalt` kullanıcı hash tuzunu
-ayarlar (prototip varsayılanı `securekit-dev-salt`). Node deposuna geçiş için
-aynı tuzu ve `packages/node-auth/.data/keystroke` dizininin mutlak yolunu
-kullanın; Node ve C# aynı depoya eşzamanlı yazmamalıdır.
-
-İşçi `PYTHON_BIN` / `Keystroke:PythonCommand` ile seçilir: boşluk içeren
-mutlak çalıştırıcı yolları ve Windows için `py -3` / `py -3.11` desteklenir.
-Ek argümanlar `Keystroke:PythonArgs` dizisiyle verilir. Çalıştırıcı
-belirtilmezse Windows'ta `py -3`, ardından `python3` ve `python` denenir.
-`KEYSTROKE_FIXED_PYTHON_TIMEOUT_MS` / `Keystroke:PythonTimeoutMs` varsayılan
-2000 ms zaman aşımını ayarlar. `Keystroke:ScriptPath` özel işçi yoludur;
-varsayılan repo içindeki `packages/node-auth/src/keystroke/python/keystroke_ml.py`
-dosyasıdır. İşçi ek Python paketleri gerektirmez. Timeout ve istek iptalinde
-süreç ağacı kapatılır; stdout/stderr ayrı ayrı 1 MiB ile sınırlanır.
-
-Aşama 4 karşılaştırmaları geçici ayrı depolarla gerçek Python enrollment,
-verify ve auto-enrollment çalıştırır. 12 ortak fixture
-`apps/securekit-api.tests/Fixtures/keystroke-stage4.json` dosyasındadır;
-Node kaynakları değişirse `node --import tsx packages/node-auth/scripts/generate-stage-four-fixtures.ts`
-ile yeniden üretilebilir.
-
-C# ses rotaları mevcut SpeechBrain/Whisper ortamını kullanır. Yukarıdaki
-`.venv-voice` kurulumundan sonra API terminalinde `VOICE_PYTHON_BIN` mutlak
-yolunu ayarlayın. `VOICE_DEVICE`, `VOICE_REQUIRE_GPU`, `VOICE_WHISPER_MODEL`,
-`VOICE_SPEAKER_MODEL`, `VOICE_UPLOAD_MAX_BYTES`, `VOICE_PYTHON_TIMEOUT_MS`,
-`VOICE_MATCH_THRESHOLD`, `VOICE_TEXT_THRESHOLD` ve `VOICE_MIN_ENROLLMENT_SAMPLES`
-Node ile ortak değişkenlerdir. C# karşılıkları `Voice` yapılandırma bölümündedir;
-özel worker yolu `VOICE_PYTHON_SCRIPT_PATH` / `Voice:ScriptPath`, ek çalıştırıcı
-argümanları `Voice:PythonArgs`, geçici ses kökü `Voice:TempRoot` ile ayarlanır.
-Varsayılan dosya sınırı 12 MiB, timeout 120 saniye, enrollment hedefi üç örnektir.
-`audioSample` dosyası ve `/challenge/text` üzerinden alınan `challengeId`
-gerekir; challenge tek kullanımlıktır. Ses kayıtları saklanmaz, profil embedding
-olarak tutulur. C# her istekte yeni worker başlatır; model yükleme süresi Node'un
-kalıcı worker'ına göre daha uzundur. İlk model indirmesinde timeout artırılabilir.
-`test:aspnet-stage6` gerçek model gerektirmeyen protokol fixture'ı ile sözleşme,
-profil dosyası ve geçici dosya temizliğini doğrular.
-
-C# kart rotaları mevcut PaddleOCR/OpenCLIP JSON-lines işçisini kullanır.
-`CARD_PYTHON_BIN`, `CARD_PYTHON_TIMEOUT_MS`, `CARD_UPLOAD_MAX_BYTES` ve
-`CARD_MATCH_THRESHOLD` Node ile ortak ayarlardır; varsayılan timeout 300 saniye,
-dosya sınırı 5 MiB ve eşik 0.7'dir. `CARD_PYTHON_SCRIPT_PATH` / `Card:ScriptPath`
-özel worker yolu, `Card:PythonArgs` ek çalıştırıcı argümanlarıdır.
-`Card:ReferenceDirectory` genel kart görsellerinin kökünü (varsayılan
-`python/card_verification/images`), `Card:UserReferenceDirectory` kullanıcı
-referanslarını (varsayılan `apps/securekit-api/.securekit/card-references`),
-`Card:TempRoot` geçici dosya kökünü ayarlar. Mevcut Node kullanıcı referanslarını
-okumak için depo kökünü aynı ayarlayın veya `Card:AllowedReferenceRoots:0` ile
-ek izinli kök tanımlayın. İki API aynı depolara eşzamanlı yazmamalıdır.
-Kullanıcı referansı `userId` ile seçilir ve `referenceId` alanından önceliklidir;
-ikisi yoksa genel dizindeki kartlar karşılaştırılır. Rıza/challenge kontrolü
-kart rotalarında mevcut Node sözleşmesindeki gibi uygulanmaz.
-C# her istekte yeni worker açar; model yükleme süresi kalıcı Node worker'ından
-uzundur. stdout/stderr ayrı ayrı 1 MiB ile sınırlıdır; timeout ve iptal süreç
-ağacını kapatır, geçici görseller tüm sonuçlarda temizlenir.
-`test:aspnet-stage7` gerçek OCR/CLIP modeli gerektirmeyen protokol fixture'ıyla
-HTTP sözleşmesini, referans yenilemeyi ve kalıcı profil biçimini karşılaştırır.
-
-Yapılandırma `apps/securekit-api/appsettings.json`, isteğe bağlı
-`appsettings.Development.json`, environment variables ve Development'ta
-.NET User Secrets üzerinden yüklenir. Portu profil dışında ayarlamak için:
-
-```powershell
-$env:ASPNETCORE_URLS="http://localhost:3002"
-dotnet run --project apps/securekit-api --no-launch-profile
-
-# İleride eklenen gizli değerler için (kaynak koda eklemeyin):
-dotnet user-secrets set "ExampleService:ApiKey" "YOUR_API_KEY" --project apps/securekit-api
-```
-
-CORS boş `Cors:AllowedOrigins` listesinde mevcut Node davranışı gibi tüm
-origin'lere izin verir. Listeyi `Cors__AllowedOrigins__0=http://localhost:5173`
-gibi environment variable ile sınırlandırabilirsiniz. Credentials açılmaz.
-JSON alanları camelCase, sayılar strict, null alanlar korunur; hata zarfında
-verilmeyen `details` atlanır. Endpoint'e özgü enum değerleri ilgili aşamada
-açıkça eşlenecektir. Merkezi exception handler `500 INTERNAL_ERROR` JSON döner.
-Request logging route şablonu, HTTP metodu, status, süre ve trace ID kaydeder.
-
-### Mevcut TypeScript / Python kontrolleri
-
-```powershell
-pnpm build
-pnpm test
-pnpm typecheck
-
-# Paket bazında test
-pnpm --filter @securekit/node-auth test
-pnpm --filter @securekit/web-sdk test
-
-# Python klavye testleri
+# Python fixed-text keystroke tests
 py -3.11 -m unittest discover -s packages/node-auth/src/keystroke/python -p "test_*.py"
 ```
 
-GitHub Actions workflow'u kaldırıldı; doğrulama komutları yerelde çalıştırılır. Birim testleri gerçek kamera / mikrofon, model kalitesi veya GPU entegrasyonunun doğrulandığı anlamına gelmez.
+Real biometric validation has a separate workflow:
 
-## Projenin kapsamı ve veri gizliliği
+```powershell
+pnpm test:biometric-preflight
+pnpm prepare:biometric-acceptance
+pnpm status:biometric-acceptance
 
-Bu proje araştırma ve yerel demo amaçlı bir prototiptir. Mevcut demo kullanıcı deposu parolaları düz metin tutar; üretim için parola hashleme, erişim kontrolü, hız sınırlama ve güvenli oturum yönetimi ayrıca tasarlanmalıdır. Bazı eski doğrulama endpoint'leri örnek sinyallerle çalışır; üretim güvenliği garantisi sunmaz.
+# Populate the manifest with local, consented samples before running.
+pnpm test:biometric-acceptance .run-logs/acceptance/manifest.json
+```
 
-Kullanıcı kayıtları, yüz / kart referansları, biyometrik profiller, model önbellekleri ve `.env` dosyaları repoya dahil edilmez. Temiz kurulum hazır kullanıcı veya kişisel referans görseli içermez; demo üzerinden kendi izinli örneklerinizi oluşturun. Yüz CLI'sındaki eski `--user-id` örnekleri yerel görseller gerektirir; temiz kurulumda `--reference` kullanın.
+Contract and smoke tests use model-free fixtures where appropriate. Passing them establishes API compatibility; biometric accuracy and hardware behavior require separate acceptance checks. Read the [acceptance guide](docs/BIOMETRIC_ACCEPTANCE.md) and [testing wiki](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6-testing-and-acceptance-tooling).
+
+## Project Status and Data Handling
+
+SecureKit is a research and local demonstration prototype. Its account store currently retains plaintext passwords, and its authentication endpoints do not provide a production security boundary. Production deployment requires password hashing, authorization, rate limiting, hardened session management, and an appropriate biometric data retention design. Some legacy verification routes use illustrative signals.
+
+Profiles and references are stored locally. Challenges and sessions are held in memory and expire; restarting the API clears them. Voice enrollment stores embeddings, and uploaded voice recordings are temporary. Face and card reference images can persist separately from profile records. Deleting a biometric profile does **not** remove external reference images or the separate fixed-text keystroke store. Consent is retained unless `deleteConsent=true` is requested.
+
+User records, reference images, local profiles, virtual environments, model caches, and environment files are excluded from version control. A fresh checkout contains no enrolled users or personal reference samples. Use consented data for evaluation. The Node and ASP.NET Core APIs must not write to the same local stores concurrently.
+
+## Documentation
+
+The [technical wiki](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit) provides architecture explanations, source references, and diagrams. Useful starting points include:
+
+- [Project overview](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1-overview)
+- [Browser SDK](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.1-@securekitweb-sdk)
+- [Shared contracts and orchestration](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.2-@securekitcore-contracts-and-orchestration)
+- [ASP.NET Core API](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2-securekit-asp.net-core-api)
+- [Testing and acceptance](https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6-testing-and-acceptance-tooling)
+
+Repository guides: [backend cutover](docs/ASPNET_CUTOVER.md), [migration plan](MIGRATION_TO_ASPNET10_PLAN.md), [API contracts](docs/NODE_API_CONTRACT_INVENTORY.md), and [biometric acceptance](docs/BIOMETRIC_ACCEPTANCE.md).
