@@ -15,7 +15,9 @@
     0 30px 45px -30px rgba(40, 30, 93, 0.25),
     0 18px 36px -18px rgba(0, 0, 0, 0.1);
 }
-.resources-section { display:grid; grid-template-columns:1fr 1fr; gap:90px; border-top:1px solid var(--line); }
+.resources-section { background:#f5f1fc; border-bottom:1px solid #e8def8; }
+.resources-inner { display:grid; grid-template-columns:1fr 1fr; gap:90px; align-items:center; }
+.resources-intro .eyebrow { color:var(--violet); }
 .resources-intro h2 { font-size:clamp(30px,3.4vw,44px); line-height:1.15; letter-spacing:-.045em; font-weight:500; margin:20px 0; }
 .resources-intro > p:not(.eyebrow) { color:var(--muted); font-size:14px; line-height:1.9; max-width:380px; margin-bottom:28px; }
 .resources-intro .button { display:inline-flex; }
@@ -25,10 +27,11 @@
 .resource-topics > a > span { color:var(--violet); font-size:12px; }
 .resource-topics > a > span:last-child { margin-left:auto; font-size:18px; transition:transform .2s; }
 .resource-topics a:hover > span:last-child { transform:translate(3px,-3px); }
+.resource-topics a:hover h3 { color:var(--violet); }
 .resource-topics h3 { font-size:19px; font-weight:500; letter-spacing:-.02em; margin-bottom:7px; }
 .resource-topics p { font-size:12px; color:var(--muted); line-height:1.8; }
 .resources-source { font-size:10px; color:var(--muted); margin-top:20px; }
-@media(max-width:760px) { .resources-section { grid-template-columns:1fr; gap:45px; } }
+@media(max-width:760px) { .resources-inner { grid-template-columns:1fr; gap:36px; } }
 * {
   box-sizing: border-box;
 }
@@ -170,6 +173,13 @@ button svg {
 .nav > a:hover {
   color: var(--violet);
 }
+.nav .nav-wiki {
+  color: var(--violet);
+  font-weight: 600;
+}
+.nav-wiki span {
+  margin-left: 5px;
+}
 .nav-cta {
   padding: 12px 20px;
   background: var(--ink);
@@ -258,6 +268,16 @@ button svg {
 .button.primary:hover {
   background: #262b3b;
   box-shadow: 0 8px 16px rgba(40, 30, 93, 0.14);
+}
+.button.primary.wiki-cta,
+.resources-intro .button.primary {
+  background: var(--violet);
+  border-color: var(--violet);
+}
+.button.primary.wiki-cta:hover,
+.resources-intro .button.primary:hover {
+  background: #5720c5;
+  border-color: #5720c5;
 }
 .button.secondary:hover {
   background: #fff;
