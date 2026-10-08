@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test:wiki": "node --test ../../scripts/resource-wiki.test.mjs",
-    "test:i18n": "node --import tsx --test scripts/i18n.test.ts",
+    "test:i18n": "node --import tsx --test scripts/i18n.test.ts scripts/wiki-i18n.test.ts",
     "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort"
   },
   "dependencies": {

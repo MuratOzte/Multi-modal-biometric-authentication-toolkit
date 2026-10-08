@@ -1,0 +1,93 @@
+<h1 id="cutover-and-parity-testing">Geçiş ve eşdeğerlik testleri</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/stage-seven-parity.ts" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/stage-seven-parity.ts</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs</a></li>
+</ul>
+</details>
+<p>Bu sayfa, eski Node/Express API’sinden (<code>packages/node-auth</code>) SecureKit ASP.NET Core 10 API’sine (<code>apps/securekit-api</code>) geçişte kullanılan stratejiyi, sunucu seçimi ortam değişkenlerini, eşdeğerlik test düzeneklerini ve doğrulama test verilerini belgeler. <code>aspnet-parity.mjs</code> çalıştırıcısını, birinci ile yedinci aşama arasındaki eşdeğerlik betiklerini ve <code>.run-logs/</code> altındaki çalışma günlüklerinin oluşturulmasını kapsar.</p>
+<hr>
+<h2 id="backend-selection-and-environment-configuration">Sunucu seçimi ve ortam yapılandırması</h2>
+<p>Monorepo, Vite geliştirme proxy’sinin arkasında eski Node/Express API’sini veya yeni ASP.NET Core API’sini çalıştırmayı destekler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L1-L31" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 1-31</a> Sunucu seçimi, kök çalıştırma betikleri ve Vite yapılandırmasında başlangıçta değerlendirilen ortam değişkenleriyle yönetilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L13-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 13-23</a></p>
+<h3 id="configuration-variables">Yapılandırma değişkenleri</h3>
+<ul>
+<li><code>VITE_SECUREKIT_API_BACKEND</code>: Hedef seçimini yönetir. <code>aspnet</code> değeri istekleri <code>3002</code> portuna, <code>node</code> değeri <code>3001</code> portuna yönlendirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L21-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 21-22</a></li>
+<li><code>VITE_SECUREKIT_DEV_PROXY_TARGET</code>: <code>VITE_SECUREKIT_API_BACKEND</code> değerinden önce gelen açık URL geçersiz kılma seçeneğidir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L20-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 20-21</a></li>
+<li>Varsayılan portlar: C# ASP.NET Core API <code>3002</code>, Node/Express API <code>3001</code>, Vite geliştirme sunucusu <code>5173</code> portunu kullanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 8-10</a></li>
+</ul>
+
+<p><em>Kaynaklar: <code>docs/ASPNET_CUTOVER.md:6-31</code>, <code>package.json:8-22</code></em></p>
+<hr>
+<h2 id="parity-runner-object-object">Eşdeğerlik çalıştırıcısı (<code>aspnet-parity.mjs</code>)</h2>
+<p>Eşdeğerlik test düzeneği <code>scripts/aspnet-parity.mjs</code> ile yönetilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> Birinci ile yedinci aşama arasındaki test betiklerini <code>tsx</code> kullanarak sırayla çalıştırır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L11-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 11-14</a> Her aşama, eski Express uygulamasıyla ASP.NET Core API dosyasını birlikte başlatır; aynı HTTP isteklerini göndererek yapısal ve davranışsal sözleşme eşdeğerliğini doğrular.</p>
+<h3 id="execution-flow">Yürütme akışı</h3>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3.3-cutover-and-parity-testing-1.svg" alt="Geçiş ve eşdeğerlik testleri — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Kaynaklar: <code>scripts/aspnet-parity.mjs:1-38</code>, <code>packages/node-auth/scripts/stage-seven-parity.ts:1-34</code></em></p>
+<h3 id="run-logs-output-structure">Çalışma günlüklerinin çıktı yapısı</h3>
+<p>Sonuçlar <code>.run-logs/aspnet-parity.json</code> içine serileştirilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L7-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 7-9</a> Şema, genel başarıyı, zamanları ve her aşamanın ölçümlerini kaydeder:</p>
+<pre><code>{
+  &quot;startedAt&quot;: &quot;2026-10-07T00:00:00.000Z&quot;,
+  &quot;passed&quot;: true,
+  &quot;stages&quot;: [
+    {
+      &quot;stage&quot;: &quot;one&quot;,
+      &quot;passed&quot;: true,
+      &quot;durationMs&quot;: 1250,
+      &quot;summary&quot;: &quot;124 comparisons passed&quot;
+    }
+  ],
+  &quot;finishedAt&quot;: &quot;2026-10-07T00:00:05.000Z&quot;
+}
+</code></pre>
+<p><em>Kaynaklar: <code>scripts/aspnet-parity.mjs:7-37</code></em></p>
+<hr>
+<h2 id="stage-one-through-seven-parity-scripts">Birinci ile yedinci aşama arasındaki eşdeğerlik betikleri</h2>
+<p>Eşdeğerlik testleri, farklı yönlendirme alanlarını ve doğrulama sınırlarını kapsayan yedi işlevsel aşamaya ayrılır:</p>
+<ul>
+<li><strong>Aşama 1–3</strong>: Temel kimlik doğrulama sözleşmeleri, oturum yönetimi, risk değerlendirme şemaları ve doğrulama isteği depoları.</li>
+<li><strong>Aşama 4–6</strong>: Biyometrik yönlendirme modülleri (yüz vektörleri, ses doğrulama, kayan pencereler, yazım ritmi profilleme).</li>
+<li><strong>Aşama 7</strong>: Kart doğrulama uç noktaları, çok parçalı form işleme, referans yönetimi, hata enjeksiyonu ve Python süreç köprüsü davranışı. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/stage-seven-parity.ts#L1-L114" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/stage-seven-parity.ts 1-114</a></li>
+</ul>
+<h3 id="normalization-and-assertion-logic">Normalleştirme ve doğrulama mantığı</h3>
+<p>Depolama yolları, sistemin ürettiği geçici dizinler ve değişken zamanlar (<code>enrolledAt</code>, <code>updatedAt</code>) Node ve .NET ortamları arasında farklılaştığı için eşdeğerlik betikleri ayrıntılı karşılaştırmadan önce yanıtları normalleştirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/stage-seven-parity.ts#L46-L57" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/stage-seven-parity.ts 46-57</a></p>
+<pre><code>// Normalization logic mapping volatile paths and dates
+const normalize = (value: any, key = &quot;&quot;): any =&gt; {
+  if (Array.isArray(value)) return value.map(v =&gt; normalize(v));
+  if (value &amp;&amp; typeof value === &quot;object&quot;) return Object.fromEntries(Object.entries(value).map(([k, v]) =&gt; [k, normalize(v, k)]));
+  if ([&quot;updatedAt&quot;, &quot;enrolledAt&quot;, &quot;cardReferenceEnrolledAt&quot;].includes(key)) return &quot;&lt;time&gt;&quot;;
+  if (typeof value === &quot;string&quot;) {
+    for (const [name, replacement] of variablePaths) value = value.split(name).join(replacement);
+    value = value.replace(/[^\s&quot;&#x27;]*securekit-card-[^/\\\s&quot;&#x27;]+[\\/]/g, &quot;&lt;temp&gt;/&quot;).replaceAll(&quot;\\&quot;, &quot;/&quot;);
+  }
+  return value;
+};
+</code></pre>
+<p><em>Kaynaklar: <code>packages/node-auth/scripts/stage-seven-parity.ts:46-57</code></em></p>
+<p><em>Kaynaklar: <code>packages/node-auth/scripts/stage-seven-parity.ts:1-94</code>, <code>scripts/aspnet-parity.mjs:1-38</code></em></p>
+<hr>
+<h2 id="fixtures-and-deterministic-testing-object-object">Test verileri ve deterministik test (<code>card-stage7.py</code>)</h2>
+<p>Yerel PyTorch, CUDA veya PaddleOCR ortamı gerektirmeden güvenilir testler çalıştırmak için yedinci aşama deterministik bir Python protokol düzeneği (<code>packages/node-auth/scripts/fixtures/card-stage7.py</code>) kullanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L1-L53" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 1-53</a></p>
+<h3 id="protocol-fixture-behavior">Protokol düzeneğinin davranışı</h3>
+<p>Betik, JSONL protokol çerçeveleriyle <code>stdin</code>/<code>stdout</code> üzerinden iletişim kurar. Gerçek makine öğrenmesi modellerini çağırmadan farklı başarı ve hata durumlarını taklit etmek için örnek görüntü yollarını inceler:</p>
+<ul>
+<li><strong><code>timeout</code></strong>: İşçi zaman aşımı yönetimini test etmek için kasıtlı 30 saniyelik gecikme oluşturur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L14-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 14-15</a></li>
+<li><strong><code>invalid</code></strong>: Ayrıştırıcı hata toparlanmasını test etmek için JSON dışı çıktı üretir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L16-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 16-18</a></li>
+<li><strong><code>stdout</code> / <code>stderr</code></strong>: Çıktı boşaltma sınırlarını doğrulamak için büyük veri tamponları veya hata akışları üretir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L19-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 19-24</a></li>
+<li><strong><code>dependency</code></strong>: Eksik Python modülü istisnalarını (örneğin <code>No module named &#x27;paddleocr&#x27;</code>) taklit eder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/scripts/fixtures/card-stage7.py#L41-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/scripts/fixtures/card-stage7.py 41-42</a></li>
+</ul>
+<pre><code># Protocol event emission from card-stage7.py
+def emit(value):
+    print(json.dumps(value), flush=True)
+ 
+emit({&quot;event&quot;: &quot;ready&quot;, &quot;ok&quot;: True})
+for line in sys.stdin:
+    request = json.loads(line)
+    mode = pathlib.Path(request[&quot;probeImagePath&quot;]).read_text()
+    # ... mode handling and score evaluation ...
+</code></pre>
+<p><em>Kaynaklar: <code>packages/node-auth/scripts/fixtures/card-stage7.py:7-13</code></em></p>
+<p><em>Kaynaklar: <code>packages/node-auth/scripts/fixtures/card-stage7.py:1-54</code>, <code>packages/node-auth/scripts/stage-seven-parity.ts:15-16</code></em></p>

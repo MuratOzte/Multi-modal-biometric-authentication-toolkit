@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Mark } from "./Visuals";
 import index from "./wiki-index.json";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { type Locale } from "./locale";
+import {
+  prepareWikiHtml,
+  wikiContentPath,
+  wikiPages,
+  wikiTranslator,
+  type WikiPage,
+} from "./wiki-locale";
 import "./wiki.css";
 
 const repository =
   "https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit";
-const pages = index.pages;
 const groups = [
   "Genel bakış",
   "ASP.NET Core API",
@@ -21,10 +29,13 @@ const wikiLink = (slug: string, section?: string) =>
 function DiagramViewer({
   diagram,
   close,
+  locale,
 }: {
   diagram: { src: string; alt: string };
   close: () => void;
+  locale: Locale;
 }) {
+  const t = wikiTranslator(locale);
   const dialog = useRef<HTMLDialogElement>(null);
   const [zoom, setZoom] = useState(1);
   useEffect(() => {
@@ -45,25 +56,25 @@ function DiagramViewer({
       onClick={(event) => {
         if (event.target === dialog.current) close();
       }}
-      aria-label="Teknik diyagram"
+      aria-label={t("Teknik diyagram")}
     >
       <div className="wiki-dialog-bar">
         <strong>{diagram.alt}</strong>
         <div>
           <button
             onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}
-            aria-label="Diyagramı küçült"
+            aria-label={t("Diyagramı küçült")}
           >
             −
           </button>
           <span>{Math.round(zoom * 100)}%</span>
           <button
             onClick={() => setZoom(Math.min(3, zoom + 0.25))}
-            aria-label="Diyagramı büyüt"
+            aria-label={t("Diyagramı büyüt")}
           >
             +
           </button>
-          <button onClick={close} aria-label="Diyagramı kapat" autoFocus>
+          <button onClick={close} aria-label={t("Diyagramı kapat")} autoFocus>
             ×
           </button>
         </div>
@@ -83,11 +94,15 @@ function WikiArticle({
   page,
   section,
   showDiagram,
+  locale,
 }: {
-  page: (typeof pages)[number];
+  page: WikiPage;
   section: string | null;
   showDiagram: (diagram: { src: string; alt: string }) => void;
+  locale: Locale;
 }) {
+  const t = wikiTranslator(locale);
+  const pages = wikiPages(locale);
   const [content, setContent] = useState("");
   const [failed, setFailed] = useState(false);
   const [retry, setRetry] = useState(0);
@@ -95,7 +110,7 @@ function WikiArticle({
   const article = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const abort = new AbortController();
-    fetch(`${import.meta.env.BASE_URL}wiki/${page.slug}.html`, {
+    fetch(wikiContentPath(locale, page.slug, import.meta.env.BASE_URL), {
       signal: abort.signal,
     })
       .then((response) => {
@@ -104,7 +119,7 @@ function WikiArticle({
       })
       .then((html) => {
         if (!abort.signal.aborted) {
-          setContent(html);
+          setContent(prepareWikiHtml(html, locale, import.meta.env.BASE_URL));
           setFailed(false);
         }
       })
@@ -112,7 +127,7 @@ function WikiArticle({
         if (!abort.signal.aborted) setFailed(true);
       });
     return () => abort.abort();
-  }, [page.slug, retry]);
+  }, [page.slug, locale, retry]);
   useEffect(() => {
     if (!content) return;
     if (section)
@@ -134,37 +149,39 @@ function WikiArticle({
     <>
       <div className="wiki-page-meta">
         <span>
-          {groups[Number(page.number.split(".")[0]) - 1]} <span>/</span>{" "}
+          {t(groups[Number(page.number.split(".")[0]) - 1])} <span>/</span>{" "}
           {page.number}
         </span>
-        <span>{Math.max(1, Math.ceil(page.words / 220))} dk okuma</span>
+        <span>
+          {Math.max(1, Math.ceil(page.words / 220))} {t("dk okuma")}
+        </span>
       </div>
       <div className="wiki-page-actions">
         <span>REPOSITORY RESOURCE WIKI</span>
         <button onClick={copyLink}>
-          {copied ? "Bağlantı kopyalandı ✓" : "Bağlantıyı kopyala ↗"}
+          {copied ? t("Bağlantı kopyalandı ✓") : t("Bağlantıyı kopyala ↗")}
         </button>
       </div>
       {failed ? (
         <div className="wiki-empty" role="alert">
-          <h1>İçerik yüklenemedi.</h1>
-          <p>Bağlantınızı kontrol edip tekrar deneyin.</p>
+          <h1>{t("İçerik yüklenemedi.")}</h1>
+          <p>{t("Bağlantınızı kontrol edip tekrar deneyin.")}</p>
           <button
             className="button secondary"
             onClick={() => setRetry(retry + 1)}
           >
-            Tekrar dene ↻
+            {t("Tekrar dene ↻")}
           </button>
         </div>
       ) : !content ? (
         <p className="wiki-loading" role="status">
-          Sayfa yükleniyor…
+          {t("Sayfa yükleniyor…")}
         </p>
       ) : (
         <div
           ref={article}
           className="wiki-prose"
-          lang="en"
+          lang={locale}
           onClick={(event) => {
             const target = event.target as HTMLElement;
             const figure = target.closest(".wiki-diagram");
@@ -188,7 +205,7 @@ function WikiArticle({
       <div className="wiki-attribution">
         <span className="status-dot" />
         <p>
-          DeepWiki arşivi · 7 Ekim 2026 ·{" "}
+          {t("DeepWiki arşivi") + " · " + t("7 Ekim 2026") + " · "}{" "}
           <a
             href={`${repository}/commit/${index.sourceCommit}`}
             target="_blank"
@@ -198,18 +215,21 @@ function WikiArticle({
           </a>
           <br />
           <span>
-            Özgün İngilizce içerik ve kaynak referansları korunmuştur.
+            {t("Kaynak referansları ve özgün teknik diyagramlar korunmuştur.")}
           </span>
         </p>
         <a href={page.source} target="_blank" rel="noreferrer">
-          Kaynak sayfa ↗
+          {t("Kaynak sayfa ↗")}
         </a>
       </div>
-      <nav className="wiki-pagination" aria-label="Önceki ve sonraki sayfa">
+      <nav
+        className="wiki-pagination"
+        aria-label={t("Önceki ve sonraki sayfa")}
+      >
         <div>
           {pages[position - 1] && (
             <a href={wikiLink(pages[position - 1].slug)}>
-              <small>← ÖNCEKİ</small>
+              <small>{t("← ÖNCEKİ")}</small>
               <strong>{pages[position - 1].title}</strong>
             </a>
           )}
@@ -217,7 +237,7 @@ function WikiArticle({
         <div>
           {pages[position + 1] && (
             <a href={wikiLink(pages[position + 1].slug)}>
-              <small>SONRAKİ →</small>
+              <small>{t("SONRAKİ →")}</small>
               <strong>{pages[position + 1].title}</strong>
             </a>
           )}
@@ -227,7 +247,15 @@ function WikiArticle({
   );
 }
 
-export default function Wiki({ hash }: { hash: string }) {
+export default function Wiki({
+  hash,
+  locale,
+}: {
+  hash: string;
+  locale: Locale;
+}) {
+  const t = wikiTranslator(locale);
+  const pages = wikiPages(locale);
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [diagram, setDiagram] = useState<{ src: string; alt: string } | null>(
@@ -238,15 +266,17 @@ export default function Wiki({ hash }: { hash: string }) {
   const slug = path.replace(/^#\/wiki\/?/, "") || pages[0].slug;
   const page = pages.find((item) => item.slug === slug);
   const section = new URLSearchParams(params).get("section");
-  const search = query.trim().toLocaleLowerCase();
+  const search = query.trim().toLocaleLowerCase(locale);
   const results = search
     ? pages.filter((item) =>
-        `${item.title} ${item.searchText}`.toLocaleLowerCase().includes(search),
+        `${item.title} ${item.searchText}`
+          .toLocaleLowerCase(locale)
+          .includes(search),
       )
     : [];
   useEffect(() => {
-    document.title = `${page?.title ?? "Sayfa bulunamadı"} · SecureKit Wiki`;
-  }, [page]);
+    document.title = `${page?.title ?? wikiTranslator(locale)("Sayfa bulunamadı")} · SecureKit Wiki`;
+  }, [page, locale]);
   useEffect(() => {
     const keydown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
@@ -271,10 +301,10 @@ export default function Wiki({ hash }: { hash: string }) {
           document.getElementById("wiki-content")?.focus();
         }}
       >
-        İçeriğe geç
+        {t("İçeriğe geç")}
       </a>
       <header className="wiki-header">
-        <a className="brand" href="#main" aria-label="SecureKit ana sayfa">
+        <a className="brand" href="#main" aria-label={t("SecureKit ana sayfa")}>
           <Mark small />
           <span>
             SecureKit<span className="brand-dot">.</span>
@@ -288,11 +318,12 @@ export default function Wiki({ hash }: { hash: string }) {
         >
           Resource Wiki
         </a>
-        <nav aria-label="Wiki üst gezinme">
-          <a href="#resources">Tanıtım sitesine dön</a>
+        <nav aria-label={t("Wiki üst gezinme")}>
+          <a href="#resources">{t("Tanıtım sitesine dön")}</a>
           <a href={repository} target="_blank" rel="noreferrer">
             GitHub ↗
           </a>
+          <LanguageSwitcher locale={locale} hash={hash} />
         </nav>
       </header>
       <div className="wiki-mobile-bar">
@@ -301,10 +332,10 @@ export default function Wiki({ hash }: { hash: string }) {
           aria-expanded={menuOpen}
           aria-controls="wiki-sidebar"
         >
-          {menuOpen ? "Konuları kapat ×" : "Konular ☰"}
+          {menuOpen ? t("Konuları kapat ×") : t("Konular ☰")}
         </button>
         <span>
-          {page?.number ?? "404"} / {pages.length} sayfa
+          {page?.number ?? "404"} / {pages.length} {t("sayfa")}
         </span>
       </div>
       <div className="wiki-layout">
@@ -313,13 +344,13 @@ export default function Wiki({ hash }: { hash: string }) {
           className={`wiki-sidebar ${menuOpen ? "is-open" : ""}`}
         >
           <div className="wiki-repository">
-            <span className="eyebrow">PROJE KAYNAKLARI</span>
+            <span className="eyebrow">{t("PROJE KAYNAKLARI")}</span>
             <strong>
               Multi-modal biometric
               <br />
               authentication toolkit
             </strong>
-            <span>27 sayfa · 7 konu grubu</span>
+            <span>{t("27 sayfa · 7 konu grubu")}</span>
           </div>
           <label className="wiki-search">
             <span aria-hidden="true">⌕</span>
@@ -327,8 +358,8 @@ export default function Wiki({ hash }: { hash: string }) {
               ref={searchRef}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Wiki içinde ara…"
-              aria-label="Wiki içinde ara"
+              placeholder={t("Wiki içinde ara…")}
+              aria-label={t("Wiki içinde ara")}
               onKeyDown={(event) => {
                 if (event.key === "Escape") setQuery("");
               }}
@@ -337,7 +368,9 @@ export default function Wiki({ hash }: { hash: string }) {
           </label>
           {search && (
             <div className="wiki-mobile-results" aria-live="polite">
-              <p>{results.length} sayfa bulundu.</p>
+              <p>
+                {results.length} {t("sayfa bulundu.")}
+              </p>
               {results.map((item) => (
                 <a
                   key={item.slug}
@@ -349,17 +382,18 @@ export default function Wiki({ hash }: { hash: string }) {
                   <span>↗</span>
                 </a>
               ))}
-              {!results.length && <p>Başka bir terim deneyin.</p>}
+              {!results.length && <p>{t("Başka bir terim deneyin.")}</p>}
             </div>
           )}
           <nav
             className={`wiki-topic-list ${search ? "has-query" : ""}`}
-            aria-label="Wiki konuları"
+            aria-label={t("Wiki konuları")}
           >
             {groups.map((group, groupIndex) => (
               <div className="wiki-topic-group" key={group}>
                 <p>
-                  {String(groupIndex + 1).padStart(2, "0")} <span>{group}</span>
+                  {String(groupIndex + 1).padStart(2, "0")}{" "}
+                  <span>{t(group)}</span>
                 </p>
                 {pages
                   .filter(
@@ -391,14 +425,15 @@ export default function Wiki({ hash }: { hash: string }) {
             target="_blank"
             rel="noreferrer"
           >
-            DeepWiki kaynağı ↗ <span>7 Ekim 2026 arşivi</span>
+            {t("DeepWiki kaynağı ↗")}
+            <span>{t("7 Ekim 2026 arşivi")}</span>
           </a>
         </aside>
         <main id="wiki-content" className="wiki-content" tabIndex={-1}>
           {!search && page && (
             <details className="wiki-inline-toc">
-              <summary>Bu sayfada</summary>
-              <nav aria-label="Mobil sayfa içindekiler">
+              <summary>{t("Bu sayfada")}</summary>
+              <nav aria-label={t("Mobil sayfa içindekiler")}>
                 {page.headings.map((heading) => (
                   <a key={heading.id} href={wikiLink(page.slug, heading.id)}>
                     {heading.title}
@@ -409,17 +444,20 @@ export default function Wiki({ hash }: { hash: string }) {
           )}
           {search ? (
             <section className="wiki-search-results" aria-live="polite">
-              <p className="eyebrow">WIKI ARAMASI</p>
+              <p className="eyebrow">{t("WIKI ARAMASI")}</p>
               <h1>“{query.trim()}”</h1>
-              <p>{results.length} sayfa bulundu.</p>
+              <p>
+                {results.length} {t("sayfa bulundu.")}
+              </p>
               <button className="wiki-back" onClick={() => setQuery("")}>
-                ← İçeriğe dön
+                {t("← İçeriğe dön")}
               </button>
               {results.length ? (
                 results.map((item) => {
                   const start = Math.max(
                     0,
-                    item.searchText.toLocaleLowerCase().indexOf(search) - 70,
+                    item.searchText.toLocaleLowerCase(locale).indexOf(search) -
+                      70,
                   );
                   return (
                     <a
@@ -429,7 +467,7 @@ export default function Wiki({ hash }: { hash: string }) {
                     >
                       <small>
                         {item.number} /{" "}
-                        {groups[Number(item.number.split(".")[0]) - 1]}
+                        {t(groups[Number(item.number.split(".")[0]) - 1])}
                       </small>
                       <h2>
                         {item.title} <span>↗</span>
@@ -440,35 +478,40 @@ export default function Wiki({ hash }: { hash: string }) {
                 })
               ) : (
                 <div className="wiki-empty">
-                  <h2>Sonuç bulunamadı.</h2>
+                  <h2>{t("Sonuç bulunamadı.")}</h2>
                   <p>
-                    Face, keystroke, session veya Python gibi bir terim deneyin.
+                    {t(
+                      "Yüz, yazım ritmi, oturum veya Python gibi bir terim deneyin.",
+                    )}
                   </p>
                 </div>
               )}
             </section>
           ) : page ? (
             <WikiArticle
-              key={page.slug}
+              key={`${locale}/${page.slug}`}
               page={page}
               section={section}
               showDiagram={setDiagram}
+              locale={locale}
             />
           ) : (
             <div className="wiki-empty">
               <p className="eyebrow">404 / WIKI</p>
-              <h1>Bu sayfa bulunamadı.</h1>
-              <p>Soldaki konulardan birini seçin veya genel bakışa dönün.</p>
+              <h1>{t("Bu sayfa bulunamadı.")}</h1>
+              <p>
+                {t("Soldaki konulardan birini seçin veya genel bakışa dönün.")}
+              </p>
               <a className="button primary" href={wikiLink(pages[0].slug)}>
-                Genel bakış →
+                {t("Genel bakış →")}
               </a>
             </div>
           )}
         </main>
         {!search && page && (
           <aside className="wiki-toc">
-            <p>BU SAYFADA</p>
-            <nav aria-label="Sayfa içindekiler">
+            <p>{t("BU SAYFADA")}</p>
+            <nav aria-label={t("Sayfa içindekiler")}>
               {page.headings.map((heading) => (
                 <a
                   key={heading.id}
@@ -480,16 +523,20 @@ export default function Wiki({ hash }: { hash: string }) {
               ))}
             </nav>
             <div className="wiki-toc-foot">
-              <span>Kaynak kodla birlikte okuyun.</span>
+              <span>{t("Kaynak kodla birlikte okuyun.")}</span>
               <a href={page.source} target="_blank" rel="noreferrer">
-                DeepWiki’de aç ↗
+                {t("DeepWiki’de aç ↗")}
               </a>
             </div>
           </aside>
         )}
       </div>
       {diagram && (
-        <DiagramViewer diagram={diagram} close={() => setDiagram(null)} />
+        <DiagramViewer
+          diagram={diagram}
+          close={() => setDiagram(null)}
+          locale={locale}
+        />
       )}
     </div>
   );

@@ -1,0 +1,61 @@
+<h1 id="securekit-aspnet-core-api">SecureKit ASP.NET Core API</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p><code>apps/securekit-api</code> projesi, SecureKit çok modlu biyometrik kimlik doğrulama araç setinin sunucu motoru olarak çalışan, yüksek performanslı ASP.NET Core 10 (<code>net10.0</code>) Web API’sidir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-24</a> Eski Node/Express API’sinin yerine geçerken HTTP rotalarını, istek/yanıt sözleşmelerini ve hata yapılarını aynen korur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L5-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 5-13</a></p>
+<p>Uygulama; <code>Program.cs</code> içindeki bağımlılık enjeksiyonu kurulumu <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a>, kesin JSON serileştirme politikaları <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L29-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 29-38</a>, merkezi ara katman hata yönetimi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L54-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 54-59</a> ve dosya tabanlı durum depoları <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10-17</a> etrafında yapılandırılmıştır.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L1-L66" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 1-66</a></li>
+<li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-33</a></li>
+</ul>
+<hr>
+<h2 id="architecture-and-bootstrap">Mimari ve başlangıç kurulumu</h2>
+<p>API, <code>apps/securekit-api/Program.cs</code> üzerinden başlatılır; temel altyapı, durum depoları, doğrulama motorları ve Python köprü hizmetleri ASP.NET Core IoC kapsayıcısına tek örnekli hizmetler olarak kaydedilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a> Biyometrik sınırlar, zaman aşımı ve donanım yürütme seçenekleri <code>apps/securekit-api/appsettings.json</code> ile yapılandırılır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L1-L35" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 1-35</a></p>
+
+<p><em>Şekil 2.1: SecureKit ASP.NET Core başlangıç ve yapılandırma akışı</em></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L63" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-63</a></li>
+<li><code>apps/securekit-api/appsettings.json</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L1-L35" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 1-35</a></li>
+</ul>
+<hr>
+<h2 id="21-http-endpoints-and-controllers">2.1 HTTP uç noktaları ve denetleyiciler</h2>
+<p>API; kullanıcı yaşam döngüsü, doğrulama isteği üretimi, rıza takibi, oturum değerlendirmesi ve çok modlu biyometrik doğrulama (yüz, ses, kimlik kartı, dinamik ve sabit yazım ritmi, ağ/IP kontrolleri, sağlık izleme) için kapsamlı denetleyici sınıfları sunar.</p>
+<p>Rota tanımları, girdi doğrulama kuralları ve JSON istek/yanıt sözleşmeleri için <a href="#/wiki/2.1-http-endpoints-and-controllers">HTTP uç noktaları ve denetleyiciler</a> sayfasına bakın.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 21-25</a></li>
+</ul>
+<hr>
+<h2 id="22-verification-services">2.2 Doğrulama hizmetleri</h2>
+<p>Hizmet katmanı; temel güvenlik mantığını, çok modlu sinyal puanlamasını ve Python işçi yürütme köprülerini içerir. <code>FaceVerification</code>, <code>VoiceVerification</code>, <code>CardVerification</code> ve <code>SessionKeystrokeVerifier</code> gibi hizmetler ham girdileri işler ve stdin/stdout alt süreç sarmalayıcılarıyla (<code>FacePython</code>, <code>VoicePython</code>, <code>CardPython</code>, <code>KeystrokePython</code>) dış Python betikleriyle iletişim kurar.</p>
+<p>Hizmet uygulamaları, risk hesaplama politikaları ve Python süreç iletişimi için <a href="#/wiki/2.2-verification-services">Doğrulama hizmetleri</a> sayfasına bakın. Alt süreç yürütme ayrıntıları için <a href="#/wiki/2.2.1-python-process-bridge">Python süreç köprüsü</a>; puanlama algoritmaları için <a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Yazım ritmi, oturum ve risk hizmetleri</a> sayfalarını inceleyin.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L27" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14-27</a></li>
+<li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L11-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 11-15</a></li>
+</ul>
+<hr>
+<h2 id="23-storage-and-configuration">2.3 Depolama ve yapılandırma</h2>
+<p>SecureKit; kullanıcı kimlik bilgilerini, biyometrik profilleri, etkin token’ları ve tek kullanımlık doğrulama isteklerini yönetmek için dosya tabanlı JSON depolama adaptörlerini (<code>FileUserStore</code>, <code>FileProfileStorage</code>, <code>FixedKeystrokeStore</code>) ve bellek depolarını (<code>SessionStore</code>, <code>ChallengeStore</code>) kullanır. Durum değişiklikleri, eşzamanlı isteklerde veri bozulmasını önlemek için atomik dosya yazımı ve iş parçacığı eşzamanlama araçlarıyla korunur.</p>
+<p>Şema düzeni, atomik kilitleme stratejileri ve ortam değişkenleriyle geçersiz kılma için <a href="#/wiki/2.3-storage-and-configuration">Depolama ve yapılandırma</a> sayfasına bakın.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10-17</a></li>
+<li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L27-L30" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 27-30</a></li>
+</ul>
+<hr>
+
+<p><em>Şekil 2.2: Uçtan uca istek yönlendirme ve biyometrik doğrulama mimarisi</em></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Program.cs</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a></li>
+<li><code>MIGRATION_TO_ASPNET10_PLAN.md</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L19-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 19-33</a></li>
+</ul>

@@ -74,3 +74,79 @@ test("configuration code samples retain separate executable lines", () => {
     /VITE_SECUREKIT_BASE_URL=\/api\/securekit\r?\nVITE_SECUREKIT_API_BACKEND=aspnet/,
   );
 });
+
+const turkish = JSON.parse(
+  readFileSync(
+    path.join(root, "apps/landing-web/src/wiki-index-tr.json"),
+    "utf8",
+  ),
+);
+
+test("both wiki languages share the complete page graph and stable section anchors", () => {
+  assert.equal(turkish.sourceCommit, index.sourceCommit);
+  assert.deepEqual(
+    turkish.pages.map((page) => page.slug),
+    index.pages.map((page) => page.slug),
+  );
+  assert.equal(turkish.pages[0].title, "Genel bakış");
+  assert.ok(
+    turkish.pages.some((page) => page.searchText.includes("yazım ritmi")),
+  );
+});
+
+for (const page of turkish.pages) {
+  test(`${page.number}: Turkish article retains code, references, diagrams and section links`, () => {
+    const source = readFileSync(
+      path.join(directory, `${page.slug}.html`),
+      "utf8",
+    );
+    const html = readFileSync(
+      path.join(directory, "tr", `${page.slug}.html`),
+      "utf8",
+    );
+    const original = pages.get(page.slug);
+    assert.deepEqual(
+      page.headings.map((heading) => heading.id),
+      original.headings.map((heading) => heading.id),
+    );
+    assert.deepEqual(page.diagrams, original.diagrams);
+    assert.ok(
+      html.includes(
+        `<h1 id="${page.headings[0].id}">${page.title.replaceAll("&", "&amp;")}</h1>`,
+      ),
+    );
+    for (const heading of page.headings)
+      assert.ok(html.includes(`id="${heading.id}"`));
+    const matches = (text, pattern) =>
+      Array.from(text.matchAll(pattern), (match) => match[0]).sort();
+    const codeSamples = (text) =>
+      matches(text, /<pre\b[^>]*>[\s\S]*?<\/pre>/g).filter(
+        (sample) => !sample.includes("wiki-diagram"),
+      );
+    assert.deepEqual(codeSamples(html), codeSamples(source));
+    assert.deepEqual(
+      matches(html, /<code\b[^>]*>[\s\S]*?<\/code>/g),
+      matches(source, /<code\b[^>]*>[\s\S]*?<\/code>/g),
+    );
+    assert.deepEqual(
+      matches(html, /href="[^"]*"/g),
+      matches(source, /href="[^"]*"/g),
+    );
+    assert.deepEqual(
+      matches(html, /<a\b[^>]*class="wiki-source"[^>]*>[\s\S]*?<\/a>/g),
+      matches(source, /<a\b[^>]*class="wiki-source"[^>]*>[\s\S]*?<\/a>/g),
+    );
+    for (const name of page.diagrams)
+      assert.ok(html.includes(`/wiki/diagrams/${name}`));
+    assert.doesNotMatch(
+      html,
+      /<(?:script|iframe|object|embed)\b|\son\w+=|javascript:/i,
+    );
+    assert.match(html, /İlgili kaynak dosyaları/);
+    assert.doesNotMatch(
+      html,
+      /Relevant source files|Purpose and Scope|\{\d+\}/,
+    );
+    assert.ok(page.words > 100);
+  });
+}

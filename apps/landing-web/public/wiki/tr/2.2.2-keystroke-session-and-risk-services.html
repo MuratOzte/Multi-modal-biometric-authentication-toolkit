@@ -1,0 +1,65 @@
+<h1 id="keystroke-session-and-risk-services">Yazım ritmi, oturum ve risk hizmetleri</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu bölüm, ASP.NET Core API’deki (<code>apps/securekit-api</code>) sunucu doğrulama, durum yönetimi ve risk değerlendirme bileşenlerini açıklar. Dinamik ve sabit yazım ritmi ayrıştırma, üstel hareketli ortalama (EMA) kullanıcı profilleri, oturum durumu (<code>SessionStore</code>), doğrulama isteği yaşam döngüsü (<code>ChallengeStore</code>), çok sinyalli risk karar mantığı (<code>SessionRiskEvaluator</code>) ve ağ/IP doğrulaması (<code>IpCheckService</code>) ele alınır.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L8-L28" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 8-28</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L111-L147" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 111-147</a></p>
+<hr>
+<h2 id="state-and-challenge-stores">Durum ve doğrulama isteği depoları</h2>
+<p>Oturum ve doğrulama isteği verileri, başlangıçta yapılandırılan, iş parçacığı güvenli tek örnekli hizmetlerle bellekte tutulur.</p>
+<h3 id="challengestore">ChallengeStore</h3>
+<p><code>ChallengeStore</code>, süreli ve tek kullanımlık kimlik doğrulama ve biyometrik doğrulama isteklerini yönetir.</p>
+<ul>
+<li><strong>TTL</strong>: Doğrulama istekleri varsayılan bir geçerlilik süresine sahiptir (genellikle 120 saniye).</li>
+<li><strong>Tüketim</strong>: Kesin tek kullanım kuralı uygulanır; doğrulama veya kayıt sırasında tüketilen isteği sonraki doğrulama denemeleri kullanamaz.</li>
+<li><strong>Kayıt</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10</a> içinde tek örnekli hizmet olarak kaydedilir.</li>
+</ul>
+<h3 id="sessionstore">SessionStore</h3>
+<p><code>SessionStore</code>, etkin kullanıcı oturumlarını takip eder.</p>
+<ul>
+<li><strong>TTL</strong>: Oturumlarda varsayılan kayan veya mutlak zaman aşımı uygulanır (örneğin <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L119-L119" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 119</a> belgesinde belirtilen 15 dakika).</li>
+<li><strong>Durum birleştirme</strong>: Sinyaller ve ara biyometrik doğrulamalar, oturum yaşam döngüsü çağrıları boyunca biriktirilir.</li>
+<li><strong>Kayıt</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 13</a> içinde tek örnekli hizmet olarak kaydedilir.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2.2-keystroke-session-and-risk-services-1.svg" alt="Yazım ritmi, oturum ve risk hizmetleri — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Diyagram 1: Doğrulama isteği ve oturum depolarının kavramlardan kod öğelerine eşleştirilmesi</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L10-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 10-13</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L74-L79" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 74-79</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L118-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 118-124</a></p>
+<hr>
+<h2 id="keystroke-verification-and-ema-profiles">Yazım ritmi doğrulama ve EMA profilleri</h2>
+<p>Yazım ritmi doğrulaması, hem dinamik davranışsal yazım analizini hem de Python işçi köprüleri üzerinden sabit metin şablon eşleştirmesini kapsar.</p>
+<h3 id="dynamic-keystroke-and-session-verification">Dinamik yazım ritmi ve oturum doğrulama</h3>
+<ul>
+<li><strong>SessionKeystrokeVerifier</strong>: Oturum kontrollerinde gönderilen dinamik yazım örüntülerini kullanıcının mevcut temel profiliyle karşılaştırır.</li>
+<li><strong>Ölçümler ve EMA profilleri</strong>: Zaman ölçümlerini (basılı tutma ve geçiş süreleri) hesaplar; kullanıcı davranış şablonlarını üstel hareketli ortalama (EMA) güncellemeleriyle yeniler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L125-L126" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 125-126</a></li>
+</ul>
+<h3 id="fixed-keystroke-and-python-bridge">Sabit yazım ritmi ve Python köprüsü</h3>
+<ul>
+<li><strong>FixedKeystrokeStore</strong>: Sabit metin yazım ritmi kayıt şablonlarının saklanmasını ve alınmasını yönetir.</li>
+<li><strong>KeystrokePython</strong>: Alttaki Python yazım ritmi doğrulama işçisiyle iletişim kurar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L17-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 17-18</a></li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2.2-keystroke-session-and-risk-services-2.svg" alt="Yazım ritmi, oturum ve risk hizmetleri — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Diyagram 2: Yazım ritmi hattının mimarisi ve kod öğeleriyle eşleştirilmesi</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L15-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 15-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L125-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 125-128</a></p>
+<hr>
+<h2 id="risk-evaluation-and-network-verification">Risk değerlendirme ve ağ doğrulama</h2>
+<p>Risk değerlendirmesi; yazım ritmi, yüz, ses, kart ve ağ telemetrisi sinyallerini birleştirerek erişim sonucunu belirler.</p>
+<h3 id="sessionriskevaluator">SessionRiskEvaluator</h3>
+<p><code>SessionRiskEvaluator</code>, birikmiş doğrulama sinyallerini yapılandırılmış güvenlik politikalarıyla değerlendirir:</p>
+<ul>
+<li><strong>Sonuçlar</strong>: <code>allow</code>, <code>step_up</code> (veya <code>step-up</code>) ve <code>deny</code> karar durumlarını döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L121-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 121-124</a></li>
+<li><strong>Politika kontrolleri</strong>: Risk puanlarını, ülke kısıtlarını, VPN/proxy işaretlerini ve ek doğrulama sırası gereksinimlerini değerlendirir.</li>
+<li><strong>Kayıt</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14</a> içinde tek örnekli hizmet olarak kaydedilir.</li>
+</ul>
+<h3 id="network-verification-ipcheckservice">Ağ doğrulama (IpCheckService)</h3>
+<p><code>IIpCheckService</code> / <code>IpCheckService</code>, istemci IP adreslerini bilinen VPN, veri merkezi ve konum veritabanlarıyla değerlendirerek risk telemetrisini değerlendirme hattına aktarır.</p>
+<ul>
+<li><strong>Kayıt</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L16-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 16</a> içinde tek örnekli hizmet olarak kaydedilir.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2.2-keystroke-session-and-risk-services-3.svg" alt="Yazım ritmi, oturum ve risk hizmetleri — diyagram 3" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Diyagram 3: Risk değerlendirme ve ağ doğrulama veri akışı</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Program.cs#L14-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Program.cs 14-16</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L119-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 119-124</a></p>

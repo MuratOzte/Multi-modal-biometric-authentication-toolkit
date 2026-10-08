@@ -1,0 +1,89 @@
+<h1 id="glossary">Sözlük</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu sayfa, SecureKit çok modlu biyometrik kimlik doğrulama araç setinin temel terimlerini tanımlar. Her kavramın teknik uygulamasını, veri akışını, yapılandırma parametrelerini ve mimari düzenini açıklayarak monorepodaki kod öğeleriyle doğrudan ilişkilendirir.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L1-L145" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 1-145</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L1-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 1-110</a></p>
+<hr>
+<h2 id="1-parity-stage-and-parity-harness">1. Eşdeğerlik aşaması ve eşdeğerlik düzeneği</h2>
+<p><strong>Eşdeğerlik aşamaları</strong> (<code>stage-one</code> ile <code>stage-seven</code>), eski Node/Express API’si (<code>packages/node-auth</code>) ile varsayılan ASP.NET Core 10 API’si (<code>apps/securekit-api</code>) arasında geçiş ve sözleşme doğrulaması için kullanılan aşamalı kilometre taşlarıdır. Eşdeğerlik düzeneği (<code>aspnet-parity.mjs</code> ve ilgili betikler), otomatik test verileriyle iki sunucunun HTTP sözleşmelerini sırayla karşılaştırır.</p>
+<ul>
+<li><strong>Veri akışı</strong>: Çalıştırıcı iki sunucu uç noktasına aynı HTTP verilerini gönderir; yanıt yapılarını, durumlarını ve başlıklarını <code>.run-logs/aspnet-parity.json</code> içine kaydeder.</li>
+<li><strong>Temel işlevler/sınıflar</strong>: <code>packages/node-auth/scripts/</code> içindeki eşdeğerlik çalıştırma betikleri ve <code>apps/securekit-api.tests</code> altındaki C# entegrasyon testleri.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/7-glossary-1.svg" alt="Sözlük — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L76-L102" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 76-102</a></p>
+<hr>
+<h2 id="2-biometric-manifest">2. Biyometrik manifest</h2>
+<p><strong>Manifest</strong>, biyometrik kabul testlerinin yüz, ses ve kart hatları için dosya yollarını, örnek üst verilerini ve doğrulama parametrelerini tanımladığı JSON yapılandırmasıdır (<code>manifest.json</code>). Ham kişisel bilgileri (PII) veya vektörleri Git deposuna açığa çıkarmaz.</p>
+<ul>
+<li><strong>Uygulama</strong>: Hazırlık betikleriyle (<code>scripts/biometric-acceptance-prepare.mjs</code>) yönetilir ve kabul motoruyla (<code>scripts/biometric-acceptance.mjs</code>) doğrulanır.</li>
+<li><strong>Veri akışı</strong>: Manifest, <code>.run-logs/acceptance/samples</code> altındaki dosya konumlarını belirtir. Çalıştırıcı örnekleri yükler, bağımsız geçici C# API’sini başlatır ve HTTP yanıtlarını tanımlı başarı ölçütleriyle doğrular.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/7-glossary-2.svg" alt="Sözlük — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-128</a></p>
+<hr>
+<h2 id="3-biometric-preflight">3. Biyometrik ön kontrol</h2>
+<p><strong>Ön kontrol</strong>, gerçek biyometrik kabul testlerinden önce yürütülen ortam doğrulama aşamasıdır (<code>scripts/biometric-preflight.mjs</code>, <code>.py</code>). Bağımlılıkları, CUDA erişimini, yürütülebilir dosya yollarını ve FFmpeg entegrasyonunu kontrol eder.</p>
+<ul>
+<li><strong>Uygulama</strong>: Model ağırlıklarını indirmeden veya ham kullanıcı görüntülerini ayrıştırmadan, FaceNet, Whisper, SpeechBrain ve PaddleOCR içe aktarmalarını doğrulama gibi bağımlılık kontrolleri yapar.</li>
+<li><strong>Temel dosyalar</strong>: <code>scripts/biometric-preflight.mjs</code>; çıktı günlüklerini <code>.run-logs/biometric-preflight.json</code> içine üretir.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L8-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 8-39</a></p>
+<hr>
+<h2 id="4-model-and-hardware-acceptance">4. Model ve donanım kabulü</h2>
+<p><strong>Model ve donanım kabulü</strong>; gerçek derin öğrenme modellerinin (MTCNN, FaceNet, Whisper, SpeechBrain, OpenCLIP, PaddleOCR) ve sistem hızlandırıcılarının (CPU, CUDA GPU’ları) gerçek çıkarım hatlarını çalıştırdığı doğrulama aşamasıdır.</p>
+<ul>
+<li><strong>Ayrım</strong>: JSON serileştirme ve yönlendirme sözleşmelerini doğrulayan protokol testlerinden (<code>apps/securekit-api.tests</code>) farklı olarak model kabulü; vektör benzerliğini, canlılık tespitini, OCR doğruluğunu ve donanım kapasitesini <code>FACE_DEVICE</code>, <code>VOICE_DEVICE</code> ve zaman aşımı kuralları altında değerlendirir.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md NaN-NaN</a></p>
+<hr>
+<h2 id="5-challenge-ttl-and-challenge-store">5. Doğrulama isteği TTL’i ve istek deposu</h2>
+<p><strong>Doğrulama isteği TTL’i</strong> (geçerlilik süresi) ve <strong>istek deposu</strong>; konuşma doğrulama ifadeleri veya kriptografik nonce değerleri gibi süreli, tek kullanımlık kimlik doğrulama isteklerini yönetir.</p>
+<ul>
+<li><strong>Uygulama</strong>: İstekler sunucuda üretilir, süre sonu (TTL) atanır, bellek veya oturum tabanlı depoda (<code>ChallengeStore</code>) saklanır ve doğrulama denemesinde ya da zaman aşımında hemen geçersiz kılınır.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md NaN-NaN</a></p>
+<hr>
+<h2 id="6-step-up-authentication-object-object">6. Ek kimlik doğrulama (<code>step_up</code>)</h2>
+<p><code>step_up</code>, temel çok faktörlü sinyaller yetersiz, belirsiz veya yüksek riskli olduğunda risk motorunun ürettiği ara kimlik doğrulama kararıdır.</p>
+<ul>
+<li><strong>Karar modeli</strong>: Risk motoru, birleşik sinyalleri (yazım ritmi, yüz eşleşme puanı, IP/ağ itibarı) değerlendirerek <code>allow</code>, <code>step_up</code> veya <code>deny</code> üretir. <code>step_up</code> sonucu, oturum yetkisi yükseltilmeden önce istemci SDK’sının ses veya kart gibi ek biyometrik doğrulama istemesini zorunlu kılar.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/7-glossary-3.svg" alt="Sözlük — diyagram 3" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 13-14</a></p>
+<hr>
+<h2 id="7-sliding-window-face-reference-management">7. Kayan pencere yüz referansı yönetimi</h2>
+<p><strong>Kayan pencere yüz yönetimi</strong>, geçmiş vektörlerin hareketli pencere mekanizmasıyla (<code>FACE_SLIDING_REFERENCES_ROOT</code>) dinamik güncellendiği veya döndürüldüğü yüz profili referans stratejisidir.</p>
+<ul>
+<li><strong>Uygulama</strong>: Tek sabit kayıt görüntüsüne dayanmak yerine sınırlı sayıda referans vektörü tutar; depolama büyümesini sınırlarken zaman içindeki görünüm, ışık ve açı değişikliklerine uyum sağlar.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L46-L47" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 46-47</a></p>
+<hr>
+<h2 id="8-exponential-moving-average-ema-keystroke-profile">8. Üstel hareketli ortalama (EMA) yazım ritmi profili</h2>
+<p><strong>EMA yazım ritmi profili</strong>, kullanıcının yazım temelini (<code>keydown</code> / <code>keyup</code> basılı tutma ve geçiş süreleri) doğrulama oturumları boyunca uyarlamak ve güncellemek için üstel hareketli ortalama algoritması kullanır.</p>
+<ul>
+<li><strong>Veri akışı</strong>: Her başarılı doğrulama, geçmiş profil ağırlıklarıyla gelen örnek ölçümlerini üstel ağırlıklandırmayla birleştirerek yazım özellik vektörünü günceller; sistemin doğal yazım değişimlerine zamanla uyumunu sağlar.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L9-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 9-10</a></p>
+<hr>
+<h2 id="9-reference-roots">9. Referans kökleri</h2>
+<p><strong>Referans kökleri</strong> (<code>Face__AllowedReferenceRoots__0</code>, <code>Card__AllowedReferenceRoots__0</code>), ASP.NET Core’da (<code>appsettings.json</code> veya ortam değişkenleri) yapılandırılan, API’nin biyometrik görüntüleri ve OCR şablonlarını okuyup yazabileceği yerleri sınırlayan izinli dizin listeleridir.</p>
+<ul>
+<li><strong>Güvenlik görevi</strong>: Kesin dosya sistemi sınırları uygular; istek verileri üzerinden dizin aşımı saldırılarıyla biyometrik depolama yollarının değiştirilmesini önler.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L57-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 57-59</a></p>
+<hr>
+<h2 id="10-worker-bridge">10. İşçi köprüsü</h2>
+<p><strong>İşçi köprüsü</strong>, C# doğrulama hizmetlerinin bağımsız Python işçilerini (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>) standart girdi/çıktı (stdin/stdout) CLI sözleşmeleri ve geçici dosya alışverişiyle çağırdığı süreçler arası iletişim katmanıdır.</p>
+<ul>
+<li><strong>Veri akışı</strong>: C# hizmetleri girdileri serileştirir veya geçici dosya yollarını özel Python betiklerine aktarır; kesin zaman aşımı (<code>VOICE_PYTHON_TIMEOUT_MS</code>, <code>CARD_PYTHON_TIMEOUT_MS</code>) uygular, süreç ağacını sonlandırır ve stdout’tan dönen JSON yanıtlarını ayrıştırır.</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/7-glossary-4.svg" alt="Sözlük — diyagram 4" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#LNaN-LNaN" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md NaN-NaN</a></p>

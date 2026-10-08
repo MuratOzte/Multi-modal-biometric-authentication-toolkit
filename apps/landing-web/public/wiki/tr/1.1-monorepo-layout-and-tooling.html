@@ -1,0 +1,83 @@
+<h1 id="monorepo-layout-and-tooling">Monorepo düzeni ve araçları</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu sayfa, SecureKit çok modlu biyometrik kimlik doğrulama monoreposunun yapısını, çalışma alanlarını ve betik araçlarını açıklar. <code>pnpm</code> çalışma alanı tanımları, kök <code>package.json</code> görev yönetimi, derleme/tür denetimi/test hatları ve fiziksel dizin düzeni (<code>apps/</code>, <code>packages/</code>, <code>python/</code> ve <code>scripts/</code>) ele alınır.</p>
+<hr>
+<h2 id="workspace-layout-and-directory-structure">Çalışma alanı ve dizin yapısı</h2>
+<p>SecureKit monoreposu <code>pnpm</code> çalışma alanlarıyla yönetilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a> Proje düzeni; sunucu API’lerini, arayüz/istemci SDK’larını, Python biyometrik mikroservislerini ve çalıştırma betiklerini ayırır.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Belge tablosu"><table><thead><tr><th>Dizin / çalışma alanı</th><th>Hedef / görev</th><th>Temel kaynaklar</th></tr></thead><tbody><tr><td><code>apps/securekit-api/</code></td><td>ASP.NET Core 10 sunucu API’si</td><td><code>SecureKit.slnx</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L19-L19" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 19</a></td></tr><tr><td><code>apps/demo-web/</code></td><td>React 19 demo ortamı (<code>demo-web</code>)</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 1-18</a></td></tr><tr><td><code>packages/node-auth/</code></td><td>Eski Express API’si ve eşdeğerlik test düzeneği (<code>@securekit/node-auth</code>)</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-18</a></td></tr><tr><td><code>packages/core/</code></td><td>Ortak biyometrik risk politikaları, sözleşmeler ve koordinatörler (<code>@securekit/core</code>)</td><td>Çalışma alanları tarafından kullanılır</td></tr><tr><td><code>packages/web-sdk/</code></td><td>İstemcide veri yakalama ve aktarım için tarayıcı SDK’sı (<code>@securekit/web-sdk</code>)</td><td>Çalışma alanları tarafından kullanılır</td></tr><tr><td><code>python/</code></td><td>Python biyometrik doğrulama hatları (yüz, ses, kart, IP)</td><td>Süreç köprüleri üzerinden çağrılır</td></tr><tr><td><code>scripts/</code></td><td>Monorepo çalıştırma, ön kontrol, kabul ve eşdeğerlik betikleri</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L10-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 10-21</a></td></tr></tbody></table></div>
+<h3 id="diagram-workspace-layout-to-code-entities">Diyagram: Çalışma alanı düzeni ve kod öğeleri</h3>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/1.1-monorepo-layout-and-tooling-1.svg" alt="Monorepo düzeni ve araçları — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>*Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 1-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> *</p>
+<hr>
+<h2 id="root-tooling-and-object-object-configuration">Kök araçlar ve <code>package.json</code> yapılandırması</h2>
+<p>Kök <code>package.json</code>, Node <code>&gt;=22.12.0</code> ve <code>pnpm@9.15.9</code> kullanımını zorunlu kılan sürüm ve paket yöneticisi gereksinimlerini belirtir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L32-L35" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 32-35</a> Çalışma alanı kalıpları, <code>packages/*</code> ve <code>apps/*</code> altındaki tüm alt dizinleri kapsar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L4-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 4-7</a></p>
+<h3 id="root-script-definitions">Kök betik tanımları</h3>
+<p>Kök betikler temel geliştirme, derleme ve doğrulama yaşam döngülerini yürütür:</p>
+<ul>
+<li><strong>Derleme</strong>: <code>&quot;pnpm -r build&quot;</code> tüm paketleri özyinelemeli olarak derler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 9</a></li>
+<li><strong>Geliştirme</strong>: <code>&quot;node scripts/dev.mjs&quot;</code> ve <code>&quot;node scripts/dev.mjs node&quot;</code> yerel süreçlerin çalıştırılmasını yönetir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L10-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 10-11</a></li>
+<li><strong>Tür denetimi</strong>: <code>&quot;pnpm -r --if-present typecheck&quot;</code> çalışma alanlarındaki TypeScript türlerini değerlendirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 13</a></li>
+<li><strong>Test</strong>: Çalışma alanı test filtreleri, <code>@securekit/node-auth</code> ve <code>@securekit/web-sdk</code> gibi belirli doğrulama modüllerini hedefler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L14-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 14</a></li>
+<li><strong>Eşdeğerlik ve kabul</strong>: Entegrasyon testleri .NET çözümünü (<code>SecureKit.slnx</code>) derler ve <code>scripts/aspnet-parity.mjs</code> gibi Node tabanlı çalıştırıcıları yürütür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L19-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 19-21</a></li>
+</ul>
+<hr>
+<h2 id="build-parity-and-test-pipelines">Derleme, eşdeğerlik ve test hatları</h2>
+<p>Test ve eşdeğerlik araçları, Node.js çalıştırma betikleriyle .NET ve Python yürütülebilir dosyalarını birleştirir. Örneğin <code>scripts/aspnet-parity.mjs</code>, eski Node/Express API’si ile yeni ASP.NET Core sunucusu arasında aşamalı eşdeğerlik doğrulamasını sistematik olarak gerçekleştirir.</p>
+<p>Eşdeğerlik betiği, <code>one</code> ile <code>seven</code> arasındaki her aşama betiğini <code>tsx</code> ile başlatır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L11-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 11-14</a> Çıktı günlüklerini toplar <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L17-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 17-22</a>, karşılaştırma özetlerini çıkarır <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L24-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 24</a> ve yapılandırılmış JSON raporlarını <code>.run-logs/aspnet-parity.json</code> dizinine kaydeder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L7-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 7</a></p>
+<h3 id="diagram-parity-test-pipeline-architecture">Diyagram: Eşdeğerlik test hattı mimarisi</h3>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/1.1-monorepo-layout-and-tooling-2.svg" alt="Monorepo düzeni ve araçları — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/package.json#L20-L20" target="_blank" rel="noopener noreferrer" class="wiki-source">package.json 20</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/aspnet-parity.mjs#L1-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/aspnet-parity.mjs 1-38</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L11-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 11-17</a></em></p>

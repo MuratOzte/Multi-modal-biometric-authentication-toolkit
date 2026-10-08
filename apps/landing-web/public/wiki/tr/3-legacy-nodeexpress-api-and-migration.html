@@ -1,0 +1,30 @@
+<h1 id="legacy-nodeexpress-api-and-migration">Eski Node/Express API ve geçiş</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json</a></li>
+</ul>
+</details>
+<p>Bu sayfa; eski Node/Express API’sini (<code>packages/node-auth</code>), mimarisini ve sistem sorumluluklarını ASP.NET Core 10 sunucusuna (<code>apps/securekit-api</code>) aktarmak için tasarlanan geçiş stratejisini ve eşdeğerlik doğrulama takımlarını özetler.</p>
+<p>Teknik ayrıntılar için aşağıdaki alt sayfalara bakın.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3-legacy-nodeexpress-api-and-migration-1.svg" alt="Eski Node/Express API ve geçiş — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Diyagram 1: Eski Node/Express API’sinin kod öğeleri</em></p>
+<p>Kaynaklar: <code>packages/node-auth/package.json:1-18</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:1-46</code></p>
+<hr>
+<h2 id="node-auth-routes-and-services">node-auth rotaları ve hizmetleri</h2>
+<p>Eski sunucu, <code>packages/node-auth/src/server.ts</code> içinde başlatılan bir Express uygulamasına dayanır. Çok modlu doğrulama akışlarını yönetmek için farklı öneklerde modüler yönlendiriciler bağlar: kimlik doğrulama (<code>auth.ts</code>), dinamik/sabit metin doğrulama istekleri (<code>challenge.ts</code>), kullanıcı rızası (<code>consent.ts</code>), biyometrik profil üst verileri (<code>profiles.ts</code>) ve yüz, ses, yazım ritmi, kart, ağ/oturum değerlendirme uç noktaları.</p>
+<p>Ayrıntılar için <a href="#/wiki/3.1-node-auth-routes-and-services">node-auth rotaları ve hizmetleri</a> sayfasına bakın.</p>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md:30-84</code>, <code>packages/node-auth/package.json:1-37</code></p>
+<hr>
+<h2 id="migration-plan-to-aspnet-core-10">ASP.NET Core 10’a geçiş planı</h2>
+<p>Node/Express uygulamasından geçiş, her uç noktanın <code>apps/securekit-api</code> içine taşınmasını gerektirir. Strateji; yanıt şeması sözleşmelerini, hata zarfı biçimini (<code>VALIDATION_ERROR</code>, <code>UNAUTHORIZED</code>, <code>INTERNAL_ERROR</code>) ve kimlik normalleştirme kurallarını (gereken yerlerde kullanıcı kimliklerinin kırpılması ve küçük harfe çevrilmesi) koruyarak <code>@securekit/web-sdk</code> ve React demosuyla sorunsuz uyum sağlar.</p>
+<p>Ayrıntılar için <a href="#/wiki/3.2-migration-plan-to-asp.net-core-10">ASP.NET Core 10’a geçiş planı</a> sayfasına bakın.</p>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md:1-29</code></p>
+<hr>
+<h2 id="cutover-and-parity-testing">Geçiş ve eşdeğerlik testleri</h2>
+<p>Geçişte gerileme olmamasını sağlamak için kapsamlı eşdeğerlik düzeneği, eski Node uygulaması ile ASP.NET Core sunucusu arasında otomatik fark kontrolleri yürütür. Test çerçevesi, paket yapılandırmalarında tanımlı aşamalı betiklere (<code>test:aspnet-stage1</code> ile <code>test:aspnet-stage7</code>) dayanır ve ortak test verileriyle uçtan uca yanıt karşılaştırmaları yapar.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3-legacy-nodeexpress-api-and-migration-2.svg" alt="Eski Node/Express API ve geçiş — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Diyagram 2: Eşdeğerlik testlerinin yürütme hattı</em></p>
+<p>Ayrıntılar için <a href="#/wiki/3.3-cutover-and-parity-testing">Geçiş ve eşdeğerlik testleri</a> sayfasına bakın.</p>
+<p>Kaynaklar: <code>packages/node-auth/package.json:6-18</code></p>

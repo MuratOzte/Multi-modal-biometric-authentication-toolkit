@@ -1,0 +1,56 @@
+<h1 id="ip-check-and-environment-setup">IP kontrolü ve ortam kurulumu</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu sayfa; SecureKit Python biyometrik ve istihbarat işçileri için ortam kurulumunu, bağımlılık yönetimini, sanal ortamları (<code>.venv-face</code>, <code>.venv-voice</code>, <code>.venv-card</code>), GPU/CUDA yapılandırmasını, FFmpeg entegrasyonunu ve ağ/IP kontrol altyapısını (VPNAPI sinyalleri ve <code>ip_check.py</code> dahil) açıklar. Sistem ön kontrollerinin bu bağımlılıkları yürütmeden önce nasıl doğruladığını gösterir.</p>
+<hr>
+<h2 id="1-python-virtual-environments-and-dependency-isolation">1. Python sanal ortamları ve bağımlılık izolasyonu</h2>
+<p>SecureKit, Python bağımlılıklarını biyometrik türe göre ayrı sanal ortamlara (<code>.venv-face</code>, <code>.venv-voice</code>, <code>.venv-card</code>) ayırır. Bu izolasyon, PyTorch’un PaddleOCR ile birlikte içe aktarılması gibi durumlarda kütüphane sürüm çatışmalarını ve Windows DLL çakışmalarını önler.</p>
+<p>Ön kontrol modül doğrulayıcısı, her tür için açık bağımlılık gereksinimleri tanımlar:</p>
+<ul>
+<li><strong>Yüz</strong>: <code>numpy</code>, <code>PIL</code>, <code>torch</code>, <code>torchvision</code>, <code>facenet_pytorch</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-9</a></li>
+<li><strong>Ses</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
+<li><strong>Kart</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
+</ul>
+
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-14</a></p>
+<hr>
+<h2 id="2-preflight-probing-architecture">2. Ön kontrol mimarisi</h2>
+<p>Ön kontrol çalıştırıcısı <code>scripts/biometric-preflight.mjs</code>, <code>scripts/biometric-preflight.py</code> yürüten bağımsız Python alt süreçlerini başlatarak ortam denetimini koordine eder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-37</a></p>
+<h3 id="probing-data-flow">Denetim veri akışı</h3>
+<ol>
+<li><strong>Node başlatıcısı</strong>: <code>biometric-preflight.mjs</code>; ortam değişkenlerini (<code>*_PYTHON_BIN</code>), yerel <code>.venv-*</code> yollarını ve sistem <code>python3</code> veya <code>py</code> başlatıcılarını kontrol eder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L40-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 40-48</a></li>
+<li><strong>Alt süreç başlatma</strong>: <code>python scripts/biometric-preflight.py &lt;module&gt;</code>, ayrı standart akışlar ve 45 saniyelik güvenlik zaman aşımıyla başlatılır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L20" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-20</a></li>
+<li><strong>İçe aktarma güvenliği</strong>: <code>biometric-preflight.py</code>, yerel yapılandırma yollarının sızmasını veya yönetilmeyen yan etkileri önlemek için <code>importlib.import_module()</code> çağrıları sırasında stdout/stderr çıktısını toplar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 21-25</a></li>
+<li><strong>Rapor üretimi</strong>: Sonuçlar JSON çıktısından ayrıştırılır ve <code>.run-logs/biometric-preflight.json</code> içine yazılır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L30-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 30-58</a></li>
+</ol>
+
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L12-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 12-37</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L15-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 15-26</a></p>
+<hr>
+<h2 id="3-hardware-requirements-gpucuda-and-ffmpeg">3. Donanım gereksinimleri: GPU/CUDA ve FFmpeg</h2>
+<h3 id="gpu-and-cuda-validation">GPU ve CUDA doğrulaması</h3>
+<p>Yüz ve ses türleri için <code>biometric-preflight.py</code>, PyTorch CUDA kullanılabilirliğini (<code>torch.cuda.is_available()</code>) inceler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L27-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 27-33</a></p>
+<ul>
+<li><code>FACE_DEVICE</code>, <code>FACE_REQUIRE_GPU</code> veya <code>Face__RequireGpu</code> gibi parametreler GPU hızlandırmasının zorunlu olup olmadığını belirler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L30-L31" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 30-31</a></li>
+<li><code>REQUIRE_GPU</code> etkinse ve CUDA yoksa ön kontroller başarısız olur.</li>
+</ul>
+<h3 id="ffmpeg-requirements">FFmpeg gereksinimleri</h3>
+<p>Ses doğrulama, FFmpeg ile ses ön işlemeye dayanır. Ön kontrol, <code>shutil.which(&quot;ffmpeg&quot;)</code> ile FFmpeg erişimini doğrular; bulunamazsa <code>imageio_ffmpeg</code> tarafından sağlanan dosyalara otomatik geçer. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L34-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 34-44</a></p>
+
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L27-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 27-44</a></p>
+<hr>
+<h2 id="4-ip-check-and-vpnapi-signals">4. IP kontrolü ve VPNAPI sinyalleri</h2>
+<p>Ağ doğrulama ve IP istihbarat modülleri (<code>ip_check.py</code>), kimlik doğrulama oturumlarında dolandırıcılık riskini değerlendirmek için istemci bağlantı üst verilerini inceler.</p>
+<h3 id="key-signal-categories">Temel sinyal kategorileri</h3>
+<ul>
+<li><strong>VPN / proxy tespiti</strong>: Ticari VPN çıkışlarını, veri merkezlerini ve anonim proxy aralıklarını işaretlemek için VPNAPI gibi IP istihbarat sağlayıcılarını sorgular.</li>
+<li><strong>Konum riski</strong>: İstemci IP’sinin coğrafi kaynağını beklenen kullanıcı profilleri veya oturum sınırlarıyla doğrular.</li>
+<li><strong>Tehdit puanlaması</strong>: <code>SessionRiskEvaluator</code> içine dahil edilen toplam risk puanlarını hesaplar.</li>
+</ul>
+
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L1-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 1-49</a></p>

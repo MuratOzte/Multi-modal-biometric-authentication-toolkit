@@ -1,0 +1,59 @@
+<h1 id="node-auth-routes-and-services">node-auth rotaları ve hizmetleri</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json</a></li>
+</ul>
+</details>
+<p><code>packages/node-auth</code> paketi, SecureKit araç setinin eski Node.js/Express API sunucusunu sağlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/packages/node-auth/package.json#L1-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">packages/node-auth/package.json 1-37</a> ASP.NET Core’a tam geçişten önce çok modlu biyometrik doğrulama rotalarını, doğrulama isteği üretimini, oturum yaşam döngüsünü ve profil depolamasını sunar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 1-6</a> Bu sayfa; sunucu başlangıcını, Express yönlendiricilerini, depolama modüllerini ve istek/yanıt sözleşmelerini açıklar.</p>
+<hr>
+<h2 id="server-bootstrap-and-middleware-setup-object-object">Sunucu başlangıcı ve ara katman kurulumu (<code>server.ts</code>)</h2>
+<p>Express uygulaması <code>packages/node-auth/src/server.ts</code> içinde başlatılır (<code>docs/NODE_API_CONTRACT_INVENTORY.md</code> üzerinden referans verilir). Genel ara katmanları, hata yönetimini ve gövde ayrıştırma sınırlarını yapılandırır; tüm özellik yönlendiricilerini standart temel yollara bağlar.</p>
+<h3 id="key-configuration-parameters">Temel yapılandırma parametreleri</h3>
+<ul>
+<li><strong>Temel URL / port</strong>: Genellikle <code>http://localhost:3001</code> adresinde sunulur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 10</a></li>
+<li><strong>CORS</strong>: <code>cors()</code> ile genel olarak etkinleştirilir; kimlik bilgileri açığa çıkarılmadan tüm kaynaklara izin verilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 13</a></li>
+<li><strong>Veri sınırları</strong>: JSON gövde ayrıştırıcısı <code>2mb</code> boyutuyla sınırlıdır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 13-14</a></li>
+<li><strong>Hata zarfı</strong>: Ayrıştırıcı dışındaki rota hataları, <code>{&quot;error&quot;:{&quot;code&quot;:&quot;...&quot;,&quot;message&quot;:&quot;...&quot;,&quot;details&quot;:{}}}</code> yapısına uygun JSON döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L14-L16" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 14-16</a></li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3.1-node-auth-routes-and-services-1.svg" alt="node-auth rotaları ve hizmetleri — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 1: Kavramlardan kod öğelerine — ara katman ve yönlendirici dağıtım hattı.</em></p>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>, <code>packages/node-auth/package.json</code></p>
+<hr>
+<h2 id="express-routers-and-endpoint-contracts">Express yönlendiricileri ve uç nokta sözleşmeleri</h2>
+<p>API, <code>packages/node-auth/src/routes/</code> altındaki özel Express yönlendiricilerine ayrılmıştır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L31-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 31-33</a></p>
+<h3 id="1-health-and-authentication-object-object-object-object">1. Sağlık ve kimlik doğrulama (<code>auth.ts</code>, <code>legacyVerification.ts</code>)</h3>
+<ul>
+<li><code>GET /health</code>: Uygulamanın sağlık durumunu döndürür. <code>200 {&quot;ok&quot;:true}</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L37-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 37</a></li>
+<li><code>GET /auth/users</code>: Kayıtlı kullanıcıları oluşturulma ve güncelleme zamanlarıyla listeler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L38-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 38</a></li>
+<li><code>POST /auth/register</code>: <code>userId</code> ve <code>password</code> ile yeni kullanıcı kaydeder. Oluşturulduğunda <code>201</code>, aynı parametreler mevcutsa <code>200</code> döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L39-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 39</a></li>
+<li><code>POST /auth/login</code>: Kimlik bilgilerini doğrular; başarıda <code>200</code>, uyumsuzlukta <code>401 INVALID_CREDENTIALS</code> döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L40-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 40</a></li>
+</ul>
+<h3 id="2-challenges-object-object">2. Doğrulama istekleri (<code>challenge.ts</code>)</h3>
+<ul>
+<li><code>POST /challenge/text</code>: Yapılandırılabilir dil (<code>lang</code>), uzunluk (<code>length</code>) ve <code>wordCount</code> ile metin doğrulama istekleri üretir; varsayılanlar Türkçe, kısa uzunluk ve 120 saniyelik TTL’dir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L41-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 41-48</a></li>
+<li><code>POST /challenge/text/consume</code>: Doğrulama isteği kimliğinin tek kullanımlık token’ını tüketir; geçersiz, süresi dolmuş veya kullanılmışsa <code>404</code>, <code>410</code>, <code>409</code> hatalarını döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L42-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 42-48</a></li>
+</ul>
+<h3 id="3-consent-and-profiles-object-object-object-object">3. Rıza ve profiller (<code>consent.ts</code>, <code>profiles.ts</code>)</h3>
+<ul>
+<li><code>POST /consent</code>: Kullanıcı rıza sürümlerini ve zamanlarını kaydeder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L43-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 43</a></li>
+<li><code>GET /user/:userId/profiles</code>: Kullanıcının saklanmış biyometrik profil referanslarını (yazım ritmi, yüz, kart, ses) getirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L44-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 44</a></li>
+<li><code>DELETE /user/biometrics</code>: Biyometrik profilleri siler; <code>?deleteConsent=true</code> verilirse rıza kayıtlarını da temizler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L45-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 45-50</a></li>
+</ul>
+<h3 id="4-sessions-and-risk-evaluation-object-object-object-object">4. Oturumlar ve risk değerlendirme (<code>session.ts</code>, <code>session/inMemoryStore.ts</code>)</h3>
+<ul>
+<li><code>POST /session/start</code>: Varsayılan 900 saniyelik TTL ile oturum başlatır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L66-L69" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 66-69</a></li>
+<li><code>POST /verify/session</code>: Risk puanlarını, politika uyumunu ve sinyal birleşimlerini (konum, ağ, ses, yazım ritmi) değerlendirir; <code>requiredSteps</code> ile birlikte <code>allow</code>, <code>step-up</code> veya <code>deny</code> kararı üretir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L67-L75" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 67-75</a></li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3.1-node-auth-routes-and-services-2.svg" alt="node-auth rotaları ve hizmetleri — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 2: Kavramlardan kod öğelerine — oturum doğrulama ve risk değerlendirme akışı.</em></p>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code></p>
+<hr>
+<h2 id="storage-modules-and-data-layer">Depolama modülleri ve veri katmanı</h2>
+<p><code>node-auth</code> paketi; kullanıcı kayıtlarını, etkin doğrulama isteklerini ve doğrulama oturumlarını yönetmek için hafif bellek ve dosya tabanlı depolama araçları kullanır.</p>
+<ul>
+<li><strong>Normalleştirme kuralları</strong>: Kullanıcı kimlikleri, kimlik doğrulama ve kart yönlendiricilerinde <code>.trim().toLowerCase()</code>; ikincil yönlendiricilerde standart <code>.trim()</code> ile işlenir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L25-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 25-26</a></li>
+<li><strong>Durum depoları</strong>: Oturum zaman aşımı ve doğrulama isteği tüketim bayrakları gibi geçici durumlar, geliştirme ve testte hızlı doğrulama için <code>inMemoryStore.ts</code> modülleriyle tutulur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1#L61-L62" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md 61-62</a></li>
+</ul>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md</code>, <code>packages/node-auth/package.json</code></p>

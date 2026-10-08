@@ -1,0 +1,53 @@
+<h1 id="verification-services">Doğrulama hizmetleri</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardResult.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardResult.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardVerification.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardVerification.cs</a></li>
+</ul>
+</details>
+<p><code>apps/securekit-api</code> içindeki hizmet katmanı; çok modlu biyometrik kimlik doğrulamayı, risk değerlendirmesini, oturum takibini ve ağ incelemelerini koordine eder. HTTP denetleyicileri ile dosya tabanlı depolama, ağ denetleyicileri ve bağımsız Python işçi betikleri arasında iş mantığı katmanı olarak çalışır.</p>
+<p>Alt sistemlerin ayrıntıları için ilgili alt sayfalara bakın:</p>
+<ul>
+<li><a href="#/wiki/2.2.1-python-process-bridge">Python süreç köprüsü</a> — C# hizmetlerinin Python işçilerini (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>) başlatması ve yönetmesi.</li>
+<li><a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Yazım ritmi, oturum ve risk hizmetleri</a> — Dinamik ve sabit yazım ritmi ayrıştırma, EMA profilleme, oturum depoları ve <code>SessionRiskEvaluator</code> ayrıntıları.</li>
+</ul>
+<hr>
+<h2 id="1-service-layer-architecture-and-responsibilities">1. Hizmet katmanının mimarisi ve sorumlulukları</h2>
+<p>Doğrulama hizmet katmanı, biyometrik doğrulama hatlarını, güvenlik değerlendirmelerini ve kalıcı durum depolamasını ayırır. C# hizmet sınıfları, kararlar HTTP uç noktalarına dönmeden önce gereken doğrulama kurallarını, girdi ön işlemesini ve yanıt normalleştirmesini kapsar.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2-verification-services-1.svg" alt="Doğrulama hizmetleri — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 1: Hizmet katmanı öğeleri ve sorumlulukları.</em></p>
+<ul>
+<li><code>CardVerification</code>: Kart görüntüsü yüklemelerini ve referans dizini taramalarını koordine eder; görsel/OCR karşılaştırmalarını Python süreç köprüsüne aktarır. <code>ICardPython</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardVerification.cs#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardVerification.cs 8-10</a></li>
+<li><code>CardResult</code>: Kart doğrulama Python sürecinin ham JSON çıktısını normalleştirir ve doğrular; eksik bağımlılıkları ve şema doğrulamasını yönetir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardResult.cs#L8-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardResult.cs 8-38</a></li>
+<li>Yüz, ses ve yazım ritmi hizmetleri: Özel Python işçileri veya dahili matematiksel profilleme yoluyla biyometrik kayıt, şablon güncelleme ve özellik çıkarımı gerçekleştirir.</li>
+</ul>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Services/CardVerification.cs</code></li>
+<li><code>apps/securekit-api/Services/CardResult.cs</code></li>
+</ul>
+<hr>
+<h2 id="2-python-process-bridge-integration">2. Python süreç köprüsü entegrasyonu</h2>
+<p>PaddleOCR/OpenCLIP (kart), MTCNN/FaceNet (yüz) ve Whisper/SpeechBrain (ses) gibi biyometrik hatlar bağımsız Python ortamlarında çalışır. ASP.NET Core hizmet katmanı bu işçilerle özel köprü soyutlamaları üzerinden iletişim kurar.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2-verification-services-2.svg" alt="Doğrulama hizmetleri — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Akış 2: Doğrulama çağrısı ve normalleştirme akışı.</em></p>
+<p>Süreç başlatma, CLI sözleşmeleri, zaman aşımı yönetimi, süreç ağacı sonlandırma ve geçici dosya izolasyonu için <a href="#/wiki/2.2.1-python-process-bridge">Python süreç köprüsü</a> sayfasına bakın.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Services/CardVerification.cs</code></li>
+<li><code>apps/securekit-api/Services/CardResult.cs</code></li>
+</ul>
+<hr>
+<h2 id="3-keystroke-risk-and-session-management">3. Yazım ritmi, risk ve oturum yönetimi</h2>
+<p>Araç seti, biyometrik eşleştirmenin yanında kimlik doğrulama isteklerini davranışsal dinamikler ve risk puanlama modelleriyle değerlendirir.</p>
+<ul>
+<li><strong>Yazım ritmi biyometrisi</strong>: Dinamik yazım istekleri ve sabit metin parolaları için zaman ölçümlerini (basılı tutma ve geçiş süreleri) analiz eder. Profiller üstel hareketli ortalamalarla (EMA) dinamik güncellenir.</li>
+<li><strong>Oturum riski değerlendirmesi</strong>: <code>SessionRiskEvaluator</code>; son doğrulama denemelerini, anormallik tespitini, doğrulama isteği durumunu ve IP/ağ kontrolünü (<code>NetworkVerification</code>) birleştirerek <code>allow</code>, <code>step_up</code> veya <code>deny</code> kararı üreten toplam risk puanını hesaplar.</li>
+<li><strong>Durum depoları</strong>: Geçici doğrulama istekleri ve etkin kullanıcı oturumları bellek veya dosya tabanlı depolarla (<code>ChallengeStore</code>, <code>SessionStore</code>) yönetilir.</li>
+</ul>
+<p>Yazım ritmi özellik çıkarımı, profil depolama ve risk puanlama mantığı için <a href="#/wiki/2.2.2-keystroke-session-and-risk-services">Yazım ritmi, oturum ve risk hizmetleri</a> sayfasına bakın.</p>
+<p>Kaynaklar:</p>
+<ul>
+<li><code>apps/securekit-api/Services/CardVerification.cs</code></li>
+</ul>

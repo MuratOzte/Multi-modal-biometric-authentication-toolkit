@@ -78,7 +78,7 @@ export default function SiteRouter() {
         </div>
       }
     >
-      <Wiki hash={hash} />
+      <Wiki hash={hash} locale={locale} />
     </Suspense>
   ) : (
     <App locale={locale} />

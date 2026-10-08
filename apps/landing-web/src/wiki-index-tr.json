@@ -1,0 +1,1313 @@
+{
+  "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit",
+  "indexedAt": "2026-10-07",
+  "sourceCommit": "7b9cbda5",
+  "pages": [
+    {
+      "slug": "1-overview",
+      "title": "Genel bakış",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1-overview",
+      "number": "1",
+      "headings": [
+        {
+          "id": "overview",
+          "title": "Genel bakış",
+          "level": 1
+        },
+        {
+          "id": "11-monorepo-layout-and-tooling",
+          "title": "1.1. Monorepo düzeni ve araçları",
+          "level": 2
+        },
+        {
+          "id": "12-getting-started-and-local-development",
+          "title": "1.2. Başlangıç ve yerel geliştirme",
+          "level": 2
+        },
+        {
+          "id": "13-authentication-decision-model",
+          "title": "1.3. Kimlik doğrulama karar modeli",
+          "level": 2
+        }
+      ],
+      "searchText": "Genel bakış İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md README.md package.json scripts/aspnet-parity.mjs SecureKit; yazım ritmi, yüz doğrulama, ses benzerliği, kimlik kartı tanıma, ağ telemetrisi ve IP bağlamını ortak bir doğrulama hattında birleştiren çok modlu biyometrik kimlik doğrulama araç setinin monoreposudur. README.md 1-16 Mimari; ASP.NET Core 10 API sunucusunu (apps/securekit-api), eski Node.js/Express API’sini (packages/node-auth), TypeScript web SDK’sını (packages/web-sdk), React ve Vite demo ortamını (apps/demo-web) ve bağımsız Python işçi hatlarını (python/) birlikte çalıştırır. README.md 17-31 Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 1-31 package.json 1-7 Alt sistemlerin ayrıntılı belgeleri için aşağıdaki alt sayfalara bakın: Monorepo düzeni ve araçları Başlangıç ve yerel geliştirme Kimlik doğrulama karar modeli 1.1. Monorepo düzeni ve araçları Depo; ortak paketleri, sunucu uygulamalarını, bağımsız Python işçi modüllerini ve otomasyon betiklerini içeren bir pnpm çalışma alanı olarak düzenlenmiştir. package.json 1-7 package.json içinde tanımlanan kök betikler paralel derlemeleri, tür denetimini, test takımlarını, biyometrik ön kontrolleri ve ASP.NET Core eşdeğerlik doğrulamasını yönetir. package.json 8-22 Çalışma alanı, istemci SDK’sı, sunucu hizmetleri ve makine öğrenmesi işçileri arasında açık sınırlar sağlamak için derleme hedeflerini ve bağımlılıkları ayırır. Mimari, derleme komutları ve dizin düzeni için Monorepo düzeni ve araçları sayfasına bakın. Kaynaklar: package.json 1-36 README.md 17-31 1.2. Başlangıç ve yerel geliştirme Yerel çalıştırma; ortam yapılandırmasını, proxy hedeflerini ve süreçlerin eşzamanlı yürütülmesini yöneten scripts/dev.mjs üzerinden yapılır. package.json 10 Geliştiriciler, varsayılan ASP.NET Core sunucusu için pnpm dev, eski Express sunucusu için pnpm dev:node komutuyla geliştirme ortamını başlatabilir. package.json 10-11 Hizmetler sabit yerel portlarda çalışır: ASP.NET Core API 3002, eski Node API 3001, Vite React demosu 5173 portunu kullanır. README.md 51-58 MOCK_IP_CHECK, VPNAPI_KEY ve çeşitli PYTHON_BIN yolları gibi ortam değişkenleri yerel entegrasyonu belirler. README.md 75-89 Ortam kurulumu, port yapılandırması ve betiklerin çalıştırılması için Başlangıç ve yerel geliştirme sayfasına bakın. Kaynaklar: README.md 32-91 package.json 8-12 1.3. Kimlik doğrulama karar modeli SecureKit; yazım ritmi, yüz vektörleri, ses doğrulama, kimlik kartı verileri ve ağ/IP itibarı gibi birden fazla asenkron biyometrik ve bağlamsal sinyali merkezi risk değerlendirme motorunda (packages/core) birleştirir. README.md 7-15 Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 7-15 Karar modeli risk puanlama politikalarını uygulayarak üç sonuçtan birini üretir: allow, step_up veya deny. README.md 14 Oturumlar; doğrulama isteğinin geçerlilik süresi, rıza doğrulaması ve sürekli risk takibiyle yönetilir. MIGRATION_TO_ASPNET10_PLAN.md 72-166 Sinyal işleme, eşik kuralları ve oturum yaşam döngüsü için Kimlik doğrulama karar modeli sayfasına bakın. Kaynaklar: README.md 7-15 MIGRATION_TO_ASPNET10_PLAN.md 72-166",
+      "diagrams": [
+        "1-overview-1.svg",
+        "1-overview-2.svg"
+      ],
+      "words": 374
+    },
+    {
+      "slug": "1.1-monorepo-layout-and-tooling",
+      "title": "Monorepo düzeni ve araçları",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.1-monorepo-layout-and-tooling",
+      "number": "1.1",
+      "headings": [
+        {
+          "id": "monorepo-layout-and-tooling",
+          "title": "Monorepo düzeni ve araçları",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "workspace-layout-and-directory-structure",
+          "title": "Çalışma alanı ve dizin yapısı",
+          "level": 2
+        },
+        {
+          "id": "diagram-workspace-layout-to-code-entities",
+          "title": "Diyagram: Çalışma alanı düzeni ve kod öğeleri",
+          "level": 3
+        },
+        {
+          "id": "root-tooling-and-object-object-configuration",
+          "title": "Kök araçlar ve package.json yapılandırması",
+          "level": 2
+        },
+        {
+          "id": "root-script-definitions",
+          "title": "Kök betik tanımları",
+          "level": 3
+        },
+        {
+          "id": "build-parity-and-test-pipelines",
+          "title": "Derleme, eşdeğerlik ve test hatları",
+          "level": 2
+        },
+        {
+          "id": "diagram-parity-test-pipeline-architecture",
+          "title": "Diyagram: Eşdeğerlik test hattı mimarisi",
+          "level": 3
+        }
+      ],
+      "searchText": "Monorepo düzeni ve araçları İlgili kaynak dosyaları apps/demo-web/package.json package.json packages/node-auth/package.json scripts/aspnet-parity.mjs Amaç ve kapsam Bu sayfa, SecureKit çok modlu biyometrik kimlik doğrulama monoreposunun yapısını, çalışma alanlarını ve betik araçlarını açıklar. pnpm çalışma alanı tanımları, kök package.json görev yönetimi, derleme/tür denetimi/test hatları ve fiziksel dizin düzeni (apps/, packages/, python/ ve scripts/) ele alınır. Çalışma alanı ve dizin yapısı SecureKit monoreposu pnpm çalışma alanlarıyla yönetilir. package.json 4-7 Proje düzeni; sunucu API’lerini, arayüz/istemci SDK’larını, Python biyometrik mikroservislerini ve çalıştırma betiklerini ayırır. Dizin / çalışma alanıHedef / görevTemel kaynaklarapps/securekit-api/ASP.NET Core 10 sunucu API’siSecureKit.slnx package.json 19apps/demo-web/React 19 demo ortamı (demo-web)apps/demo-web/package.json 1-18packages/node-auth/Eski Express API’si ve eşdeğerlik test düzeneği (@securekit/node-auth)packages/node-auth/package.json 1-18packages/core/Ortak biyometrik risk politikaları, sözleşmeler ve koordinatörler (@securekit/core)Çalışma alanları tarafından kullanılırpackages/web-sdk/İstemcide veri yakalama ve aktarım için tarayıcı SDK’sı (@securekit/web-sdk)Çalışma alanları tarafından kullanılırpython/Python biyometrik doğrulama hatları (yüz, ses, kart, IP)Süreç köprüleri üzerinden çağrılırscripts/Monorepo çalıştırma, ön kontrol, kabul ve eşdeğerlik betikleripackage.json 10-21 Diyagram: Çalışma alanı düzeni ve kod öğeleri Diyagramı büyütmek için seçin ↗ *Kaynaklar: package.json 4-7 apps/demo-web/package.json 1-18 packages/node-auth/package.json 1-18 scripts/aspnet-parity.mjs 1-38 * Kök araçlar ve package.json yapılandırması Kök package.json, Node >=22.12.0 ve pnpm@9.15.9 kullanımını zorunlu kılan sürüm ve paket yöneticisi gereksinimlerini belirtir. package.json 32-35 Çalışma alanı kalıpları, packages/* ve apps/* altındaki tüm alt dizinleri kapsar. package.json 4-7 Kök betik tanımları Kök betikler temel geliştirme, derleme ve doğrulama yaşam döngülerini yürütür: Derleme: \"pnpm -r build\" tüm paketleri özyinelemeli olarak derler. package.json 9 Geliştirme: \"node scripts/dev.mjs\" ve \"node scripts/dev.mjs node\" yerel süreçlerin çalıştırılmasını yönetir. package.json 10-11 Tür denetimi: \"pnpm -r --if-present typecheck\" çalışma alanlarındaki TypeScript türlerini değerlendirir. package.json 13 Test: Çalışma alanı test filtreleri, @securekit/node-auth ve @securekit/web-sdk gibi belirli doğrulama modüllerini hedefler. package.json 14 Eşdeğerlik ve kabul: Entegrasyon testleri .NET çözümünü (SecureKit.slnx) derler ve scripts/aspnet-parity.mjs gibi Node tabanlı çalıştırıcıları yürütür. package.json 19-21 Derleme, eşdeğerlik ve test hatları Test ve eşdeğerlik araçları, Node.js çalıştırma betikleriyle .NET ve Python yürütülebilir dosyalarını birleştirir. Örneğin scripts/aspnet-parity.mjs, eski Node/Express API’si ile yeni ASP.NET Core sunucusu arasında aşamalı eşdeğerlik doğrulamasını sistematik olarak gerçekleştirir. Eşdeğerlik betiği, one ile seven arasındaki her aşama betiğini tsx ile başlatır. scripts/aspnet-parity.mjs 11-14 Çıktı günlüklerini toplar scripts/aspnet-parity.mjs 17-22, karşılaştırma özetlerini çıkarır scripts/aspnet-parity.mjs 24 ve yapılandırılmış JSON raporlarını .run-logs/aspnet-parity.json dizinine kaydeder. scripts/aspnet-parity.mjs 7 Diyagram: Eşdeğerlik test hattı mimarisi Diyagramı büyütmek için seçin ↗ Kaynaklar: package.json 20 scripts/aspnet-parity.mjs 1-38 packages/node-auth/package.json 11-17",
+      "diagrams": [
+        "1.1-monorepo-layout-and-tooling-1.svg",
+        "1.1-monorepo-layout-and-tooling-2.svg"
+      ],
+      "words": 368
+    },
+    {
+      "slug": "1.2-getting-started-and-local-development",
+      "title": "Başlangıç ve yerel geliştirme",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.2-getting-started-and-local-development",
+      "number": "1.2",
+      "headings": [
+        {
+          "id": "getting-started-and-local-development",
+          "title": "Başlangıç ve yerel geliştirme",
+          "level": 1
+        },
+        {
+          "id": "local-development-orchestration-object-object",
+          "title": "Yerel geliştirme süreçlerinin yönetimi (scripts/dev.mjs)",
+          "level": 2
+        },
+        {
+          "id": "process-lifecycle-and-signal-handling",
+          "title": "Süreç yaşam döngüsü ve sinyal yönetimi",
+          "level": 3
+        },
+        {
+          "id": "port-allocations-and-vite-proxy-resolution",
+          "title": "Port dağılımı ve Vite proxy hedefi",
+          "level": 2
+        },
+        {
+          "id": "proxy-target-resolution-hierarchy",
+          "title": "Proxy hedefinin öncelik sırası",
+          "level": 3
+        },
+        {
+          "id": "environment-variables-and-configuration",
+          "title": "Ortam değişkenleri ve yapılandırma",
+          "level": 2
+        },
+        {
+          "id": "example-environment-configuration-object-object",
+          "title": "Örnek ortam yapılandırması (apps/demo-web/.env.example)",
+          "level": 3
+        },
+        {
+          "id": "runtime-environment-variables-for-data-migration",
+          "title": "Veri geçişi için çalışma zamanı ortam değişkenleri",
+          "level": 3
+        },
+        {
+          "id": "backend-switching-and-backward-compatibility",
+          "title": "Sunucu değiştirme ve geriye dönük uyumluluk",
+          "level": 2
+        },
+        {
+          "id": "switching-to-aspnet-core-default",
+          "title": "ASP.NET Core’a geçiş (varsayılan)",
+          "level": 3
+        },
+        {
+          "id": "switching-to-nodeexpress",
+          "title": "Node/Express’e geçiş",
+          "level": 3
+        }
+      ],
+      "searchText": "Başlangıç ve yerel geliştirme İlgili kaynak dosyaları apps/demo-web/.env.example docs/ASPNET_CUTOVER.md scripts/dev.mjs Bu sayfa, SecureKit çok modlu biyometrik kimlik doğrulama monoreposunun yerel geliştirme ortamını açıklar. Kök geliştirme betikleri, scripts/dev.mjs üzerinden süreç yönetimi, port dağılımı (ASP.NET Core için 3002, Node/Express için 3001, Vite demo-web arayüzü için 5173), ortam değişkenleri ve sunucu değiştirme adımları ele alınır. Kaynaklar: docs/ASPNET_CUTOVER.md 1-110 scripts/dev.mjs 1-40 apps/demo-web/.env.example 1-4 Yerel geliştirme süreçlerinin yönetimi (scripts/dev.mjs) Yerel geliştirme akışı scripts/dev.mjs betiğiyle yönetilir. Betik, React demo uygulamasıyla (apps/demo-web) birlikte yeni ASP.NET Core 10 sunucusunu (apps/securekit-api) veya eski Node/Express API’sini (packages/node-auth) başlatmak için komut argümanlarını veya ortam değişkenlerini inceler. scripts/dev.mjs 1-40 Süreç yaşam döngüsü ve sinyal yönetimi pnpm dev veya pnpm dev:node çalıştırıldığında scripts/dev.mjs şu adımları uygular: Depo kökünü ve hedef sunucuyu (aspnet veya node) belirler; seçim belirtilmemişse aspnet kullanır. scripts/dev.mjs 5-7 aspnet seçilmişse C# çözümünü derlemek için dotnet build apps/securekit-api komutunu asenkron çalıştırır. scripts/dev.mjs 25-29 Derlenmiş API dosyasını (SecureKit.Api.dll) veya Node sunucusunu (tsx üzerinden src/server.ts) başlatır; stdin/stdout/stderr akışlarını stdio: \"inherit\" ile bağlar. scripts/dev.mjs 16-34 apps/demo-web için Vite geliştirme sunucusunu başlatır ve etkin sunucuyu gösteren proxy ortam değişkenlerini aktarır. scripts/dev.mjs 35-38 Sonlandırma sinyallerini (SIGINT, SIGTERM) dinler ve süreç ağacını dolaşarak tüm alt süreçleri düzgünce kapatır. scripts/dev.mjs 10-40 Kaynaklar: scripts/dev.mjs 1-40 Port dağılımı ve Vite proxy hedefi SecureKit, yerel entegrasyon testleri ve tarayıcı erişimi için sabit bir port düzeni kullanır: 3002: ASP.NET Core 10 API (apps/securekit-api) varsayılan portu. docs/ASPNET_CUTOVER.md 8 3001: Eski Node/Express API (packages/node-auth) varsayılan portu. docs/ASPNET_CUTOVER.md 10 5173: apps/demo-web için Vite geliştirme sunucusu. docs/ASPNET_CUTOVER.md 8 Proxy hedefinin öncelik sırası Vite geliştirme sunucusu, API çağrılarını /api/securekit üzerinden seçilen sunucuya ileten bir proxy katmanı kullanır. docs/ASPNET_CUTOVER.md 28-30 Hedef, scripts/dev.mjs ve Vite yapılandırması tarafından şu öncelik sırasıyla belirlenir: VITE_SECUREKIT_DEV_PROXY_TARGET: Ortamda açıkça belirtilmiş, boş olmayan bir URL varsa en yüksek önceliğe sahiptir. docs/ASPNET_CUTOVER.md 21 VITE_SECUREKIT_API_BACKEND: aspnet değeri http://localhost:3002 adresini; node değeri http://localhost:3001 adresini hedefler. docs/ASPNET_CUTOVER.md 22 Varsayılan hedef: İkisi de tanımlı değilse http://localhost:3002 adresindeki ASP.NET Core API kullanılır. docs/ASPNET_CUTOVER.md 23 Kaynaklar: docs/ASPNET_CUTOVER.md 18-30 scripts/dev.mjs 35-38 Ortam değişkenleri ve yapılandırma Yerel geliştirme yapılandırması, belirli paketlerdeki .env dosyalarıyla (örneğin apps/demo-web/.env.example) veya çalıştırıcıya terminalden aktarılan ortam değişkenleriyle yönetilebilir. docs/ASPNET_CUTOVER.md 25-27 apps/demo-web/.env.example 1-4 Örnek ortam yapılandırması (apps/demo-web/.env.example) VITE_SECUREKIT_BASE_URL=/api/securekit VITE_SECUREKIT_API_BACKEND=aspnet # Optional explicit target (takes precedence over API_BACKEND): # VITE_SECUREKIT_DEV_PROXY_TARGET=http://localhost:3002 Kaynaklar: apps/demo-web/.env.example 1-4 Veri geçişi için çalışma zamanı ortam değişkenleri Eski Node sunucusundan ASP.NET Core sunucusuna geçerken yerel kullanıcı depolarını ve biyometrik referans klasörlerini korumak için pnpm dev çalıştırılmadan önce ilgili ortam değişkenleri terminal oturumunda tanımlanmalıdır. docs/ASPNET_CUTOVER.md 39-51 Değişken adıAmaçÖrnek değerSECUREKIT_USERS_FILEJSON kullanıcı kimlik bilgileri deposunun yoluC:\\Repo\\users.jsonSECUREKIT_PROFILE_STOREKullanıcı biyometrik profil üst verilerinin yolu.../node-auth/.securekit/user-profiles.jsonSECUREKIT_KEYSTROKE_STOREYazım ritmi profil verilerinin dizini.../node-auth/.data/keystrokeFace__ReferenceDirectoryKayıtlı yüz vektörü referanslarının dizini.../node-auth/.securekit/face-referencesFACE_SLIDING_REFERENCES_ROOTYüz doğrulama için kayan pencere referans kökü.../node-auth/.securekit/face-sliding-windowCard__UserReferenceDirectoryKimlik kartı referans görüntülerinin dizini.../node-auth/.securekit/card-referencesMOCK_IP_CHECKYerel geliştirmede IP kontrollerinin dış ağ çağrılarını atlar1 Kaynaklar: docs/ASPNET_CUTOVER.md 42-50 Sunucu değiştirme ve geriye dönük uyumluluk Geliştiriciler test gereksinimlerine göre sunucular arasında geçiş yapabilir. ASP.NET Core’a geçiş (varsayılan) Çalışan süreçleri Ctrl+C ile durdurun. docs/ASPNET_CUTOVER.md 64 VITE_SECUREKIT_DEV_PROXY_TARGET tanımlı olmasın veya http://localhost:3002 adresini göstersin. docs/ASPNET_CUTOVER.md 66 pnpm dev komutunu çalıştırın. docs/ASPNET_CUTOVER.md 8 Node/Express’e geçiş Çalışan süreçleri Ctrl+C ile durdurun. docs/ASPNET_CUTOVER.md 64 Express sunucusunu 3001 portunda başlatmak ve Vite proxy’sini buna bağlamak için pnpm dev:node komutunu çalıştırın. docs/ASPNET_CUTOVER.md 10 [!UYARI] Her iki sunucu aynı JSON durum dosyalarına eşzamanlı yazmamalıdır. Kalıcı depolama dizinleri paylaşılıyorsa diğer sunucuyu başlatmadan önce çalışan sunucuyu mutlaka kapatın. docs/ASPNET_CUTOVER.md 36-37 Kaynaklar: docs/ASPNET_CUTOVER.md 1-110",
+      "diagrams": [],
+      "words": 530
+    },
+    {
+      "slug": "1.3-authentication-decision-model",
+      "title": "Kimlik doğrulama karar modeli",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/1.3-authentication-decision-model",
+      "number": "1.3",
+      "headings": [
+        {
+          "id": "authentication-decision-model",
+          "title": "Kimlik doğrulama karar modeli",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "1-multi-modal-signal-ingestion",
+          "title": "1. Çok modlu sinyal alımı",
+          "level": 2
+        },
+        {
+          "id": "2-challenge-consent-and-session-management",
+          "title": "2. Doğrulama isteği, rıza ve oturum yönetimi",
+          "level": 2
+        },
+        {
+          "id": "3-risk-scoring-and-decision-outcomes",
+          "title": "3. Risk puanlama ve karar sonuçları",
+          "level": 2
+        },
+        {
+          "id": "4-architecture-and-code-entity-mapping",
+          "title": "4. Mimari ve kod öğeleriyle eşleştirme",
+          "level": 2
+        },
+        {
+          "id": "decision-pipeline-mapping",
+          "title": "Karar hattının eşleştirilmesi",
+          "level": 3
+        },
+        {
+          "id": "session-verification-and-risk-evaluation-flow",
+          "title": "Oturum doğrulama ve risk değerlendirme akışı",
+          "level": 3
+        }
+      ],
+      "searchText": "Kimlik doğrulama karar modeli İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md README.md Amaç ve kapsam SecureKit kimlik doğrulama karar modeli; çok modlu biyometrik sinyalleri (yazım ritmi, yüz doğrulama, ses tanıma ve kimlik kartı OCR/eşleştirme) bağlamsal risk göstergeleriyle (IP konumu, VPN/proxy/Tor tespiti) birleştirerek kullanıcının kimliğini değerlendirir. README.md 9-14 Bu sayfa; sinyal alımını, doğrulama isteği/yanıtı yaşam döngüsünü, rıza kaydını, oturum takibini ve allow, step_up veya deny sonucunu üreten risk mantığını açıklar. README.md 14 1. Çok modlu sinyal alımı SecureKit, kimliği yalnızca sabit sırlara dayanmadan doğrulamak için farklı biyometrik ve bağlamsal vektörleri değerlendirir: Yazım ritmi: Web SDK’sı üzerinden hassas keydown ve keyup telemetrisi (basılı tutma ve tuşlar arası geçiş süreleri) toplar. Hem dinamik yazım ritmini üstel hareketli ortalama (EMA) profilleriyle karşılaştırır hem de sabit doğrulama metnini kontrol eder. README.md 9 MIGRATION_TO_ASPNET10_PLAN.md 125-126 Yüz doğrulama: Görüntüleri MTCNN ve FaceNet hatlarında işleyerek yüz vektörlerini çıkarır, canlılık kontrolleri yapar ve referans profillerini kayan pencere mekanizmasıyla yönetir. README.md 10 Ses doğrulama: Rastgele doğrulama ifadelerine ait ses örneklerini alır; Whisper ile metin doğruluğunu, SpeechBrain ile konuşmacı benzerliğini doğrular. README.md 11 Kart doğrulama: Resmî kimlik kartlarını doğrulamak için belge yakalama, PaddleOCR metin çıkarımı ve OpenCLIP görsel benzerlik puanlamasını birleştirir. README.md 12 Ağ ve IP bağlamı: VPNAPI gibi IP istihbarat hizmetlerini sorgular; VPN, proxy, Tor çıkış düğümleri, veri merkezi trafiği ve konum anormalliklerini tanımlı ülke erişim politikalarıyla değerlendirir. README.md 13 Kaynaklar: README.md 7-14 MIGRATION_TO_ASPNET10_PLAN.md 125-126 2. Doğrulama isteği, rıza ve oturum yönetimi SecureKit, özel depolama yöneticileri ve uç noktalar aracılığıyla kullanıcı etkileşimlerinde kriptografik ve durum temelli kontroller uygular: Doğrulama isteği üretimi ve tüketimi: POST /challenge/text ve POST /challenge/text/consume üzerinden yönetilir. İstekler varsayılan olarak 120 saniyelik kesin bir geçerlilik süresine (TTL) sahiptir; tek kullanımlık tüketim kuralları uygulanır ve ChallengeStore ile bellekte yönetilir. MIGRATION_TO_ASPNET10_PLAN.md 75-79 Rıza takibi: POST /consent üzerinden kaydedilir; yarış koşullarını önlemek için atomik dosya yazımı ve süreç içi kilitlemeyle dosya tabanlı JSON deposuna kalıcı olarak yazılır. MIGRATION_TO_ASPNET10_PLAN.md 78-79 Oturum yaşam döngüsü: POST /session/start ve POST /verify/session ile yönetilir. Oturumların kayan zaman aşımı varsayılan olarak 15 dakikadır ve SessionStore içinde takip edilir. MIGRATION_TO_ASPNET10_PLAN.md 119-120 İstekler arasındaki sinyaller biriktirilir; geçmiş yazım ölçümleri kullanıcının EMA profiline göre güncellenir. MIGRATION_TO_ASPNET10_PLAN.md 121-126 Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 72-126 3. Risk puanlama ve karar sonuçları Karar motoru, birleşik biyometrik sapma puanlarını ve bağlamsal tehdit göstergelerini SessionRiskEvaluator ve destekleyici risk politikaları üzerinden değerlendirir. README.md 21 MIGRATION_TO_ASPNET10_PLAN.md 121-124 Yapılandırılabilir risk ağırlıkları, kaynak ülke kuralları ve ağ tehdidi işaretlerine göre değerlendirici üç açık karardan birini üretir: allow: Toplam risk puanı ana eşiğin altındadır ve tüm zorunlu biyometrik kontroller başarılıdır. Oturuma izin verilir. step_up (veya step-up): Orta düzey risk ya da kısmi biyometrik uyumsuzluk tespit edilmiştir. Tam erişim verilmeden önce ikincil doğrulama (örneğin ses isteğinin veya yüz canlılık kontrolünün tekrarı) gerekir. MIGRATION_TO_ASPNET10_PLAN.md 122-123 deny: Yüksek risk puanı, engellenmiş IP aralıkları, etkin Tor/proxy tespiti veya ciddi biyometrik doğrulama hataları isteği ya da oturumu hemen sonlandırır. Kaynaklar: README.md 14 MIGRATION_TO_ASPNET10_PLAN.md 121-124 4. Mimari ve kod öğeleriyle eşleştirme Aşağıdaki diyagramlar, kimlik doğrulama karar modelindeki kavramları C# ve TypeScript kod tabanındaki somut uygulamalarıyla ilişkilendirir. Karar hattının eşleştirilmesi Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 21-30 MIGRATION_TO_ASPNET10_PLAN.md 121-126 Oturum doğrulama ve risk değerlendirme akışı Diyagramı büyütmek için seçin ↗ Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 118-126",
+      "diagrams": [
+        "1.3-authentication-decision-model-1.svg",
+        "1.3-authentication-decision-model-2.svg"
+      ],
+      "words": 512
+    },
+    {
+      "slug": "2-securekit-asp.net-core-api",
+      "title": "SecureKit ASP.NET Core API",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2-securekit-asp.net-core-api",
+      "number": "2",
+      "headings": [
+        {
+          "id": "securekit-aspnet-core-api",
+          "title": "SecureKit ASP.NET Core API",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "architecture-and-bootstrap",
+          "title": "Mimari ve başlangıç kurulumu",
+          "level": 2
+        },
+        {
+          "id": "21-http-endpoints-and-controllers",
+          "title": "2.1 HTTP uç noktaları ve denetleyiciler",
+          "level": 2
+        },
+        {
+          "id": "22-verification-services",
+          "title": "2.2 Doğrulama hizmetleri",
+          "level": 2
+        },
+        {
+          "id": "23-storage-and-configuration",
+          "title": "2.3 Depolama ve yapılandırma",
+          "level": 2
+        }
+      ],
+      "searchText": "SecureKit ASP.NET Core API İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api/Program.cs apps/securekit-api/appsettings.json Amaç ve kapsam apps/securekit-api projesi, SecureKit çok modlu biyometrik kimlik doğrulama araç setinin sunucu motoru olarak çalışan, yüksek performanslı ASP.NET Core 10 (net10.0) Web API’sidir. MIGRATION_TO_ASPNET10_PLAN.md 1-24 Eski Node/Express API’sinin yerine geçerken HTTP rotalarını, istek/yanıt sözleşmelerini ve hata yapılarını aynen korur. MIGRATION_TO_ASPNET10_PLAN.md 5-13 Uygulama; Program.cs içindeki bağımlılık enjeksiyonu kurulumu apps/securekit-api/Program.cs 8-28, kesin JSON serileştirme politikaları apps/securekit-api/Program.cs 29-38, merkezi ara katman hata yönetimi apps/securekit-api/Program.cs 54-59 ve dosya tabanlı durum depoları apps/securekit-api/Program.cs 10-17 etrafında yapılandırılmıştır. Kaynaklar: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 1-66 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 1-33 Mimari ve başlangıç kurulumu API, apps/securekit-api/Program.cs üzerinden başlatılır; temel altyapı, durum depoları, doğrulama motorları ve Python köprü hizmetleri ASP.NET Core IoC kapsayıcısına tek örnekli hizmetler olarak kaydedilir. apps/securekit-api/Program.cs 8-28 Biyometrik sınırlar, zaman aşımı ve donanım yürütme seçenekleri apps/securekit-api/appsettings.json ile yapılandırılır. apps/securekit-api/appsettings.json 1-35 Şekil 2.1: SecureKit ASP.NET Core başlangıç ve yapılandırma akışı Kaynaklar: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 8-63 apps/securekit-api/appsettings.json apps/securekit-api/appsettings.json 1-35 2.1 HTTP uç noktaları ve denetleyiciler API; kullanıcı yaşam döngüsü, doğrulama isteği üretimi, rıza takibi, oturum değerlendirmesi ve çok modlu biyometrik doğrulama (yüz, ses, kimlik kartı, dinamik ve sabit yazım ritmi, ağ/IP kontrolleri, sağlık izleme) için kapsamlı denetleyici sınıfları sunar. Rota tanımları, girdi doğrulama kuralları ve JSON istek/yanıt sözleşmeleri için HTTP uç noktaları ve denetleyiciler sayfasına bakın. Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 21-25 2.2 Doğrulama hizmetleri Hizmet katmanı; temel güvenlik mantığını, çok modlu sinyal puanlamasını ve Python işçi yürütme köprülerini içerir. FaceVerification, VoiceVerification, CardVerification ve SessionKeystrokeVerifier gibi hizmetler ham girdileri işler ve stdin/stdout alt süreç sarmalayıcılarıyla (FacePython, VoicePython, CardPython, KeystrokePython) dış Python betikleriyle iletişim kurar. Hizmet uygulamaları, risk hesaplama politikaları ve Python süreç iletişimi için Doğrulama hizmetleri sayfasına bakın. Alt süreç yürütme ayrıntıları için Python süreç köprüsü; puanlama algoritmaları için Yazım ritmi, oturum ve risk hizmetleri sayfalarını inceleyin. Kaynaklar: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 14-27 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 11-15 2.3 Depolama ve yapılandırma SecureKit; kullanıcı kimlik bilgilerini, biyometrik profilleri, etkin token’ları ve tek kullanımlık doğrulama isteklerini yönetmek için dosya tabanlı JSON depolama adaptörlerini (FileUserStore, FileProfileStorage, FixedKeystrokeStore) ve bellek depolarını (SessionStore, ChallengeStore) kullanır. Durum değişiklikleri, eşzamanlı isteklerde veri bozulmasını önlemek için atomik dosya yazımı ve iş parçacığı eşzamanlama araçlarıyla korunur. Şema düzeni, atomik kilitleme stratejileri ve ortam değişkenleriyle geçersiz kılma için Depolama ve yapılandırma sayfasına bakın. Kaynaklar: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 10-17 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 27-30 Şekil 2.2: Uçtan uca istek yönlendirme ve biyometrik doğrulama mimarisi Kaynaklar: apps/securekit-api/Program.cs apps/securekit-api/Program.cs 8-28 MIGRATION_TO_ASPNET10_PLAN.md MIGRATION_TO_ASPNET10_PLAN.md 19-33",
+      "diagrams": [],
+      "words": 381
+    },
+    {
+      "slug": "2.1-http-endpoints-and-controllers",
+      "title": "HTTP uç noktaları ve denetleyiciler",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.1-http-endpoints-and-controllers",
+      "number": "2.1",
+      "headings": [
+        {
+          "id": "http-endpoints-and-controllers",
+          "title": "HTTP uç noktaları ve denetleyiciler",
+          "level": 1
+        },
+        {
+          "id": "1-controller-architecture-and-routing-overview",
+          "title": "1. Denetleyici mimarisi ve yönlendirmeye genel bakış",
+          "level": 2
+        },
+        {
+          "id": "2-requestresponse-contracts-and-error-envelopes",
+          "title": "2. İstek/yanıt sözleşmeleri ve hata zarfları",
+          "level": 2
+        },
+        {
+          "id": "3-detailed-controller-breakdown",
+          "title": "3. Denetleyicilerin ayrıntıları",
+          "level": 2
+        },
+        {
+          "id": "health-controller",
+          "title": "Sağlık denetleyicisi",
+          "level": 3
+        },
+        {
+          "id": "card-controller-object-object",
+          "title": "Kart denetleyicisi (CardController.cs)",
+          "level": 3
+        },
+        {
+          "id": "4-api-request-pipeline-and-flow-diagram",
+          "title": "4. API istek hattı ve akış diyagramı",
+          "level": 2
+        }
+      ],
+      "searchText": "HTTP uç noktaları ve denetleyiciler İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api.tests/HealthTests.cs apps/securekit-api/Controllers/CardController.cs Bu sayfa, ASP.NET Core API’deki (apps/securekit-api) HTTP uç noktalarını, denetleyici sınıflarını, yönlendirmeyi ve istek/yanıt sözleşmelerini açıklar. Denetleyiciler; gelen HTTP trafiğini (JSON verileri ve çok parçalı form yüklemeleri) alır, girdileri doğrular, doğrulama/depolama hizmetlerine erişir ve yanıtları standart JSON zarflarına veya hata verilerine dönüştürür. 1. Denetleyici mimarisi ve yönlendirmeye genel bakış API, ASP.NET Core 10 üzerinde [ApiController] ile işaretlenmiş ve özniteliklerle yönlendirilmiş denetleyiciler kullanır. apps/securekit-api/Controllers/CardController.cs 11-13 Uç noktalar, @securekit/web-sdk ve apps/demo-web ile sorunsuz uyum için eski Node/Express rotalarıyla kesin eşdeğerliği korur. MIGRATION_TO_ASPNET10_PLAN.md 5-14 Denetleyiciler aşağıdaki işlev alanlarını kapsar: Sağlık: Sistem durumu kontrolleri (/health). apps/securekit-api.tests/HealthTests.cs 9-15 Kimlik doğrulama: Kullanıcı kaydı, giriş ve listeleme (/auth/register, /auth/login, /auth/users). MIGRATION_TO_ASPNET10_PLAN.md 150-152 Doğrulama isteği: Biyometrik ve metin doğrulama isteği üretimi ve tek kullanımlık tüketim (/challenge/text, /challenge/text/consume). MIGRATION_TO_ASPNET10_PLAN.md 99-100 Oturum ve profiller: Oturum başlatma, kayan pencerede risk değerlendirme, profil sorgulama ve kullanıcının biyometrik verilerini silme (/session/start, /verify/session, /user/{userId}/profiles, /user/biometrics). MIGRATION_TO_ASPNET10_PLAN.md 101-154 Biyometrik doğrulama (kart, yüz, ses, yazım ritmi, sabit yazım ritmi): Çok parçalı görüntü/ses yüklemelerini ve biyometrik telemetriyi işleyen kayıt ve doğrulama uç noktaları. Ağ: IP ve VPN doğrulama kontrolleri (/verify/network). Kaynaklar: [apps/securekit-api/Controllers/CardController.cs:11-13], [apps/securekit-api.tests/HealthTests.cs:9-15], [MIGRATION_TO_ASPNET10_PLAN.md:5-14] 2. İstek/yanıt sözleşmeleri ve hata zarfları Uç noktalar JSON (application/json) veya dosya yüklemeleri (kimlik kartı, yüz görüntüsü, ses örneği) için çok parçalı form verileri (multipart/form-data) kullanır. Standart hatalar; hata kodu, mesaj ve isteğe bağlı ayrıntıları içeren tutarlı bir JSON zarfına alınır: { \"error\": { \"code\": \"INVALID_REQUEST\", \"message\": \"referenceImage is required.\", \"details\": null } } Yükleme verisi yapılandırılmış azami gövde boyutunu (CardOptions.MaxUploadBytes) aşarsa denetleyiciler BadHttpRequestException veya InvalidDataException hatasını yakalar ve IMAGE_TOO_LARGE koduyla 413 Payload Too Large durumunu döndürür. apps/securekit-api/Controllers/CardController.cs 36-88 Kaynaklar: [apps/securekit-api/Controllers/CardController.cs:25-89], [apps/securekit-api.tests/HealthTests.cs:18-24] 3. Denetleyicilerin ayrıntıları Sağlık denetleyicisi GET /health: Sistemin çalışır durumda olduğunu bildirir. Yanıt (200 OK): {\"ok\":true} apps/securekit-api.tests/HealthTests.cs 12-14 Kart denetleyicisi (CardController.cs) CardController, OCR ve vektör karşılaştırma işçileriyle kimlik kartı referans görüntülerini ve doğrulama örneklerini yönetir. apps/securekit-api/Controllers/CardController.cs 12-13 GET /card/references: Saklanan kart referans kayıtlarını listeler. apps/securekit-api/Controllers/CardController.cs 14-19 POST /enroll/card/reference: userId metni ve referenceImage dosyası (image/jpeg, image/png, image/webp) içeren multipart/form-data verisini kabul eder. apps/securekit-api/Controllers/CardController.cs 20-61 POST /verify/card: Örnek görüntüyü (probeImage) ve isteğe bağlı referenceId, userId, threshold alanlarını kabul ederek eşleşme puanlarını ve doğrulama sonuçlarını döndürür. apps/securekit-api/Controllers/CardController.cs 22-80 Kaynaklar: [apps/securekit-api/Controllers/CardController.cs:11-89], [apps/securekit-api.tests/HealthTests.cs:18-24] 4. API istek hattı ve akış diyagramı Aşağıdaki diyagram, gelen HTTP isteklerinin ASP.NET Core ara katman hattından ilgili denetleyicilere ve hizmet katmanlarına akışını gösterir. Kaynaklar: [apps/securekit-api/Controllers/CardController.cs:1-90], [apps/securekit-api.tests/HealthTests.cs:1-34], [MIGRATION_TO_ASPNET10_PLAN.md:43-125]",
+      "diagrams": [],
+      "words": 386
+    },
+    {
+      "slug": "2.2-verification-services",
+      "title": "Doğrulama hizmetleri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2-verification-services",
+      "number": "2.2",
+      "headings": [
+        {
+          "id": "verification-services",
+          "title": "Doğrulama hizmetleri",
+          "level": 1
+        },
+        {
+          "id": "1-service-layer-architecture-and-responsibilities",
+          "title": "1. Hizmet katmanının mimarisi ve sorumlulukları",
+          "level": 2
+        },
+        {
+          "id": "2-python-process-bridge-integration",
+          "title": "2. Python süreç köprüsü entegrasyonu",
+          "level": 2
+        },
+        {
+          "id": "3-keystroke-risk-and-session-management",
+          "title": "3. Yazım ritmi, risk ve oturum yönetimi",
+          "level": 2
+        }
+      ],
+      "searchText": "Doğrulama hizmetleri İlgili kaynak dosyaları apps/securekit-api/Services/CardResult.cs apps/securekit-api/Services/CardVerification.cs apps/securekit-api içindeki hizmet katmanı; çok modlu biyometrik kimlik doğrulamayı, risk değerlendirmesini, oturum takibini ve ağ incelemelerini koordine eder. HTTP denetleyicileri ile dosya tabanlı depolama, ağ denetleyicileri ve bağımsız Python işçi betikleri arasında iş mantığı katmanı olarak çalışır. Alt sistemlerin ayrıntıları için ilgili alt sayfalara bakın: Python süreç köprüsü — C# hizmetlerinin Python işçilerini (CardPython, FacePython, VoicePython, KeystrokePython) başlatması ve yönetmesi. Yazım ritmi, oturum ve risk hizmetleri — Dinamik ve sabit yazım ritmi ayrıştırma, EMA profilleme, oturum depoları ve SessionRiskEvaluator ayrıntıları. 1. Hizmet katmanının mimarisi ve sorumlulukları Doğrulama hizmet katmanı, biyometrik doğrulama hatlarını, güvenlik değerlendirmelerini ve kalıcı durum depolamasını ayırır. C# hizmet sınıfları, kararlar HTTP uç noktalarına dönmeden önce gereken doğrulama kurallarını, girdi ön işlemesini ve yanıt normalleştirmesini kapsar. Diyagramı büyütmek için seçin ↗ Şekil 1: Hizmet katmanı öğeleri ve sorumlulukları. CardVerification: Kart görüntüsü yüklemelerini ve referans dizini taramalarını koordine eder; görsel/OCR karşılaştırmalarını Python süreç köprüsüne aktarır. ICardPython apps/securekit-api/Services/CardVerification.cs 8-10 CardResult: Kart doğrulama Python sürecinin ham JSON çıktısını normalleştirir ve doğrular; eksik bağımlılıkları ve şema doğrulamasını yönetir. apps/securekit-api/Services/CardResult.cs 8-38 Yüz, ses ve yazım ritmi hizmetleri: Özel Python işçileri veya dahili matematiksel profilleme yoluyla biyometrik kayıt, şablon güncelleme ve özellik çıkarımı gerçekleştirir. Kaynaklar: apps/securekit-api/Services/CardVerification.cs apps/securekit-api/Services/CardResult.cs 2. Python süreç köprüsü entegrasyonu PaddleOCR/OpenCLIP (kart), MTCNN/FaceNet (yüz) ve Whisper/SpeechBrain (ses) gibi biyometrik hatlar bağımsız Python ortamlarında çalışır. ASP.NET Core hizmet katmanı bu işçilerle özel köprü soyutlamaları üzerinden iletişim kurar. Diyagramı büyütmek için seçin ↗ Akış 2: Doğrulama çağrısı ve normalleştirme akışı. Süreç başlatma, CLI sözleşmeleri, zaman aşımı yönetimi, süreç ağacı sonlandırma ve geçici dosya izolasyonu için Python süreç köprüsü sayfasına bakın. Kaynaklar: apps/securekit-api/Services/CardVerification.cs apps/securekit-api/Services/CardResult.cs 3. Yazım ritmi, risk ve oturum yönetimi Araç seti, biyometrik eşleştirmenin yanında kimlik doğrulama isteklerini davranışsal dinamikler ve risk puanlama modelleriyle değerlendirir. Yazım ritmi biyometrisi: Dinamik yazım istekleri ve sabit metin parolaları için zaman ölçümlerini (basılı tutma ve geçiş süreleri) analiz eder. Profiller üstel hareketli ortalamalarla (EMA) dinamik güncellenir. Oturum riski değerlendirmesi: SessionRiskEvaluator; son doğrulama denemelerini, anormallik tespitini, doğrulama isteği durumunu ve IP/ağ kontrolünü (NetworkVerification) birleştirerek allow, step_up veya deny kararı üreten toplam risk puanını hesaplar. Durum depoları: Geçici doğrulama istekleri ve etkin kullanıcı oturumları bellek veya dosya tabanlı depolarla (ChallengeStore, SessionStore) yönetilir. Yazım ritmi özellik çıkarımı, profil depolama ve risk puanlama mantığı için Yazım ritmi, oturum ve risk hizmetleri sayfasına bakın. Kaynaklar: apps/securekit-api/Services/CardVerification.cs",
+      "diagrams": [
+        "2.2-verification-services-1.svg",
+        "2.2-verification-services-2.svg"
+      ],
+      "words": 380
+    },
+    {
+      "slug": "2.2.1-python-process-bridge",
+      "title": "Python süreç köprüsü",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.1-python-process-bridge",
+      "number": "2.2.1",
+      "headings": [
+        {
+          "id": "python-process-bridge",
+          "title": "Python süreç köprüsü",
+          "level": 1
+        },
+        {
+          "id": "1-worker-discovery-and-environment-resolution",
+          "title": "1. İşçi keşfi ve ortam seçimi",
+          "level": 2
+        },
+        {
+          "id": "2-cli-contracts-and-stdinstdout-json-lines-protocol",
+          "title": "2. CLI sözleşmeleri ve stdin/stdout JSON satırı protokolü",
+          "level": 2
+        },
+        {
+          "id": "3-timeouts-error-handling-and-process-tree-termination",
+          "title": "3. Zaman aşımı, hata yönetimi ve süreç ağacının sonlandırılması",
+          "level": 2
+        },
+        {
+          "id": "4-temporary-files-and-data-flow",
+          "title": "4. Geçici dosyalar ve veri akışı",
+          "level": 2
+        }
+      ],
+      "searchText": "Python süreç köprüsü İlgili kaynak dosyaları apps/securekit-api/Services/CardOptions.cs apps/securekit-api/Services/CardPython.cs Python süreç köprüsü; ASP.NET Core sunucusundan dış Python biyometrik doğrulama işçilerinin (CardPython, FacePython, VoicePython, KeystrokePython) yaşam döngüsünü, girdi/çıktı akışlarını ve hatalarını yönetir. Sanal ortamlarda süreç keşfi yapar, standart girdi/çıktı üzerinden JSON satırlarıyla iletişim kurar, kesin yürütme zaman aşımı uygular ve sahipsiz işçi süreçlerini önlemek için tüm süreç ağacını sonlandırır. 1. İşçi keşfi ve ortam seçimi C# koordinasyon katmanı, yapılandırma parametrelerine ve yerel çalışma alanı düzenine göre Python çalışma ortamlarını dinamik olarak bulur ve başlatır. CardOptions sınıfı; betik, geçici dizinler ve alternatif arama yollarını belirler [apps/securekit-api/Services/CardOptions.cs:12-25]. CardPython uygulaması, öncelik sırasına göre aday çalışma ortamlarını (Candidates()) inceler; sistem yorumlayıcılarına (py -3, python3, python) geçmeden önce sanal ortamları (.venv-card, .venv) değerlendirir [apps/securekit-api/Services/CardPython.cs:22-43]. Eksik Python paketi gibi bir bağımlılık hatasında köprü standart hata çıktısını toplar ve istisnayı HTTP yanıtına eşlenen yapılandırılmış hataya dönüştürür [apps/securekit-api/Services/CardPython.cs:27-31, 80-87]. Kaynaklar: apps/securekit-api/Services/CardPython.cs 18-43 apps/securekit-api/Services/CardOptions.cs 12-25 2. CLI sözleşmeleri ve stdin/stdout JSON satırı protokolü İşçi süreci başlatıldıktan sonra standart girdi ve çıktı akışları üzerinde eşzamanlı, satır tabanlı bir JSON protokolüyle iletişim kurulur. CardPython.Converse uygulamasında işçi, --worker bayrağıyla başlar ve yeni satırlarla ayrılmış JSON nesneleri üretir [apps/securekit-api/Services/CardPython.cs:57-58, 99-128]. Protokol iki aşamalı bir el sıkışma gerektirir: Hazır olma aşaması: C# süreci, event alanı ready ve ok alanı true olan bir olay gelene kadar stdout’u okur [apps/securekit-api/Services/CardPython.cs:115-120]. İletişim aşaması: Hazır olma bildirimi gelince C# süreci, id: \"1\" atanmış istek nesnesini standart girdiye (process.StandardInput) yazar ve standart çıktıda eşleşen yanıt satırını bekler [apps/securekit-api/Services/CardPython.cs:102-127]. Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api/Services/CardPython.cs 45-76 apps/securekit-api/Services/CardPython.cs 99-128 3. Zaman aşımı, hata yönetimi ve süreç ağacının sonlandırılması Yoğun görüntü işleme sırasında takılan iş parçacıklarını ve işletim sistemi kaynak sızıntılarını önlemek için CardPython, yürütmeyi bağlantılı iptal token’ları ve süreç iş kapsayıcılarıyla sınırlar. Zaman aşımı: CancellationTokenSource, varsayılan 300.000 ms / 5 dakika olan options.TimeoutMs değerine bağlanır [apps/securekit-api/Services/CardPython.cs:60-61]. Süre aşılırsa OperationCanceledException yakalanır ve PYTHON_TIMEOUT hata koduna (504 Gateway Timeout) dönüştürülür [apps/securekit-api/Services/CardPython.cs:77-78]. Süreç ağacını kapatma: ProcessJob.Attach(process), alt süreci bir iş nesnesine kaydeder [apps/securekit-api/Services/CardPython.cs:68]. finally temizleme bloğunda süreç hâlâ çalışıyorsa process.Kill(true) özyinelemeli çağrılarak tüm ağaç sonlandırılır; sahipsiz Python alt süreçleri önlenir [apps/securekit-api/Services/CardPython.cs:88-96]. Stderr boşaltma: Hata veya uyarılarda stderr tamponu dolduğunda boru kilitlenmesini önlemek için standart hata akışı DrainError ile asenkron boşaltılır [apps/securekit-api/Services/CardPython.cs:69]. Kaynaklar: [apps/securekit-api/Services/CardPython.cs:60-96] 4. Geçici dosyalar ve veri akışı Biyometrik doğrulama hatları genellikle yüksek çözünürlüklü görüntü veya ses verileri alır. Köprü, girdileri doğrudan akıtarak veya CardOptions.Allowed ile doğrulanmış yolları kullanarak veri aktarımını koordine eder [apps/securekit-api/Services/CardOptions.cs:28-41]. Yol güvenliği kuralları, referans görüntülerinin ve geçici yüklemelerin yalnızca izin verilen köklerde (ReferenceDirectory, UserReferenceDirectory) bulunmasını zorunlu kılar. Böylece işçi CLI argümanları oluşturulmadan önce dizin aşımı açıkları önlenir [apps/securekit-api/Services/CardOptions.cs:15-16, 24-41]. Kaynaklar: [apps/securekit-api/Services/CardOptions.cs:12-42]",
+      "diagrams": [
+        "2.2.1-python-process-bridge-1.svg"
+      ],
+      "words": 421
+    },
+    {
+      "slug": "2.2.2-keystroke-session-and-risk-services",
+      "title": "Yazım ritmi, oturum ve risk hizmetleri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.2.2-keystroke-session-and-risk-services",
+      "number": "2.2.2",
+      "headings": [
+        {
+          "id": "keystroke-session-and-risk-services",
+          "title": "Yazım ritmi, oturum ve risk hizmetleri",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "state-and-challenge-stores",
+          "title": "Durum ve doğrulama isteği depoları",
+          "level": 2
+        },
+        {
+          "id": "challengestore",
+          "title": "ChallengeStore",
+          "level": 3
+        },
+        {
+          "id": "sessionstore",
+          "title": "SessionStore",
+          "level": 3
+        },
+        {
+          "id": "keystroke-verification-and-ema-profiles",
+          "title": "Yazım ritmi doğrulama ve EMA profilleri",
+          "level": 2
+        },
+        {
+          "id": "dynamic-keystroke-and-session-verification",
+          "title": "Dinamik yazım ritmi ve oturum doğrulama",
+          "level": 3
+        },
+        {
+          "id": "fixed-keystroke-and-python-bridge",
+          "title": "Sabit yazım ritmi ve Python köprüsü",
+          "level": 3
+        },
+        {
+          "id": "risk-evaluation-and-network-verification",
+          "title": "Risk değerlendirme ve ağ doğrulama",
+          "level": 2
+        },
+        {
+          "id": "sessionriskevaluator",
+          "title": "SessionRiskEvaluator",
+          "level": 3
+        },
+        {
+          "id": "network-verification-ipcheckservice",
+          "title": "Ağ doğrulama (IpCheckService)",
+          "level": 3
+        }
+      ],
+      "searchText": "Yazım ritmi, oturum ve risk hizmetleri İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md apps/securekit-api/Program.cs Amaç ve kapsam Bu bölüm, ASP.NET Core API’deki (apps/securekit-api) sunucu doğrulama, durum yönetimi ve risk değerlendirme bileşenlerini açıklar. Dinamik ve sabit yazım ritmi ayrıştırma, üstel hareketli ortalama (EMA) kullanıcı profilleri, oturum durumu (SessionStore), doğrulama isteği yaşam döngüsü (ChallengeStore), çok sinyalli risk karar mantığı (SessionRiskEvaluator) ve ağ/IP doğrulaması (IpCheckService) ele alınır. Kaynaklar: apps/securekit-api/Program.cs 8-28 MIGRATION_TO_ASPNET10_PLAN.md 111-147 Durum ve doğrulama isteği depoları Oturum ve doğrulama isteği verileri, başlangıçta yapılandırılan, iş parçacığı güvenli tek örnekli hizmetlerle bellekte tutulur. ChallengeStore ChallengeStore, süreli ve tek kullanımlık kimlik doğrulama ve biyometrik doğrulama isteklerini yönetir. TTL: Doğrulama istekleri varsayılan bir geçerlilik süresine sahiptir (genellikle 120 saniye). Tüketim: Kesin tek kullanım kuralı uygulanır; doğrulama veya kayıt sırasında tüketilen isteği sonraki doğrulama denemeleri kullanamaz. Kayıt: apps/securekit-api/Program.cs 10 içinde tek örnekli hizmet olarak kaydedilir. SessionStore SessionStore, etkin kullanıcı oturumlarını takip eder. TTL: Oturumlarda varsayılan kayan veya mutlak zaman aşımı uygulanır (örneğin MIGRATION_TO_ASPNET10_PLAN.md 119 belgesinde belirtilen 15 dakika). Durum birleştirme: Sinyaller ve ara biyometrik doğrulamalar, oturum yaşam döngüsü çağrıları boyunca biriktirilir. Kayıt: apps/securekit-api/Program.cs 13 içinde tek örnekli hizmet olarak kaydedilir. Diyagramı büyütmek için seçin ↗ Diyagram 1: Doğrulama isteği ve oturum depolarının kavramlardan kod öğelerine eşleştirilmesi Kaynaklar: apps/securekit-api/Program.cs 10-13 MIGRATION_TO_ASPNET10_PLAN.md 74-79 MIGRATION_TO_ASPNET10_PLAN.md 118-124 Yazım ritmi doğrulama ve EMA profilleri Yazım ritmi doğrulaması, hem dinamik davranışsal yazım analizini hem de Python işçi köprüleri üzerinden sabit metin şablon eşleştirmesini kapsar. Dinamik yazım ritmi ve oturum doğrulama SessionKeystrokeVerifier: Oturum kontrollerinde gönderilen dinamik yazım örüntülerini kullanıcının mevcut temel profiliyle karşılaştırır. Ölçümler ve EMA profilleri: Zaman ölçümlerini (basılı tutma ve geçiş süreleri) hesaplar; kullanıcı davranış şablonlarını üstel hareketli ortalama (EMA) güncellemeleriyle yeniler. MIGRATION_TO_ASPNET10_PLAN.md 125-126 Sabit yazım ritmi ve Python köprüsü FixedKeystrokeStore: Sabit metin yazım ritmi kayıt şablonlarının saklanmasını ve alınmasını yönetir. KeystrokePython: Alttaki Python yazım ritmi doğrulama işçisiyle iletişim kurar. apps/securekit-api/Program.cs 17-18 Diyagramı büyütmek için seçin ↗ Diyagram 2: Yazım ritmi hattının mimarisi ve kod öğeleriyle eşleştirilmesi Kaynaklar: apps/securekit-api/Program.cs 15-18 MIGRATION_TO_ASPNET10_PLAN.md 125-128 Risk değerlendirme ve ağ doğrulama Risk değerlendirmesi; yazım ritmi, yüz, ses, kart ve ağ telemetrisi sinyallerini birleştirerek erişim sonucunu belirler. SessionRiskEvaluator SessionRiskEvaluator, birikmiş doğrulama sinyallerini yapılandırılmış güvenlik politikalarıyla değerlendirir: Sonuçlar: allow, step_up (veya step-up) ve deny karar durumlarını döndürür. MIGRATION_TO_ASPNET10_PLAN.md 121-124 Politika kontrolleri: Risk puanlarını, ülke kısıtlarını, VPN/proxy işaretlerini ve ek doğrulama sırası gereksinimlerini değerlendirir. Kayıt: apps/securekit-api/Program.cs 14 içinde tek örnekli hizmet olarak kaydedilir. Ağ doğrulama (IpCheckService) IIpCheckService / IpCheckService, istemci IP adreslerini bilinen VPN, veri merkezi ve konum veritabanlarıyla değerlendirerek risk telemetrisini değerlendirme hattına aktarır. Kayıt: apps/securekit-api/Program.cs 16 içinde tek örnekli hizmet olarak kaydedilir. Diyagramı büyütmek için seçin ↗ Diyagram 3: Risk değerlendirme ve ağ doğrulama veri akışı Kaynaklar: apps/securekit-api/Program.cs 14-16 MIGRATION_TO_ASPNET10_PLAN.md 119-124",
+      "diagrams": [
+        "2.2.2-keystroke-session-and-risk-services-1.svg",
+        "2.2.2-keystroke-session-and-risk-services-2.svg",
+        "2.2.2-keystroke-session-and-risk-services-3.svg"
+      ],
+      "words": 431
+    },
+    {
+      "slug": "2.3-storage-and-configuration",
+      "title": "Depolama ve yapılandırma",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/2.3-storage-and-configuration",
+      "number": "2.3",
+      "headings": [
+        {
+          "id": "storage-and-configuration",
+          "title": "Depolama ve yapılandırma",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "file-based-json-stores-and-concurrency",
+          "title": "Dosya tabanlı JSON depoları ve eşzamanlılık",
+          "level": 2
+        },
+        {
+          "id": "configuration-architecture-object-object",
+          "title": "Yapılandırma mimarisi (appsettings.json)",
+          "level": 2
+        },
+        {
+          "id": "environment-variable-overrides-and-reference-roots",
+          "title": "Ortam değişkenleriyle geçersiz kılma ve referans kökleri",
+          "level": 2
+        }
+      ],
+      "searchText": "Depolama ve yapılandırma İlgili kaynak dosyaları apps/securekit-api/appsettings.json docs/ASPNET_CUTOVER.md Amaç ve kapsam Bu bölüm, SecureKit ASP.NET Core API’nin (apps/securekit-api) depolama mekanizmalarını ve yapılandırma altyapısını kapsar. SecureKit, haricî veritabanına gerek duymadan kullanıcı kayıtlarını, biyometrik profilleri ve yazım ritmi şablonlarını yönetmek için hafif dosya tabanlı JSON depoları (FileUserStore, ProfileStorage, FixedKeystrokeStore) kullanır. Yapılandırma appsettings.json ile yönetilir ve hiyerarşik ortam değişkenleriyle genişletilir; kesin referans kökü doğrulaması ve atomik yazım garantileri güvenlik sınırlarını uygular. Kaynaklar: docs/ASPNET_CUTOVER.md:34-37, apps/securekit-api/appsettings.json:1-35 Dosya tabanlı JSON depoları ve eşzamanlılık Depolama alt sistemi, yeniden başlatmalar arasında durumu korumak için yerel dosyalara dayanır. Depolar varsayılan olarak apps/securekit-api/.securekit dizininde başlatılır veya belirli ortam değişkenleriyle değiştirilir. docs/ASPNET_CUTOVER.md 34 Depolama katmanının temel bileşenleri: FileUserStore: Kullanıcı kimlik bilgilerini, salt değerlerini ve kimlik özetlerini yönetir. Dosya yolu SECUREKIT_USERS_FILE ile yapılandırılır. docs/ASPNET_CUTOVER.md 43 ProfileStorage: Çok modlu biyometrik profil eşlemelerini saklar; SECUREKIT_PROFILE_STORE üzerinden takip edilir. docs/ASPNET_CUTOVER.md 44 FixedKeystrokeStore: Sabit yazım ritmi şablonlarını ve referans girdilerini yönetir; SECUREKIT_KEYSTROKE_STORE üzerinden takip edilir. docs/ASPNET_CUTOVER.md 45 Eşzamanlı isteklerde yarış koşullarını ve kısmi yazımları önlemek için depolama katmanı atomik yazım ve süreç düzeyinde dosya kilitleme kullanır. Kaynaklar: docs/ASPNET_CUTOVER.md:34-49 Yapılandırma mimarisi (appsettings.json) API davranışını, apps/securekit-api/appsettings.json içinde tanımlı yapılandırılmış bölümler belirler. Yapılandırma şeması, hizmet katmanında kullanılan tür güvenli seçenek sınıflarıyla doğrudan eşleşir. Yapılandırma düzeninin ana blokları: Logging: Microsoft ASP.NET ve varsayılan günlük düzeylerini tanımlar. apps/securekit-api/appsettings.json 2-7 Face: Yüz doğrulama kurallarını, yükleme sınırlarını, zaman aşımı eşiklerini, cihaz seçimini (auto) ve GPU zorunluluğunu yönetir. apps/securekit-api/appsettings.json 9-15 Voice: Konuşmacı doğrulama parametrelerini, asgari kayıt örneklerini, Whisper model düzeylerini ve ECAPA-VoxCeleb vektörlerini yapılandırır. apps/securekit-api/appsettings.json 16-26 Card: OCR zaman aşımını, yükleme sınırlarını ve varsayılan eşleşme eşiklerini tanımlar. apps/securekit-api/appsettings.json 27-31 Cors: İzin verilen kaynaklar arası paylaşım politikalarını yönetir. apps/securekit-api/appsettings.json 32-34 Kaynaklar: apps/securekit-api/appsettings.json:1-35 Ortam değişkenleriyle geçersiz kılma ve referans kökleri ASP.NET Core, ortam değişkenlerinde çift alt çizgi (__) sözdizimiyle herhangi bir hiyerarşik yapılandırma anahtarının değiştirilmesine izin verir. Bu mekanizma dağıtım özelleştirmesi, dosya yolu yönlendirmesi ve biyometrik referans sınırlarının uygulanmasında yoğun kullanılır. Temel ortam değişkenleri ve yol eşlemeleri: SECUREKIT_USERS_FILE: Kullanıcı deposunun mutlak yolunu değiştirir. docs/ASPNET_CUTOVER.md 43 SECUREKIT_PROFILE_STORE: Kullanıcı profillerinin mutlak yolunu değiştirir. docs/ASPNET_CUTOVER.md 44 SECUREKIT_KEYSTROKE_STORE: Sabit yazım ritmi modellerinin dizin yolu. docs/ASPNET_CUTOVER.md 45 Face__ReferenceDirectory / FACE_SLIDING_REFERENCES_ROOT: Yüz vektörü referanslarının depolama kökleri. docs/ASPNET_CUTOVER.md 46-47 Card__UserReferenceDirectory: Doğrulanmış kimlik kartı şablonlarının depolama kökü. docs/ASPNET_CUTOVER.md 48 Face__AllowedReferenceRoots__0 / Card__AllowedReferenceRoots__0: Dosya erişimini yetkili referans dizinleriyle sınırlayan açık güvenlik kuralları. docs/ASPNET_CUTOVER.md 58-59 MOCK_IP_CHECK: Geliştirmede canlı IP/VPN konum kontrollerini atlama bayrağı. docs/ASPNET_CUTOVER.md 49 Kaynaklar: docs/ASPNET_CUTOVER.md:43-60",
+      "diagrams": [],
+      "words": 381
+    },
+    {
+      "slug": "3-legacy-nodeexpress-api-and-migration",
+      "title": "Eski Node/Express API ve geçiş",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3-legacy-nodeexpress-api-and-migration",
+      "number": "3",
+      "headings": [
+        {
+          "id": "legacy-nodeexpress-api-and-migration",
+          "title": "Eski Node/Express API ve geçiş",
+          "level": 1
+        },
+        {
+          "id": "node-auth-routes-and-services",
+          "title": "node-auth rotaları ve hizmetleri",
+          "level": 2
+        },
+        {
+          "id": "migration-plan-to-aspnet-core-10",
+          "title": "ASP.NET Core 10’a geçiş planı",
+          "level": 2
+        },
+        {
+          "id": "cutover-and-parity-testing",
+          "title": "Geçiş ve eşdeğerlik testleri",
+          "level": 2
+        }
+      ],
+      "searchText": "Eski Node/Express API ve geçiş İlgili kaynak dosyaları docs/NODE_API_CONTRACT_INVENTORY.md packages/node-auth/package.json Bu sayfa; eski Node/Express API’sini (packages/node-auth), mimarisini ve sistem sorumluluklarını ASP.NET Core 10 sunucusuna (apps/securekit-api) aktarmak için tasarlanan geçiş stratejisini ve eşdeğerlik doğrulama takımlarını özetler. Teknik ayrıntılar için aşağıdaki alt sayfalara bakın. Diyagramı büyütmek için seçin ↗ Diyagram 1: Eski Node/Express API’sinin kod öğeleri Kaynaklar: packages/node-auth/package.json:1-18, docs/NODE_API_CONTRACT_INVENTORY.md:1-46 node-auth rotaları ve hizmetleri Eski sunucu, packages/node-auth/src/server.ts içinde başlatılan bir Express uygulamasına dayanır. Çok modlu doğrulama akışlarını yönetmek için farklı öneklerde modüler yönlendiriciler bağlar: kimlik doğrulama (auth.ts), dinamik/sabit metin doğrulama istekleri (challenge.ts), kullanıcı rızası (consent.ts), biyometrik profil üst verileri (profiles.ts) ve yüz, ses, yazım ritmi, kart, ağ/oturum değerlendirme uç noktaları. Ayrıntılar için node-auth rotaları ve hizmetleri sayfasına bakın. Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md:30-84, packages/node-auth/package.json:1-37 ASP.NET Core 10’a geçiş planı Node/Express uygulamasından geçiş, her uç noktanın apps/securekit-api içine taşınmasını gerektirir. Strateji; yanıt şeması sözleşmelerini, hata zarfı biçimini (VALIDATION_ERROR, UNAUTHORIZED, INTERNAL_ERROR) ve kimlik normalleştirme kurallarını (gereken yerlerde kullanıcı kimliklerinin kırpılması ve küçük harfe çevrilmesi) koruyarak @securekit/web-sdk ve React demosuyla sorunsuz uyum sağlar. Ayrıntılar için ASP.NET Core 10’a geçiş planı sayfasına bakın. Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md:1-29 Geçiş ve eşdeğerlik testleri Geçişte gerileme olmamasını sağlamak için kapsamlı eşdeğerlik düzeneği, eski Node uygulaması ile ASP.NET Core sunucusu arasında otomatik fark kontrolleri yürütür. Test çerçevesi, paket yapılandırmalarında tanımlı aşamalı betiklere (test:aspnet-stage1 ile test:aspnet-stage7) dayanır ve ortak test verileriyle uçtan uca yanıt karşılaştırmaları yapar. Diyagramı büyütmek için seçin ↗ Diyagram 2: Eşdeğerlik testlerinin yürütme hattı Ayrıntılar için Geçiş ve eşdeğerlik testleri sayfasına bakın. Kaynaklar: packages/node-auth/package.json:6-18",
+      "diagrams": [
+        "3-legacy-nodeexpress-api-and-migration-1.svg",
+        "3-legacy-nodeexpress-api-and-migration-2.svg"
+      ],
+      "words": 240
+    },
+    {
+      "slug": "3.1-node-auth-routes-and-services",
+      "title": "node-auth rotaları ve hizmetleri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.1-node-auth-routes-and-services",
+      "number": "3.1",
+      "headings": [
+        {
+          "id": "node-auth-routes-and-services",
+          "title": "node-auth rotaları ve hizmetleri",
+          "level": 1
+        },
+        {
+          "id": "server-bootstrap-and-middleware-setup-object-object",
+          "title": "Sunucu başlangıcı ve ara katman kurulumu (server.ts)",
+          "level": 2
+        },
+        {
+          "id": "key-configuration-parameters",
+          "title": "Temel yapılandırma parametreleri",
+          "level": 3
+        },
+        {
+          "id": "express-routers-and-endpoint-contracts",
+          "title": "Express yönlendiricileri ve uç nokta sözleşmeleri",
+          "level": 2
+        },
+        {
+          "id": "1-health-and-authentication-object-object-object-object",
+          "title": "1. Sağlık ve kimlik doğrulama (auth.ts, legacyVerification.ts)",
+          "level": 3
+        },
+        {
+          "id": "2-challenges-object-object",
+          "title": "2. Doğrulama istekleri (challenge.ts)",
+          "level": 3
+        },
+        {
+          "id": "3-consent-and-profiles-object-object-object-object",
+          "title": "3. Rıza ve profiller (consent.ts, profiles.ts)",
+          "level": 3
+        },
+        {
+          "id": "4-sessions-and-risk-evaluation-object-object-object-object",
+          "title": "4. Oturumlar ve risk değerlendirme (session.ts, session/inMemoryStore.ts)",
+          "level": 3
+        },
+        {
+          "id": "storage-modules-and-data-layer",
+          "title": "Depolama modülleri ve veri katmanı",
+          "level": 2
+        }
+      ],
+      "searchText": "node-auth rotaları ve hizmetleri İlgili kaynak dosyaları docs/NODE_API_CONTRACT_INVENTORY.md packages/node-auth/package.json packages/node-auth paketi, SecureKit araç setinin eski Node.js/Express API sunucusunu sağlar. packages/node-auth/package.json 1-37 ASP.NET Core’a tam geçişten önce çok modlu biyometrik doğrulama rotalarını, doğrulama isteği üretimini, oturum yaşam döngüsünü ve profil depolamasını sunar. docs/NODE_API_CONTRACT_INVENTORY.md 1-6 Bu sayfa; sunucu başlangıcını, Express yönlendiricilerini, depolama modüllerini ve istek/yanıt sözleşmelerini açıklar. Sunucu başlangıcı ve ara katman kurulumu (server.ts) Express uygulaması packages/node-auth/src/server.ts içinde başlatılır (docs/NODE_API_CONTRACT_INVENTORY.md üzerinden referans verilir). Genel ara katmanları, hata yönetimini ve gövde ayrıştırma sınırlarını yapılandırır; tüm özellik yönlendiricilerini standart temel yollara bağlar. Temel yapılandırma parametreleri Temel URL / port: Genellikle http://localhost:3001 adresinde sunulur. docs/NODE_API_CONTRACT_INVENTORY.md 10 CORS: cors() ile genel olarak etkinleştirilir; kimlik bilgileri açığa çıkarılmadan tüm kaynaklara izin verilir. docs/NODE_API_CONTRACT_INVENTORY.md 13 Veri sınırları: JSON gövde ayrıştırıcısı 2mb boyutuyla sınırlıdır. docs/NODE_API_CONTRACT_INVENTORY.md 13-14 Hata zarfı: Ayrıştırıcı dışındaki rota hataları, {\"error\":{\"code\":\"...\",\"message\":\"...\",\"details\":{}}} yapısına uygun JSON döndürür. docs/NODE_API_CONTRACT_INVENTORY.md 14-16 Diyagramı büyütmek için seçin ↗ Şekil 1: Kavramlardan kod öğelerine — ara katman ve yönlendirici dağıtım hattı. Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md, packages/node-auth/package.json Express yönlendiricileri ve uç nokta sözleşmeleri API, packages/node-auth/src/routes/ altındaki özel Express yönlendiricilerine ayrılmıştır. docs/NODE_API_CONTRACT_INVENTORY.md 31-33 1. Sağlık ve kimlik doğrulama (auth.ts, legacyVerification.ts) GET /health: Uygulamanın sağlık durumunu döndürür. 200 {\"ok\":true} docs/NODE_API_CONTRACT_INVENTORY.md 37 GET /auth/users: Kayıtlı kullanıcıları oluşturulma ve güncelleme zamanlarıyla listeler. docs/NODE_API_CONTRACT_INVENTORY.md 38 POST /auth/register: userId ve password ile yeni kullanıcı kaydeder. Oluşturulduğunda 201, aynı parametreler mevcutsa 200 döndürür. docs/NODE_API_CONTRACT_INVENTORY.md 39 POST /auth/login: Kimlik bilgilerini doğrular; başarıda 200, uyumsuzlukta 401 INVALID_CREDENTIALS döndürür. docs/NODE_API_CONTRACT_INVENTORY.md 40 2. Doğrulama istekleri (challenge.ts) POST /challenge/text: Yapılandırılabilir dil (lang), uzunluk (length) ve wordCount ile metin doğrulama istekleri üretir; varsayılanlar Türkçe, kısa uzunluk ve 120 saniyelik TTL’dir. docs/NODE_API_CONTRACT_INVENTORY.md 41-48 POST /challenge/text/consume: Doğrulama isteği kimliğinin tek kullanımlık token’ını tüketir; geçersiz, süresi dolmuş veya kullanılmışsa 404, 410, 409 hatalarını döndürür. docs/NODE_API_CONTRACT_INVENTORY.md 42-48 3. Rıza ve profiller (consent.ts, profiles.ts) POST /consent: Kullanıcı rıza sürümlerini ve zamanlarını kaydeder. docs/NODE_API_CONTRACT_INVENTORY.md 43 GET /user/:userId/profiles: Kullanıcının saklanmış biyometrik profil referanslarını (yazım ritmi, yüz, kart, ses) getirir. docs/NODE_API_CONTRACT_INVENTORY.md 44 DELETE /user/biometrics: Biyometrik profilleri siler; ?deleteConsent=true verilirse rıza kayıtlarını da temizler. docs/NODE_API_CONTRACT_INVENTORY.md 45-50 4. Oturumlar ve risk değerlendirme (session.ts, session/inMemoryStore.ts) POST /session/start: Varsayılan 900 saniyelik TTL ile oturum başlatır. docs/NODE_API_CONTRACT_INVENTORY.md 66-69 POST /verify/session: Risk puanlarını, politika uyumunu ve sinyal birleşimlerini (konum, ağ, ses, yazım ritmi) değerlendirir; requiredSteps ile birlikte allow, step-up veya deny kararı üretir. docs/NODE_API_CONTRACT_INVENTORY.md 67-75 Diyagramı büyütmek için seçin ↗ Şekil 2: Kavramlardan kod öğelerine — oturum doğrulama ve risk değerlendirme akışı. Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md Depolama modülleri ve veri katmanı node-auth paketi; kullanıcı kayıtlarını, etkin doğrulama isteklerini ve doğrulama oturumlarını yönetmek için hafif bellek ve dosya tabanlı depolama araçları kullanır. Normalleştirme kuralları: Kullanıcı kimlikleri, kimlik doğrulama ve kart yönlendiricilerinde .trim().toLowerCase(); ikincil yönlendiricilerde standart .trim() ile işlenir. docs/NODE_API_CONTRACT_INVENTORY.md 25-26 Durum depoları: Oturum zaman aşımı ve doğrulama isteği tüketim bayrakları gibi geçici durumlar, geliştirme ve testte hızlı doğrulama için inMemoryStore.ts modülleriyle tutulur. docs/NODE_API_CONTRACT_INVENTORY.md 61-62 Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md, packages/node-auth/package.json",
+      "diagrams": [
+        "3.1-node-auth-routes-and-services-1.svg",
+        "3.1-node-auth-routes-and-services-2.svg"
+      ],
+      "words": 460
+    },
+    {
+      "slug": "3.2-migration-plan-to-asp.net-core-10",
+      "title": "ASP.NET Core 10’a geçiş planı",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.2-migration-plan-to-asp.net-core-10",
+      "number": "3.2",
+      "headings": [
+        {
+          "id": "migration-plan-to-aspnet-core-10",
+          "title": "ASP.NET Core 10’a geçiş planı",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "target-architecture-and-core-components",
+          "title": "Hedef mimari ve temel bileşenler",
+          "level": 2
+        },
+        {
+          "id": "migration-principles-and-methodology",
+          "title": "Geçiş ilkeleri ve yöntem",
+          "level": 2
+        },
+        {
+          "id": "migration-stages-and-status",
+          "title": "Geçiş aşamaları ve durum",
+          "level": 2
+        },
+        {
+          "id": "stage-summary-and-implementation-status",
+          "title": "Aşama özeti ve uygulama durumu",
+          "level": 3
+        }
+      ],
+      "searchText": "ASP.NET Core 10’a geçiş planı İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md Amaç ve kapsam Bu belge, packages/node-auth içindeki eski Node.js Express API’sini, istemci uygulamalarını değiştirmeden tam sözleşme uyumuyla apps/securekit-api içindeki yeni ve yüksek performanslı ASP.NET Core 10 API’sine (net10.0) taşımanın mimari planını tanımlar. MIGRATION_TO_ASPNET10_PLAN.md 1-6 İlk geçiş sırasında şu bileşenler korunur: React/Vite demo uygulaması (apps/demo-web). MIGRATION_TO_ASPNET10_PLAN.md 8-10 TypeScript web SDK’sı (packages/web-sdk). MIGRATION_TO_ASPNET10_PLAN.md 8-11 Yüz, ses, kart, IP ve sabit metin yazım ritmi doğrulaması için Python işçileri. MIGRATION_TO_ASPNET10_PLAN.md 8-12 Mevcut HTTP rotaları, istek/yanıt veri şemaları ve hata yapıları. MIGRATION_TO_ASPNET10_PLAN.md 8-13 Python işçileri, C# hizmetlerinin doğrudan yönettiği kontrollü süreç köprüsüyle entegre edilir. MIGRATION_TO_ASPNET10_PLAN.md 15 Veritabanı geçişleri, parola güvenliği iyileştirmeleri ve gelişmiş kimlik doğrulama stratejisi değişiklikleri bu API uyumluluk geçişinden ayrı çalışmalar olarak ele alınır. MIGRATION_TO_ASPNET10_PLAN.md 16-17 Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 1-18 Hedef mimari ve temel bileşenler Hedef sistem; ASP.NET Core denetleyicilerini, WebApplicationFactory ile xUnit testlerini ve eski Node.js davranış sözleşmelerine uyan sağlam JSON dosya depolama adaptörlerini kullanan modern .NET 10 düzenine dayanır. MIGRATION_TO_ASPNET10_PLAN.md 19-33 Diyagramı büyütmek için seçin ↗ Şekil 1: Geçiş mimarisinin kavramlardan monorepodaki somut kod öğelerine eşleştirilmesi. Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 19-33 Geçiş ilkeleri ve yöntem Geçiş, gerileme olmaması kuralına bağlıdır; ilgili C# modülleri tüm doğrulama kontrollerinden geçene kadar eski Node API çalışır durumda tutulur. MIGRATION_TO_ASPNET10_PLAN.md 34-42 Geri dönüşün korunması: Tüm C# modülleri bütün test düzeneklerini geçene kadar Node API (packages/node-auth) korunur. MIGRATION_TO_ASPNET10_PLAN.md 34-36 Aşamalı commit’ler: Her geçiş adımı küçük, bağımsız ve geri alınabilir commit’lerden oluşur. MIGRATION_TO_ASPNET10_PLAN.md 37 Önce sözleşme: Şemalar ve testler uygulamadan önce oluşturulur. MIGRATION_TO_ASPNET10_PLAN.md 38 Kesin eşdeğerlik: Rotalar, HTTP yöntemleri, durum kodları ve JSON alan tanımları değiştirilmez. MIGRATION_TO_ASPNET10_PLAN.md 39 İki ortamda doğrulama: Aynı uç noktalar, yanıt eşdeğerliğini doğrulamak için hem Node hem C# ortamında çalıştırılır. MIGRATION_TO_ASPNET10_PLAN.md 40 Kontrolle ilerleme: Mevcut aşamanın testleri geçmeden sonraki aşamaya geçilemez. MIGRATION_TO_ASPNET10_PLAN.md 41 Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 34-42 Geçiş aşamaları ve durum Geçiş planı; temel iskeletten başlayıp alan hizmetleri, biyometrik doğrulama köprüleri ve kabul düzeneklerine ilerleyen sıralı aşamalara ayrılmıştır. Diyagramı büyütmek için seçin ↗ Şekil 2: Otomatik test kontrolleriyle yönetilen sıralı geçiş aşamaları. Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 43-166 Aşama özeti ve uygulama durumu AşamaOdak alanlarıTemel kod öğeleri ve çıktılarDurumAşama 0İskelet, CORS, JSON, sağlık kontrolüProgram.cs, apps/securekit-api.tests, /healthTamamlandı MIGRATION_TO_ASPNET10_PLAN.md 45-51Aşama 1Doğrulama isteği, rıza, profillerPOST /challenge/text, POST /consent, GET /user/{userId}/profiles, DELETE /user/biometricsTamamlandı MIGRATION_TO_ASPNET10_PLAN.md 74-81Aşama 2Kullanıcılar ve oturum akışıGET /auth/users, POST /auth/register, POST /auth/login, POST /session/start, POST /verify/sessionTamamlandı MIGRATION_TO_ASPNET10_PLAN.md 113-118Aşama 3Ağ, konum ve eski sistemAğ doğrulama, IP kontrolü, eski proxy rotalarıTamamlandı MIGRATION_TO_ASPNET10_PLAN.md 164-166 Kaynaklar: MIGRATION_TO_ASPNET10_PLAN.md 43-166",
+      "diagrams": [
+        "3.2-migration-plan-to-asp.net-core-10-1.svg",
+        "3.2-migration-plan-to-asp.net-core-10-2.svg"
+      ],
+      "words": 390
+    },
+    {
+      "slug": "3.3-cutover-and-parity-testing",
+      "title": "Geçiş ve eşdeğerlik testleri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/3.3-cutover-and-parity-testing",
+      "number": "3.3",
+      "headings": [
+        {
+          "id": "cutover-and-parity-testing",
+          "title": "Geçiş ve eşdeğerlik testleri",
+          "level": 1
+        },
+        {
+          "id": "backend-selection-and-environment-configuration",
+          "title": "Sunucu seçimi ve ortam yapılandırması",
+          "level": 2
+        },
+        {
+          "id": "configuration-variables",
+          "title": "Yapılandırma değişkenleri",
+          "level": 3
+        },
+        {
+          "id": "parity-runner-object-object",
+          "title": "Eşdeğerlik çalıştırıcısı (aspnet-parity.mjs)",
+          "level": 2
+        },
+        {
+          "id": "execution-flow",
+          "title": "Yürütme akışı",
+          "level": 3
+        },
+        {
+          "id": "run-logs-output-structure",
+          "title": "Çalışma günlüklerinin çıktı yapısı",
+          "level": 3
+        },
+        {
+          "id": "stage-one-through-seven-parity-scripts",
+          "title": "Birinci ile yedinci aşama arasındaki eşdeğerlik betikleri",
+          "level": 2
+        },
+        {
+          "id": "normalization-and-assertion-logic",
+          "title": "Normalleştirme ve doğrulama mantığı",
+          "level": 3
+        },
+        {
+          "id": "fixtures-and-deterministic-testing-object-object",
+          "title": "Test verileri ve deterministik test (card-stage7.py)",
+          "level": 2
+        },
+        {
+          "id": "protocol-fixture-behavior",
+          "title": "Protokol düzeneğinin davranışı",
+          "level": 3
+        }
+      ],
+      "searchText": "Geçiş ve eşdeğerlik testleri İlgili kaynak dosyaları docs/ASPNET_CUTOVER.md package.json packages/node-auth/scripts/fixtures/card-stage7.py packages/node-auth/scripts/stage-seven-parity.ts scripts/aspnet-parity.mjs Bu sayfa, eski Node/Express API’sinden (packages/node-auth) SecureKit ASP.NET Core 10 API’sine (apps/securekit-api) geçişte kullanılan stratejiyi, sunucu seçimi ortam değişkenlerini, eşdeğerlik test düzeneklerini ve doğrulama test verilerini belgeler. aspnet-parity.mjs çalıştırıcısını, birinci ile yedinci aşama arasındaki eşdeğerlik betiklerini ve .run-logs/ altındaki çalışma günlüklerinin oluşturulmasını kapsar. Sunucu seçimi ve ortam yapılandırması Monorepo, Vite geliştirme proxy’sinin arkasında eski Node/Express API’sini veya yeni ASP.NET Core API’sini çalıştırmayı destekler. docs/ASPNET_CUTOVER.md 1-31 Sunucu seçimi, kök çalıştırma betikleri ve Vite yapılandırmasında başlangıçta değerlendirilen ortam değişkenleriyle yönetilir. docs/ASPNET_CUTOVER.md 13-23 Yapılandırma değişkenleri VITE_SECUREKIT_API_BACKEND: Hedef seçimini yönetir. aspnet değeri istekleri 3002 portuna, node değeri 3001 portuna yönlendirir. docs/ASPNET_CUTOVER.md 21-22 VITE_SECUREKIT_DEV_PROXY_TARGET: VITE_SECUREKIT_API_BACKEND değerinden önce gelen açık URL geçersiz kılma seçeneğidir. docs/ASPNET_CUTOVER.md 20-21 Varsayılan portlar: C# ASP.NET Core API 3002, Node/Express API 3001, Vite geliştirme sunucusu 5173 portunu kullanır. docs/ASPNET_CUTOVER.md 8-10 Kaynaklar: docs/ASPNET_CUTOVER.md:6-31, package.json:8-22 Eşdeğerlik çalıştırıcısı (aspnet-parity.mjs) Eşdeğerlik test düzeneği scripts/aspnet-parity.mjs ile yönetilir. scripts/aspnet-parity.mjs 1-38 Birinci ile yedinci aşama arasındaki test betiklerini tsx kullanarak sırayla çalıştırır. scripts/aspnet-parity.mjs 11-14 Her aşama, eski Express uygulamasıyla ASP.NET Core API dosyasını birlikte başlatır; aynı HTTP isteklerini göndererek yapısal ve davranışsal sözleşme eşdeğerliğini doğrular. Yürütme akışı Diyagramı büyütmek için seçin ↗ Kaynaklar: scripts/aspnet-parity.mjs:1-38, packages/node-auth/scripts/stage-seven-parity.ts:1-34 Çalışma günlüklerinin çıktı yapısı Sonuçlar .run-logs/aspnet-parity.json içine serileştirilir. scripts/aspnet-parity.mjs 7-9 Şema, genel başarıyı, zamanları ve her aşamanın ölçümlerini kaydeder: { \"startedAt\": \"2026-10-07T00:00:00.000Z\", \"passed\": true, \"stages\": [ { \"stage\": \"one\", \"passed\": true, \"durationMs\": 1250, \"summary\": \"124 comparisons passed\" } ], \"finishedAt\": \"2026-10-07T00:00:05.000Z\" } Kaynaklar: scripts/aspnet-parity.mjs:7-37 Birinci ile yedinci aşama arasındaki eşdeğerlik betikleri Eşdeğerlik testleri, farklı yönlendirme alanlarını ve doğrulama sınırlarını kapsayan yedi işlevsel aşamaya ayrılır: Aşama 1–3: Temel kimlik doğrulama sözleşmeleri, oturum yönetimi, risk değerlendirme şemaları ve doğrulama isteği depoları. Aşama 4–6: Biyometrik yönlendirme modülleri (yüz vektörleri, ses doğrulama, kayan pencereler, yazım ritmi profilleme). Aşama 7: Kart doğrulama uç noktaları, çok parçalı form işleme, referans yönetimi, hata enjeksiyonu ve Python süreç köprüsü davranışı. packages/node-auth/scripts/stage-seven-parity.ts 1-114 Normalleştirme ve doğrulama mantığı Depolama yolları, sistemin ürettiği geçici dizinler ve değişken zamanlar (enrolledAt, updatedAt) Node ve .NET ortamları arasında farklılaştığı için eşdeğerlik betikleri ayrıntılı karşılaştırmadan önce yanıtları normalleştirir. packages/node-auth/scripts/stage-seven-parity.ts 46-57 // Normalization logic mapping volatile paths and dates const normalize = (value: any, key = \"\"): any => { if (Array.isArray(value)) return value.map(v => normalize(v)); if (value && typeof value === \"object\") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, normalize(v, k)])); if ([\"updatedAt\", \"enrolledAt\", \"cardReferenceEnrolledAt\"].includes(key)) return \"<time>\"; if (typeof value === \"string\") { for (const [name, replacement] of variablePaths) value = value.split(name).join(replacement); value = value.replace(/[^\\s\"']*securekit-card-[^/\\\\\\s\"']+[\\\\/]/g, \"<temp>/\").replaceAll(\"\\\\\", \"/\"); } return value; }; Kaynaklar: packages/node-auth/scripts/stage-seven-parity.ts:46-57 Kaynaklar: packages/node-auth/scripts/stage-seven-parity.ts:1-94, scripts/aspnet-parity.mjs:1-38 Test verileri ve deterministik test (card-stage7.py) Yerel PyTorch, CUDA veya PaddleOCR ortamı gerektirmeden güvenilir testler çalıştırmak için yedinci aşama deterministik bir Python protokol düzeneği (packages/node-auth/scripts/fixtures/card-stage7.py) kullanır. packages/node-auth/scripts/fixtures/card-stage7.py 1-53 Protokol düzeneğinin davranışı Betik, JSONL protokol çerçeveleriyle stdin/stdout üzerinden iletişim kurar. Gerçek makine öğrenmesi modellerini çağırmadan farklı başarı ve hata durumlarını taklit etmek için örnek görüntü yollarını inceler: timeout: İşçi zaman aşımı yönetimini test etmek için kasıtlı 30 saniyelik gecikme oluşturur. packages/node-auth/scripts/fixtures/card-stage7.py 14-15 invalid: Ayrıştırıcı hata toparlanmasını test etmek için JSON dışı çıktı üretir. packages/node-auth/scripts/fixtures/card-stage7.py 16-18 stdout / stderr: Çıktı boşaltma sınırlarını doğrulamak için büyük veri tamponları veya hata akışları üretir. packages/node-auth/scripts/fixtures/card-stage7.py 19-24 dependency: Eksik Python modülü istisnalarını (örneğin No module named 'paddleocr') taklit eder. packages/node-auth/scripts/fixtures/card-stage7.py 41-42 # Protocol event emission from card-stage7.py def emit(value): print(json.dumps(value), flush=True) emit({\"event\": \"ready\", \"ok\": True}) for line in sys.stdin: request = json.loads(line) mode = pathlib.Path(request[\"probeImagePath\"]).read_text() # ... mode handling and score evaluation ... Kaynaklar: packages/node-auth/scripts/fixtures/card-stage7.py:7-13 Kaynaklar: packages/node-auth/scripts/fixtures/card-stage7.py:1-54, packages/node-auth/scripts/stage-seven-parity.ts:15-16",
+      "diagrams": [
+        "3.3-cutover-and-parity-testing-1.svg"
+      ],
+      "words": 569
+    },
+    {
+      "slug": "4-client-side--sdk-core-and-demo-app",
+      "title": "İstemci tarafı: SDK, Core ve demo uygulaması",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4-client-side:-sdk-core-and-demo-app",
+      "number": "4",
+      "headings": [
+        {
+          "id": "client-side-sdk-core-and-demo-app",
+          "title": "İstemci tarafı: SDK, Core ve demo uygulaması",
+          "level": 1
+        },
+        {
+          "id": "41-object-object-overview",
+          "title": "4.1. @securekit/web-sdk genel bakış",
+          "level": 2
+        },
+        {
+          "id": "42-object-object-contracts-and-orchestration",
+          "title": "4.2. @securekit/core sözleşmeleri ve koordinasyon",
+          "level": 2
+        },
+        {
+          "id": "43-object-object-application",
+          "title": "4.3. demo-web uygulaması",
+          "level": 2
+        },
+        {
+          "id": "client-side-architecture-and-code-entity-mapping",
+          "title": "İstemci mimarisi ve kod öğeleriyle eşleştirme",
+          "level": 2
+        }
+      ],
+      "searchText": "İstemci tarafı: SDK, Core ve demo uygulaması İlgili kaynak dosyaları README.md apps/demo-web/package.json Bu bölüm, SecureKit istemci mimarisine genel bakış sunar: tarayıcıya yönelik TypeScript SDK’sı (@securekit/web-sdk), ortak sözleşme ve mantık paketi (@securekit/core) ve React demo ortamı (apps/demo-web). Teknik ayrıntılar, uygulama özellikleri ve modül iç yapıları için ilgili alt sayfalara bakın: @securekit/web-sdk: @securekit/web-sdk sayfasına bakın. @securekit/core Contracts and Orchestration: @securekit/core sözleşmeleri ve koordinasyon sayfasına bakın. demo-web Application: demo-web uygulaması sayfasına bakın. Kaynaklar: README.md 21-24 4.1. @securekit/web-sdk genel bakış @securekit/web-sdk paketi; kimlik doğrulama uç noktalarına erişmek, kullanıcı biyometrisini toplamak ve bağlamsal sinyalleri takip etmek için tarayıcı arayüzü sağlar. Aktarım mantığını, yazım ritmi olay toplayıcılarını, konum/ağ bağlamı işleyicilerini ve eski istemci uyumluluk adaptörlerini kapsar. README.md 23 client.ts, aktarım katmanları, yazım ritmi toplayıcıları, adaptörler ve eski istemci desteği için @securekit/web-sdk sayfasına bakın. Kaynaklar: README.md 23 4.2. @securekit/core sözleşmeleri ve koordinasyon @securekit/core paketi, monoreponun ortak temel katmanıdır. Çok modlu sinyalleri değerlendirmek için istek/yanıt sözleşmelerini, biyometrik işleme modüllerini, risk politikalarını ve istemci koordinasyon mantığını tanımlar. README.md 21 Ortak sözleşmeler, biyometri modülleri, risk politikaları, koordinatör ve varsayılan politikalar için @securekit/core sözleşmeleri ve koordinasyon sayfasına bakın. Kaynaklar: README.md 21 4.3. demo-web uygulaması demo-web, kayıt, giriş, rıza akışları ve çok modlu biyometrik profil doğrulamasını test etmek için tasarlanmış React ve Vite tabanlı demo ortamıdır (apps/demo-web). README.md 15 Hem @securekit/web-sdk hem @securekit/core paketleriyle entegre çalışır. apps/demo-web/package.json 16-17 Vite geliştirme proxy’si, sunucu hedefinin belirlenmesi (api-target.ts), AuthApp arayüzü, kimlik doğrulama akışları (auth.html) ve kabul smoke testleri için demo-web uygulaması sayfasına bakın. Kaynaklar: README.md 15 apps/demo-web/package.json 16-17 İstemci mimarisi ve kod öğeleriyle eşleştirme Aşağıdaki diyagram; tarayıcı istemci bileşenlerini, ortak çekirdek sözleşmelerini ve demo uygulamasını ilişkilendirir. Başlık: İstemci bileşen yapısı Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 21-24 apps/demo-web/package.json 16-17 Kimlik doğrulama veya kayıt denemesinde veri, React arayüzünden (demo-web) SDK aktarım katmanına akar ve @securekit/core ortak yapılarını kullanır. Başlık: İstemci istek akışı Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 21-24",
+      "diagrams": [
+        "4-client-side--sdk-core-and-demo-app-1.svg",
+        "4-client-side--sdk-core-and-demo-app-2.svg"
+      ],
+      "words": 305
+    },
+    {
+      "slug": "4.1--securekitweb-sdk",
+      "title": "@securekit/web-sdk",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.1-@securekitweb-sdk",
+      "number": "4.1",
+      "headings": [
+        {
+          "id": "securekitweb-sdk",
+          "title": "@securekit/web-sdk",
+          "level": 1
+        },
+        {
+          "id": "client-initialization-and-core-architecture-object-object",
+          "title": "İstemci başlatma ve temel mimari (client.ts)",
+          "level": 2
+        },
+        {
+          "id": "transport-layer-and-adapters",
+          "title": "Aktarım katmanı ve adaptörler",
+          "level": 2
+        },
+        {
+          "id": "keystroke-collectors",
+          "title": "Yazım ritmi toplayıcıları",
+          "level": 2
+        },
+        {
+          "id": "location-and-context-signals",
+          "title": "Konum ve bağlam sinyalleri",
+          "level": 2
+        },
+        {
+          "id": "legacy-client-surface",
+          "title": "Eski istemci arayüzü",
+          "level": 2
+        }
+      ],
+      "searchText": "@securekit/web-sdk İlgili kaynak dosyaları README.md @securekit/web-sdk paketi (packages/web-sdk), SecureKit’in temel tarayıcı istemci kütüphanesidir. Biyometrik yazım ritmi yakalama, tarayıcı ve konum sinyallerini toplama, SecureKit API aktarım katmanıyla iletişim ve eski istemci arayüzleri üzerinden geriye dönük uyumluluk için modüler araçlar sağlar. Kaynaklar: README.md 23 İstemci başlatma ve temel mimari (client.ts) @securekit/web-sdk giriş noktası; kimlik doğrulama istemcisini başlatır, API temel URL’si, zaman aşımı ve başlıklar gibi seçenekleri yönetir ve biyometrik toplayıcıların kaydını koordine eder. İstemci örneği, aktarım mekanizmalarını, yazım ritmi izleme bağlarını ve ortam sinyali toplayıcılarını ortak arayüzde birleştirir. Diyagramı büyütmek için seçin ↗ Şekil 1: Tarayıcı olaylarını aktarıma bağlayan istemci başlatma ve bileşen bağlantı akışı. Kaynaklar: README.md 23 README.md 86-88 Aktarım katmanı ve adaptörler Aktarım katmanı, tarayıcı SDK’sı ile sunucu API’si (apps/securekit-api veya eski packages/node-auth) arasında HTTP iletişimini yönetir. İstek serileştirme, kimlik doğrulama başlıkları, hata yönetimi ve VITE_SECUREKIT_BASE_URL, VITE_SECUREKIT_API_BACKEND gibi ortam değişkenlerine göre uç nokta seçimini soyutlar. Diyagramı büyütmek için seçin ↗ Şekil 2: Hedef sunucu API’leri için aktarım yönlendirmesi ve adaptör seçimi. Kaynaklar: README.md 75-88 Yazım ritmi toplayıcıları Yazım ritmi toplayıcısı, belirli girdi alanları veya formlardaki keydown ve keyup DOM olaylarını dinleyerek gerçek zamanlı yazım ritmini yakalar. Biyometrik profil oluşturmak için basılı tutma sürelerini ve ardışık tuşlar arasındaki geçiş sürelerini kaydeder. Basılı tutma süresi: Tek bir tuşun keydown olayı ile ona karşılık gelen keyup olayı arasındaki süre. Geçiş süresi: Önceki tuşun keyup olayı ile sonraki tuşun keydown olayı arasındaki süre. Dinamik/sabit puanlama: Ham olay akışlarını hem serbest metin yazım modelleri hem sabit metin biyometrik şablonlarıyla doğrulamaya hazırlar. Kaynaklar: README.md 9 README.md 23 Konum ve bağlam sinyalleri Web SDK’sı, risk değerlendirme ve cihaz parmak izi için konum ve ortam toplayıcıları içerir. Saat dilimi farkı, ekran çözünürlüğü, tarayıcı dili ve kullanıcı iznine bağlı isteğe bağlı konum koordinatları gibi sinyalleri toplar; bunları kimlik doğrulama isteği verilerine ekler. Kaynaklar: README.md 13-14 Eski istemci arayüzü Eski uygulamalarla veya Express uç noktalarından (packages/node-auth) ASP.NET Core denetleyicilerine (apps/securekit-api) geçiş sırasında uyumu korumak için SDK eski istemci arayüzü sağlar. Bu adaptör katmanı, istemci kodunu yeniden yazmadan eski istek verilerini güncel API sözleşmelerine eşleyen geriye uyumlu yöntem imzaları sunar. Kaynaklar: README.md 22 README.md 57-61",
+      "diagrams": [
+        "4.1--securekitweb-sdk-1.svg",
+        "4.1--securekitweb-sdk-2.svg"
+      ],
+      "words": 344
+    },
+    {
+      "slug": "4.2--securekitcore-contracts-and-orchestration",
+      "title": "@securekit/core sözleşmeleri ve koordinasyon",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.2-@securekitcore-contracts-and-orchestration",
+      "number": "4.2",
+      "headings": [
+        {
+          "id": "securekitcore-contracts-and-orchestration",
+          "title": "@securekit/core sözleşmeleri ve koordinasyon",
+          "level": 1
+        },
+        {
+          "id": "1-shared-request-and-response-contracts",
+          "title": "1. Ortak istek ve yanıt sözleşmeleri",
+          "level": 2
+        },
+        {
+          "id": "2-biometrics-modules-and-signal-models",
+          "title": "2. Biyometri modülleri ve sinyal modelleri",
+          "level": 2
+        },
+        {
+          "id": "3-risk-policies-and-default-configuration-object-object",
+          "title": "3. Risk politikaları ve varsayılan yapılandırma (defaultPolicy)",
+          "level": 2
+        },
+        {
+          "id": "4-the-orchestration-engine",
+          "title": "4. Koordinasyon motoru",
+          "level": 2
+        }
+      ],
+      "searchText": "@securekit/core sözleşmeleri ve koordinasyon İlgili kaynak dosyaları README.md docs/NODE_API_CONTRACT_INVENTORY.md @securekit/core paketi, SecureKit monoreposunun ortak temel TypeScript kütüphanesidir. Sunucu uygulamalarının (packages/node-auth, apps/securekit-api) ve istemci SDK’larının (packages/web-sdk) kullandığı alan modellerini, istek/yanıt sözleşmelerini, biyometrik sinyal arayüzlerini, risk politikalarını ve koordinasyon mantığını tanımlar. 1. Ortak istek ve yanıt sözleşmeleri Core paketi; kullanıcı yaşam döngüsü, doğrulama isteği üretimi, rıza doğrulaması ve çok modlu profil depolaması için standart veri aktarım nesneleri (DTO) ve durum arayüzleri tanımlar. Temel yapısal tanımlar: Kullanıcı kayıtları ve profiller: userId, kayıt zamanları, rıza sürümleri ve profil ilişkileri (yazım ritmi modelleri, yüz vektörleri, ses referansları, kart üst verileri) için standart şemalar. Kimlikler, kimlik doğrulama sınırları boyunca tutarlı biçimde normalleştirilir (uygun yerlerde kırpılır ve küçük harfe çevrilir). Doğrulama istekleri: Dil parametreleri (lang), metin uzunlukları (length), dinamik sözcük sayıları (wordCount) ve kesin geçerlilik süresi (CHALLENGE_TTL_SECONDS) kuralları dahil istek üretimini yöneten yapılar. Oturum yaşam döngüsü: Süre sonu pencerelerini (SESSION_TTL_SECONDS), birikmiş sinyalleri ve değerlendirme sonuçlarını izleyen süreli oturum tanıtıcıları (sessionId). Şekil 1: Sözleşme doğrulama ve koordinasyon akışı Kaynaklar: README.md:19-21, docs/NODE_API_CONTRACT_INVENTORY.md:30-52 2. Biyometri modülleri ve sinyal modelleri Biyometrik ve bağlamsal veriler, doğrulama hizmetlerine veya risk değerlendiricilerine aktarılmadan önce yapılandırılmış sinyal verilerine dönüştürülür. Core sözleşmeleri şu alanlarda ortak şemalar tanımlar: Yazım ritmi: EMA kullanıcı profilleri veya sabit metin şablonlarıyla eşleştirmek için basılı tutma sürelerini ve geçiş gecikmelerini ölçen keydown, keyup olay zamanları. Yüz ve ses sinyalleri: Dış Python alt süreçleriyle değerlendirilen vektörler, referans görüntü yolları, canlılık göstergeleri ve konuşmadan metne doğrulama verileri. Ağ ve konum sinyalleri: VPN, proxy, Tor veya relay kullanım işaretleri, coğrafi sapma hesapları ve izin verilen ülke kodları (allowedCountries) içeren IP üst veri yapıları. Sinyal işleme ve modüllerin kod öğelerine eşleştirilmesi Kaynaklar: README.md:9-14, docs/NODE_API_CONTRACT_INVENTORY.md:69-76 3. Risk politikaları ve varsayılan yapılandırma (defaultPolicy) Risk motoru oturum güven puanlarını hesaplar; doğrulama denemesine izin verilip verilmeyeceğini veya ek doğrulama gerekip gerekmediğini belirler. defaultPolicy yapılandırması eşik kurallarını ve güvenlik kısıtlarını belirler: Risk puanı sınırları: Birleşik sinyal puanlarını sınıflandırmak için allowMaxRisk, denyMinRisk gibi sayısal sınırlar tanımlar. Ağ kuralları: treatVpnAsFailure, minNetworkScore gibi parametreler, konut dışı veya proxy IP işaretlerinde doğrudan ret ya da puan cezasını belirler. Ek doğrulama gereksinimleri: Orta düzey riskte gerekli ikincil doğrulama türlerini (ses isteği, yüzün yeniden doğrulanması gibi) gösteren stepUpSteps dizi eşlemelerini belirtir. Karar sonuçları: Dinamik değerlendirmede allow, step_up, deny; sabit metin doğrulamasında accept, reject ayrık sonuçlarını üretir. Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md:27-29, docs/NODE_API_CONTRACT_INVENTORY.md:69-76 4. Koordinasyon motoru Koordinatör, etkin kimlik doğrulama oturumunda durumun kalıcılığını, sinyallerin aşamalı birikimini ve politika uygulamasını yönetir. Doğrulama isteği gönderildiğinde koordinatör şu sırayı izler: Etkin oturum durumunu alttaki depolama katmanından (SessionStore) alır. Gelen telemetri sinyallerini (signalsUsed) geçmiş oturum verilerine ekler veya birleştirir. Etkin politika profili (defaultPolicy) için risk değerlendirme hizmetini (SessionRiskEvaluator) çağırır. Ortak kararı (decision) üretir, sonuç riskScore değerini hesaplar; gerekli ek doğrulama işlemlerini (requiredSteps) ve tanılama nedenlerini (reasons) derler. Diyagramı büyütmek için seçin ↗ Koordinasyon ve politika değerlendirme hattı Kaynaklar: docs/NODE_API_CONTRACT_INVENTORY.md:59-76",
+      "diagrams": [
+        "4.2--securekitcore-contracts-and-orchestration-1.svg"
+      ],
+      "words": 454
+    },
+    {
+      "slug": "4.3-demo-web-application",
+      "title": "demo-web uygulaması",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/4.3-demo-web-application",
+      "number": "4.3",
+      "headings": [
+        {
+          "id": "demo-web-application",
+          "title": "demo-web uygulaması",
+          "level": 1
+        },
+        {
+          "id": "vite-configuration-and-dev-proxy-architecture",
+          "title": "Vite yapılandırması ve geliştirme proxy mimarisi",
+          "level": 2
+        },
+        {
+          "id": "backend-resolution-object-object",
+          "title": "Sunucu hedefinin belirlenmesi (api-target.ts)",
+          "level": 2
+        },
+        {
+          "id": "application-ui-and-multi-page-build-object-object",
+          "title": "Uygulama arayüzü ve çok sayfalı derleme (auth.html)",
+          "level": 2
+        },
+        {
+          "id": "aspnet-smoke-test-script-object-object",
+          "title": "ASP.NET smoke test betiği (aspnet-smoke.ts)",
+          "level": 2
+        }
+      ],
+      "searchText": "demo-web uygulaması İlgili kaynak dosyaları apps/demo-web/.env.example apps/demo-web/api-target.ts apps/demo-web/scripts/aspnet-smoke.ts apps/demo-web/vite.config.ts apps/demo-web paketi, SecureKit’in temel demo ve deneme arayüzü olan Vite destekli React tek/çok sayfalı uygulamasıdır. @securekit/web-sdk ile kayıt, kimlik doğrulama, çok modlu biyometrik kayıt/doğrulama (yazım ritmi, yüz, ses, kart), ağ sinyali kontrolleri ve risk puanlamayı gösterir. Bu sayfa; derleme yapılandırmasını, sunucu hedefi seçimini, proxy yol dönüştürme kurallarını, arayüz giriş noktalarını (auth.html) ve uçtan uca smoke test düzeneğini (aspnet-smoke.ts) açıklar. Vite yapılandırması ve geliştirme proxy mimarisi Arayüz derlemesi ve geliştirme sunucusu apps/demo-web/vite.config.ts ile yapılandırılır. apps/demo-web/vite.config.ts 1-54 Vite, React eklentisiyle (@vitejs/plugin-react) başlatılır apps/demo-web/vite.config.ts 4, @securekit/web-sdk takma adını doğrudan çalışma alanı kaynağına eşler apps/demo-web/vite.config.ts 19 ve yerel geliştirme proxy’sini kurar. apps/demo-web/vite.config.ts 30-44 Eski Node ve yeni ASP.NET Core sunucularının yol kuralları farklılaştığı için Vite proxy’si /api/securekit ile eşleşen istekleri inceler apps/demo-web/vite.config.ts 32 ve koşullu yol dönüştürmesi uygular. apps/demo-web/vite.config.ts 36-41 Yazım ritmi rotaları tam önekini (/api/securekit/keystroke/...) korur; diğer rotalarda seçilen sunucuya iletimden önce /api/securekit kaldırılır. apps/demo-web/vite.config.ts 36-41 Diyagramı büyütmek için seçin ↗ Şekil 1: Kavramsal akışı kod öğelerine bağlayan Vite proxy yol dönüştürme ve yönlendirme mimarisi. Kaynaklar: apps/demo-web/vite.config.ts:1-54 Sunucu hedefinin belirlenmesi (api-target.ts) Geliştirme ve test sırasında eski Express ile yeni ASP.NET Core sunucuları arasında geçişi desteklemek için apps/demo-web/api-target.ts, resolveApiTarget() işlevini dışa aktarır. apps/demo-web/api-target.ts 1-8 Hedef belirleme işlevi Vite’ın yüklediği ortam değişkenlerini değerlendirir: Önce en yüksek öncelikli açık hedef değişikliğini (VITE_SECUREKIT_DEV_PROXY_TARGET) kontrol eder. apps/demo-web/api-target.ts 2-3 Yoksa varsayılan aspnet olan VITE_SECUREKIT_API_BACKEND değerine geçer. apps/demo-web/api-target.ts 4 Değer aspnet ise http://localhost:3002 adresini apps/demo-web/api-target.ts 5, node ise http://localhost:3001 adresini kullanır. apps/demo-web/api-target.ts 6 Diğer durumlarda hata verir. apps/demo-web/api-target.ts 7 Diyagramı büyütmek için seçin ↗ resolveApiTarget ile sunucu hedeflerini belirleme mantığı. Kaynaklar: apps/demo-web/api-target.ts:1-8, apps/demo-web/.env.example:1-5 Uygulama arayüzü ve çok sayfalı derleme (auth.html) Demo, apps/demo-web/vite.config.ts içindeki rollupOptions.input altında tanımlı çok sayfalı bir Vite paketi olarak düzenlenir. apps/demo-web/vite.config.ts 45-52 index: Ana paneli ve biyometrik deneme ortamını sunan apps/demo-web/index.html dosyasına eşlenir. apps/demo-web/vite.config.ts 48 auth: Kimlik doğrulama akışlarını, rıza pencerelerini ve doğrulama isteği/yanıtı girişlerini sunan apps/demo-web/auth.html dosyasına eşlenir. apps/demo-web/vite.config.ts 49 Arayüz, istemci veri toplamasını (yazım ritmi, yüz yakalama, ses kaydı, kart yakalama) @securekit/web-sdk ile yürütür; standart REST çağrıları ve tür güvenli aktarım hata yönetimiyle sunucu API’leriyle iletişim kurar. Kaynaklar: apps/demo-web/vite.config.ts:45-54 ASP.NET smoke test betiği (aspnet-smoke.ts) Demo uygulamasının ASP.NET Core API’ye karşı entegrasyon ve kabul testleri apps/demo-web/scripts/aspnet-smoke.ts ile otomatikleştirilir. apps/demo-web/scripts/aspnet-smoke.ts 1-95 Betik şu doğrulama aşamalarını gerçekleştirir: Hedef belirleme birim testi: Farklı ortam yapılandırmalarında resolveApiTarget davranışını doğrular. apps/demo-web/scripts/aspnet-smoke.ts 12-15 Geçici ortam hazırlama: Geçici apps/demo-web/scripts/aspnet-smoke.ts 17 dizinini oluşturur ve derlenmiş ASP.NET Core API dosyasını (SecureKit.Api.dll) dinamik portta (http://127.0.0.1:0) başlatır. apps/demo-web/scripts/aspnet-smoke.ts 21-33 Vite geliştirme sunucusu başlatma: Çalışan ASP.NET Core örneğini hedefleyen Vite sunucusunu programlı olarak başlatır. apps/demo-web/scripts/aspnet-smoke.ts 46-50 Uçtan uca SDK doğrulama: SecureKitClient örneğini oluşturup kapsamlı entegrasyon kontrollerini yürütür: sağlık kontrolü, kullanıcı kaydı, rıza, giriş, oturum oluşturma, ağ/konum doğrulama, dinamik yazım ritmi kaydı ve istek doğrulaması, yüz referansı kaydı/doğrulaması (kayan pencere dahil), ses isteği/yanıtı doğrulaması, kart kaydı/doğrulaması ve biyometrik temizleme. apps/demo-web/scripts/aspnet-smoke.ts 52-95 Diyagramı büyütmek için seçin ↗ Şekil 2: aspnet-smoke.ts test düzeneğinin entegrasyon yaşam döngüsü. Kaynaklar: apps/demo-web/scripts/aspnet-smoke.ts:1-95, apps/demo-web/api-target.ts:1-8",
+      "diagrams": [
+        "4.3-demo-web-application-1.svg",
+        "4.3-demo-web-application-2.svg",
+        "4.3-demo-web-application-3.svg"
+      ],
+      "words": 477
+    },
+    {
+      "slug": "5-python-biometric-workers",
+      "title": "Python biyometrik işçileri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5-python-biometric-workers",
+      "number": "5",
+      "headings": [
+        {
+          "id": "python-biometric-workers",
+          "title": "Python biyometrik işçileri",
+          "level": 1
+        },
+        {
+          "id": "face-and-voice-workers",
+          "title": "Yüz ve ses işçileri",
+          "level": 2
+        },
+        {
+          "id": "card-verification-worker",
+          "title": "Kart doğrulama işçisi",
+          "level": 2
+        },
+        {
+          "id": "ip-check-and-environment-setup",
+          "title": "IP kontrolü ve ortam kurulumu",
+          "level": 2
+        }
+      ],
+      "searchText": "Python biyometrik işçileri İlgili kaynak dosyaları README.md scripts/biometric-preflight.py Python biyometrik işçileri; yüz doğrulama, ses kaydı ve tanıma, kimlik kartı ayrıştırma ve IP itibarı kontrolleri için özel makine öğrenmesi ve görüntü işleme hatları sağlar. Sunucu entegrasyon katmanı, bu betikleri standart girdi/çıktı sözleşmeleri veya komut satırı argümanları kullanan alt süreç köprüleriyle çağırır. python/ dizini, her biyometrik tür için ayrı modülleri README.md 27-30, ortam yapılandırma betiklerini README.md 34 ve ön kontrol araçlarını scripts/biometric-preflight.py 8-14 içerir. Her işçi; PyTorch, TorchAudio, Whisper, SpeechBrain, PaddleOCR ve OpenCLIP gibi bağımlılıkları sürüm çatışması olmadan yönetmek için kendi Python sanal ortamında çalışır. Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 27-30 scripts/biometric-preflight.py 8-14 Yüz ve ses işçileri Yüz ve ses hatları; biyometrik vektör üretimi, canlılık doğrulama, doğrulama ifadesinin konuşmadan metne kontrolü ve konuşmacı benzerliği puanlamasını yapar. README.md 10-11 Yüz modülü, işaret noktası tespiti için MTCNN, yüksek boyutlu vektör çıkarımı için FaceNet kullanır ve kayan pencere referans yönetimini destekler. README.md 10 Ses modülü, metne dönüştürme için Whisper ile SpeechBrain konuşmacı tanıma modellerini birleştirir. README.md 11 Mimari, komut satırı argümanları, girdi/çıktı JSON şemaları ve entegrasyon hatları için Yüz ve ses işçileri sayfasına bakın. Kaynaklar: README.md 10-11 Kart doğrulama işçisi Kart işçisi (python/card_verification), metin çıkarımı için PaddleOCR ile görsel belge benzerliği için OpenCLIP’i birleştirerek kimlik belgesi işlemeyi otomatikleştirir. README.md 12 Yapılandırılmış dosyalarla (config.yaml / config.cpu.yaml) çalışır; görüntü ön işleme, hizalama ve dayanıklı alan çıkarımını yönetir. README.md 29 Yürütme betikleri, yapılandırma seçenekleri ve test takımları için Kart doğrulama işçisi sayfasına bakın. Kaynaklar: README.md 12 README.md 29 IP kontrolü ve ortam kurulumu IP betiği (python/ip_check.py), VPNAPI gibi itibar hizmetlerini sorgular; VPN, proxy, Tor çıkış düğümleri ve relay yapılandırmalarını tespit ederek istemci ağ sinyallerini değerlendirir. README.md 13 Kurulum; özel sanal ortamları (.venv-face, .venv-voice, .venv-card) yapılandırmayı README.md 34, CPU/CUDA hızlandırma yollarını seçmeyi ve ses işleme için FFmpeg erişimini sağlamayı içerir. README.md 135 Kurulum adımları, ön kontrol betikleri scripts/biometric-preflight.py 8-14 ve ortam değişkenleri için IP kontrolü ve ortam kurulumu sayfasına bakın. Kaynaklar: README.md 13 README.md 34 README.md 135 scripts/biometric-preflight.py 8-14",
+      "diagrams": [
+        "5-python-biometric-workers-1.svg"
+      ],
+      "words": 322
+    },
+    {
+      "slug": "5.1-face-and-voice-workers",
+      "title": "Yüz ve ses işçileri",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.1-face-and-voice-workers",
+      "number": "5.1",
+      "headings": [
+        {
+          "id": "face-and-voice-workers",
+          "title": "Yüz ve ses işçileri",
+          "level": 1
+        },
+        {
+          "id": "face-verification-worker",
+          "title": "Yüz doğrulama işçisi",
+          "level": 2
+        },
+        {
+          "id": "implementation-details",
+          "title": "Uygulama ayrıntıları",
+          "level": 3
+        },
+        {
+          "id": "data-flow",
+          "title": "Veri akışı",
+          "level": 3
+        },
+        {
+          "id": "configuration",
+          "title": "Yapılandırma",
+          "level": 3
+        },
+        {
+          "id": "voice-verification-worker",
+          "title": "Ses doğrulama işçisi",
+          "level": 2
+        },
+        {
+          "id": "implementation-details-2",
+          "title": "Uygulama ayrıntıları",
+          "level": 3
+        },
+        {
+          "id": "data-flow-2",
+          "title": "Veri akışı",
+          "level": 3
+        },
+        {
+          "id": "configuration-2",
+          "title": "Yapılandırma",
+          "level": 3
+        }
+      ],
+      "searchText": "Yüz ve ses işçileri İlgili kaynak dosyaları MIGRATION_TO_ASPNET10_PLAN.md README.md Bu sayfa, SecureKit yüz ve ses biyometrik işçilerinin uygulamasını açıklar. Python işçileri, MTCNN/FaceNet ile yüz kaydı ve doğrulama; Whisper/SpeechBrain ile ses kaydı ve doğrulama mantığını yürütür. ASP.NET Core API tarafından kontrollü süreç köprüsü üzerinden çağrılırlar. Yüz doğrulama işçisi python/face_verification/face_verification.py konumundaki yüz işçisi python/face_verification/face_verification.py 1-177, yüzleri tespit eder, yüz vektörlerini çıkarır ve doğrulama için karşılaştırır. Yüz tespiti için MTCNN (çok görevli kademeli evrişimli ağlar), yüksek boyutlu yüz vektörleri için FaceNet kullanır. Uygulama ayrıntıları face_verification.py betiği iki ana modda çalışabilir: Kayıt: Görüntüyü alır, yüzü tespit eder ve vektörünü döndürür. Doğrulama: Referans vektörünü ve örnek görüntüyü alır; örnekteki yüzü tespit edip vektörünü çıkarır ve iki vektör arasındaki benzerliği hesaplar. Betik; işlem modu (--enroll veya --verify), girdi dosyaları (--image, --reference, --probe) ve çıktı biçimi (--json) için komut satırı argümanlarını argparse python/face_verification/face_verification.py 130-147 ile işler. Temel bileşenler ve görevleri: FaceDetector sınıfı: python/face_verification/face_verification.py 16-40 Yüz tespiti için MTCNN modelini başlatır. detect_face yöntemi python/face_verification/face_verification.py 29-40, NumPy dizisi biçiminde görüntü alır ve tespit edilen yüzün sınırlayıcı kutu koordinatlarını döndürür. FaceEmbedder sınıfı: python/face_verification/face_verification.py 43-67 Vektör üretimi için FaceNet modelini başlatır. get_embedding yöntemi python/face_verification/face_verification.py 56-67, kırpılmış yüz görüntüsünü alır ve 512 boyutlu vektörünü döndürür. FaceVerifier sınıfı: python/face_verification/face_verification.py 70-100 Yüz tespiti ve vektör çıkarımını koordine eder. enroll yöntemi python/face_verification/face_verification.py 79-84, görüntüdeki yüzü tespit eder ve vektörünü döndürür. verify yöntemi python/face_verification/face_verification.py 86-100, referans vektörünü ve örnek görüntüyü alır; örnek vektörünü çıkarıp aralarındaki kosinüs benzerliğini hesaplar. Yüzlerin eşleşmesini belirlemek için yapılandırılabilir FACE_VERIFICATION_THRESHOLD eşiğini de uygular. Betik, görüntüde tek ve belirgin yüz olup olmadığını kontrol ederek temel canlılık tespiti de yapar. Birden çok yüz veya hiç yüz bulunamazsa hata döndürür. Veri akışı ASP.NET Core API, face_verification.py betiğini alt süreç olarak çağırır. Diyagramı büyütmek için seçin ↗ Diyagram 1: Yüz doğrulama işçisinin veri akışı Kaynaklar: python/face_verification/face_verification.py 1-177 MIGRATION_TO_ASPNET10_PLAN.md 1-166 Yapılandırma Yüz işçisinin davranışı ortam değişkenleriyle değiştirilebilir: FACE_PYTHON_BIN: Yüz işçisinin Python yürütülebilir dosyasını belirtir. README.md 83 FACE_DEVICE: Hesaplamalarda kullanılacak cihazı belirleyen auto, cpu veya cuda değerini alabilir. README.md 84 FACE_REQUIRE_GPU: Tanımlıysa GPU kullanımını zorunlu kılar. README.md 85 Bu değişkenler genellikle yüz doğrulama Python sanal ortamının kurulumunda ayarlanır. README.md 113-117 Kaynaklar: README.md 83-85 README.md 113-117 Ses doğrulama işçisi python/voice_verification/voice_verification.py konumundaki ses işçisi python/voice_verification/voice_verification.py 1-200, ses kaydı ve doğrulamasını yönetir. Söylenen ifadenin doğrulama metniyle eşleşmesini kontrol etmek için Whisper; ses özelliklerini karşılaştırarak konuşmacıyı doğrulamak için SpeechBrain kullanır. Uygulama ayrıntıları voice_verification.py betiği iki ana işlemi destekler: Kayıt: Ses dosyasını ve doğrulama metnini alır; Whisper ile sesi metne dönüştürüp isteğe göre doğrular, ardından SpeechBrain ile konuşmacı vektörünü çıkarır. Doğrulama: Ses dosyası, doğrulama metni ve referans konuşmacı vektörünü alır. Sesi metne dönüştürür, metni doğrular, sesin konuşmacı vektörünü çıkarır ve referansla karşılaştırır. Betik, komut satırı argümanlarını argparse python/voice_verification/voice_verification.py 160-177 ile ayrıştırır; işlem modu (--enroll veya --verify), girdi sesi (--audio), doğrulama metni (--challenge) ve referans vektörü (--reference) belirtilebilir. Temel bileşenler ve görevleri: SpeechToText sınıfı: python/voice_verification/voice_verification.py 16-40 Konuşmayı metne dönüştürmek için Whisper modelini başlatır. transcribe yöntemi python/voice_verification/voice_verification.py 29-40, ses dosyası yolunu alır ve çıkarılan metni döndürür. SpeakerEmbedder sınıfı: python/voice_verification/voice_verification.py 43-67 SpeechBrain konuşmacı doğrulama modelini başlatır. get_embedding yöntemi python/voice_verification/voice_verification.py 56-67, ses dosyası yolunu alır ve konuşmacı vektörünü döndürür. VoiceVerifier sınıfı: python/voice_verification/voice_verification.py 70-109 Metne dönüştürme ve konuşmacı vektörü süreçlerini koordine eder. enroll yöntemi python/voice_verification/voice_verification.py 82-92, sesi metne dönüştürür, doğrulama isteğiyle kontrol eder ve konuşmacı vektörünü çıkarır. verify yöntemi python/voice_verification/voice_verification.py 94-109; metne dönüştürme, istek doğrulama ve örnek vektörü çıkarımını yapar; referans vektörüyle kosinüs benzerliğini hesaplar. Benzerlik karşılaştırmasında VOICE_VERIFICATION_THRESHOLD kullanır. Betik, çıkarılan metnin verilen doğrulama metniyle eşleşmesini zorunlu kılar; böylece canlılık ve niyet doğrulaması katmanı ekler. Veri akışı Yüz işçisinde olduğu gibi ASP.NET Core API, voice_verification.py betiğiyle süreç köprüsü üzerinden iletişim kurar. Diyagramı büyütmek için seçin ↗ Diyagram 2: Ses doğrulama işçisinin veri akışı Kaynaklar: python/voice_verification/voice_verification.py 1-200 MIGRATION_TO_ASPNET10_PLAN.md 1-166 Yapılandırma Ses işçisinin ortam değişkenleri: VOICE_PYTHON_BIN: Ses işçisinin Python yürütülebilir dosyasını belirtir. README.md 83 VOICE_DEVICE: auto, cpu veya cuda değerini alabilir. README.md 84 VOICE_REQUIRE_GPU: Tanımlıysa GPU kullanımını zorunlu kılar. README.md 85 VOICE_WHISPER_MODEL: Kullanılacak Whisper modelini belirtir (örneğin base, small, medium). README.md 132 Ses işçisi için özel Python sanal ortamı oluşturulması ve bağımlılıkların kurulması da gerekir. README.md 128-131 Whisper, ses işleme için FFmpeg gerektirir; alternatif olarak imageio-ffmpeg tarafından sağlanır. README.md 135 Kaynaklar: README.md 83-85 README.md 128-132 README.md 135",
+      "diagrams": [
+        "5.1-face-and-voice-workers-1.svg",
+        "5.1-face-and-voice-workers-2.svg"
+      ],
+      "words": 677
+    },
+    {
+      "slug": "5.2-card-verification-worker",
+      "title": "Kart doğrulama işçisi",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.2-card-verification-worker",
+      "number": "5.2",
+      "headings": [
+        {
+          "id": "card-verification-worker",
+          "title": "Kart doğrulama işçisi",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "1-c-orchestration-and-process-bridge-object-object-object-object",
+          "title": "1. C# koordinasyonu ve süreç köprüsü (CardPython ve CardVerification)",
+          "level": 2
+        },
+        {
+          "id": "runtime-resolution-and-execution",
+          "title": "Çalışma ortamının belirlenmesi ve yürütme",
+          "level": 3
+        },
+        {
+          "id": "json-lines-conversational-protocol",
+          "title": "JSON satırı iletişim protokolü",
+          "level": 3
+        },
+        {
+          "id": "reference-management-and-verification-service",
+          "title": "Referans yönetimi ve doğrulama hizmeti",
+          "level": 3
+        },
+        {
+          "id": "2-pipeline-architecture-paddleocr-openclip",
+          "title": "2. Hat mimarisi (PaddleOCR + OpenCLIP)",
+          "level": 2
+        },
+        {
+          "id": "verification-data-flow",
+          "title": "Doğrulama veri akışı",
+          "level": 3
+        },
+        {
+          "id": "3-configuration-and-execution-files",
+          "title": "3. Yapılandırma ve yürütme dosyaları",
+          "level": 2
+        }
+      ],
+      "searchText": "Kart doğrulama işçisi İlgili kaynak dosyaları apps/securekit-api/Services/CardPython.cs apps/securekit-api/Services/CardVerification.cs Amaç ve kapsam Bu sayfa, SecureKit kart doğrulama alt sistemini açıklar. Metin çıkarımı için PaddleOCR, görsel ve anlamsal benzerlik için OpenCLIP kullanan Python hattını; süreç yaşam döngüsü, sanal ortamlar ve JSON satırı iletişimini yöneten C# köprüsünü (CardPython, CardVerification) kapsar. 1. C# koordinasyonu ve süreç köprüsü (CardPython ve CardVerification) C# API katmanı, kart işçisiyle standart girdi/çıktı yönlendirmesi ve JSON satırı iletişim protokolü üzerinden haberleşir. CardPython sınıfı; Python ortamını bulmak, işçiyi başlatmak, el sıkışmayı yürütmek ve zaman aşımı/süreç hatası toparlanmasını yönetmek için ICardPython arayüzünü uygular. Çalışma ortamının belirlenmesi ve yürütme CardPython, uygun Python sanal ortamlarını (.venv-card veya .venv) arar; yoksa sistem kurulumlarına (py -3, python3, python) geçer. apps/securekit-api/Services/CardPython.cs 34-43 Aday seçilince RunOnce, süreci UTF-8 kodlama seçenekleriyle başlatır ve hedef betiğe --worker aktarır. apps/securekit-api/Services/CardPython.cs 45-58 Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api/Services/CardPython.cs 20-97 JSON satırı iletişim protokolü C# ile Python işçisi standart akışlar üzerinden şu sırayla iletişim kurar: Süreç başlar ve ready olayını ({\"event\": \"ready\", \"ok\": true}) üretir. apps/securekit-api/Services/CardPython.cs 115-120 Converse, el sıkışmayı yakalar ve örnek görüntü yolu, referans dizini ve eşleşme eşiğini içeren veriyi gönderir. apps/securekit-api/Services/CardPython.cs 121-122 İşçi kartı değerlendirir ve CardResult.Normalize(raw) tarafından normalleştirilen JSON yanıtını döndürür. apps/securekit-api/Services/CardPython.cs 126-127 Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api/Services/CardPython.cs 20-128 apps/securekit-api/Services/CardVerification.cs 52-97 Referans yönetimi ve doğrulama hizmeti CardVerification hizmeti, kullanıcı kart kayıtlarını (EnrollAsync) ve doğrulama isteklerini (VerifyAsync) işler. apps/securekit-api/Services/CardVerification.cs 28-97 İş parçacığı güvenli referans dizini listeleme, boyut kurallarına (MaxUploadBytes) göre dosya doğrulama ve örnek işlemesi için ayrı geçici dizin oluşturmayı yönetir. apps/securekit-api/Services/CardVerification.cs 10-102 Kaynaklar: apps/securekit-api/Services/CardVerification.cs 1-105 2. Hat mimarisi (PaddleOCR + OpenCLIP) Python kart işçisi, optik karakter tanımayı görsel özellik vektörleriyle birleştirir: PaddleOCR: Kimlik kartları veya yaka kartlarından metin alanlarını çıkarır; görsel kontrollerle birlikte metin tabanlı yapısal doğrulama sağlar. OpenCLIP: Örnek kart görüntüsünün yüksek boyutlu görsel vektörlerini hesaplar; kosinüs benzerliği veya metrik uzaklık eşikleriyle kayıtlı referans görüntülerine karşılaştırır. Doğrulama veri akışı Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api/Services/CardVerification.cs 52-97 apps/securekit-api/Services/CardPython.cs 20-32 Kaynaklar: apps/securekit-api/Services/CardVerification.cs 52-97 apps/securekit-api/Services/CardPython.cs 20-32 3. Yapılandırma ve yürütme dosyaları Kart işçisi; model parametreleri, cihaz seçimi (CPU veya CUDA/GPU), ön işleme çözünürlükleri ve benzerlik eşiklerini tanımlamak için config.yaml, config.cpu.yaml yapılandırma dosyalarını kullanır. Ortam ayrımı: Yalnızca CPU kullanan dağıtımlar, donanım hızlandırma gereksinimini kapatmak için config.cpu.yaml kullanır; hafif ön kontroller veya özel GPU’su olmayan konteyner ortamları için uygundur. Hata yönetimi: Eksik Python bağımlılıkları PYTHON_DEPENDENCY_MISSING hata kodunu üretir ve hedef sanal ortama python/card_verification/requirements.txt kurulmasını önerir. apps/securekit-api/Services/CardPython.cs 83-86 *Kaynaklar: apps/securekit-api/Services/CardPython.cs 80-87 *",
+      "diagrams": [
+        "5.2-card-verification-worker-1.svg",
+        "5.2-card-verification-worker-2.svg",
+        "5.2-card-verification-worker-3.svg"
+      ],
+      "words": 392
+    },
+    {
+      "slug": "5.3-ip-check-and-environment-setup",
+      "title": "IP kontrolü ve ortam kurulumu",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/5.3-ip-check-and-environment-setup",
+      "number": "5.3",
+      "headings": [
+        {
+          "id": "ip-check-and-environment-setup",
+          "title": "IP kontrolü ve ortam kurulumu",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "1-python-virtual-environments-and-dependency-isolation",
+          "title": "1. Python sanal ortamları ve bağımlılık izolasyonu",
+          "level": 2
+        },
+        {
+          "id": "2-preflight-probing-architecture",
+          "title": "2. Ön kontrol mimarisi",
+          "level": 2
+        },
+        {
+          "id": "probing-data-flow",
+          "title": "Denetim veri akışı",
+          "level": 3
+        },
+        {
+          "id": "3-hardware-requirements-gpucuda-and-ffmpeg",
+          "title": "3. Donanım gereksinimleri: GPU/CUDA ve FFmpeg",
+          "level": 2
+        },
+        {
+          "id": "gpu-and-cuda-validation",
+          "title": "GPU ve CUDA doğrulaması",
+          "level": 3
+        },
+        {
+          "id": "ffmpeg-requirements",
+          "title": "FFmpeg gereksinimleri",
+          "level": 3
+        },
+        {
+          "id": "4-ip-check-and-vpnapi-signals",
+          "title": "4. IP kontrolü ve VPNAPI sinyalleri",
+          "level": 2
+        },
+        {
+          "id": "key-signal-categories",
+          "title": "Temel sinyal kategorileri",
+          "level": 3
+        }
+      ],
+      "searchText": "IP kontrolü ve ortam kurulumu İlgili kaynak dosyaları scripts/biometric-preflight.mjs scripts/biometric-preflight.py Amaç ve kapsam Bu sayfa; SecureKit Python biyometrik ve istihbarat işçileri için ortam kurulumunu, bağımlılık yönetimini, sanal ortamları (.venv-face, .venv-voice, .venv-card), GPU/CUDA yapılandırmasını, FFmpeg entegrasyonunu ve ağ/IP kontrol altyapısını (VPNAPI sinyalleri ve ip_check.py dahil) açıklar. Sistem ön kontrollerinin bu bağımlılıkları yürütmeden önce nasıl doğruladığını gösterir. 1. Python sanal ortamları ve bağımlılık izolasyonu SecureKit, Python bağımlılıklarını biyometrik türe göre ayrı sanal ortamlara (.venv-face, .venv-voice, .venv-card) ayırır. Bu izolasyon, PyTorch’un PaddleOCR ile birlikte içe aktarılması gibi durumlarda kütüphane sürüm çatışmalarını ve Windows DLL çakışmalarını önler. Ön kontrol modül doğrulayıcısı, her tür için açık bağımlılık gereksinimleri tanımlar: Yüz: numpy, PIL, torch, torchvision, facenet_pytorch. scripts/biometric-preflight.py 8-9 Ses: numpy, torch, torchaudio, whisper, speechbrain, imageio_ffmpeg. scripts/biometric-preflight.py 10 Kart: numpy, PIL, cv2, yaml, rapidfuzz, skimage, torch, open_clip, paddle, paddleocr. scripts/biometric-preflight.py 13 Kaynaklar: scripts/biometric-preflight.py 8-14 2. Ön kontrol mimarisi Ön kontrol çalıştırıcısı scripts/biometric-preflight.mjs, scripts/biometric-preflight.py yürüten bağımsız Python alt süreçlerini başlatarak ortam denetimini koordine eder. scripts/biometric-preflight.mjs 12-37 Denetim veri akışı Node başlatıcısı: biometric-preflight.mjs; ortam değişkenlerini (*_PYTHON_BIN), yerel .venv-* yollarını ve sistem python3 veya py başlatıcılarını kontrol eder. scripts/biometric-preflight.mjs 40-48 Alt süreç başlatma: python scripts/biometric-preflight.py <module>, ayrı standart akışlar ve 45 saniyelik güvenlik zaman aşımıyla başlatılır. scripts/biometric-preflight.mjs 12-20 İçe aktarma güvenliği: biometric-preflight.py, yerel yapılandırma yollarının sızmasını veya yönetilmeyen yan etkileri önlemek için importlib.import_module() çağrıları sırasında stdout/stderr çıktısını toplar. scripts/biometric-preflight.py 21-25 Rapor üretimi: Sonuçlar JSON çıktısından ayrıştırılır ve .run-logs/biometric-preflight.json içine yazılır. scripts/biometric-preflight.mjs 30-58 Kaynaklar: scripts/biometric-preflight.mjs 12-37 scripts/biometric-preflight.py 15-26 3. Donanım gereksinimleri: GPU/CUDA ve FFmpeg GPU ve CUDA doğrulaması Yüz ve ses türleri için biometric-preflight.py, PyTorch CUDA kullanılabilirliğini (torch.cuda.is_available()) inceler. scripts/biometric-preflight.py 27-33 FACE_DEVICE, FACE_REQUIRE_GPU veya Face__RequireGpu gibi parametreler GPU hızlandırmasının zorunlu olup olmadığını belirler. scripts/biometric-preflight.py 30-31 REQUIRE_GPU etkinse ve CUDA yoksa ön kontroller başarısız olur. FFmpeg gereksinimleri Ses doğrulama, FFmpeg ile ses ön işlemeye dayanır. Ön kontrol, shutil.which(\"ffmpeg\") ile FFmpeg erişimini doğrular; bulunamazsa imageio_ffmpeg tarafından sağlanan dosyalara otomatik geçer. scripts/biometric-preflight.py 34-44 Kaynaklar: scripts/biometric-preflight.py 27-44 4. IP kontrolü ve VPNAPI sinyalleri Ağ doğrulama ve IP istihbarat modülleri (ip_check.py), kimlik doğrulama oturumlarında dolandırıcılık riskini değerlendirmek için istemci bağlantı üst verilerini inceler. Temel sinyal kategorileri VPN / proxy tespiti: Ticari VPN çıkışlarını, veri merkezlerini ve anonim proxy aralıklarını işaretlemek için VPNAPI gibi IP istihbarat sağlayıcılarını sorgular. Konum riski: İstemci IP’sinin coğrafi kaynağını beklenen kullanıcı profilleri veya oturum sınırlarıyla doğrular. Tehdit puanlaması: SessionRiskEvaluator içine dahil edilen toplam risk puanlarını hesaplar. Kaynaklar: scripts/biometric-preflight.py 1-49",
+      "diagrams": [],
+      "words": 387
+    },
+    {
+      "slug": "6-testing-and-acceptance-tooling",
+      "title": "Test ve kabul araçları",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6-testing-and-acceptance-tooling",
+      "number": "6",
+      "headings": [
+        {
+          "id": "testing-and-acceptance-tooling",
+          "title": "Test ve kabul araçları",
+          "level": 1
+        },
+        {
+          "id": "testing-architecture-and-tooling-flow",
+          "title": "Test mimarisi ve araç akışı",
+          "level": 2
+        },
+        {
+          "id": "61-biometric-preflight",
+          "title": "6.1 Biyometrik ön kontrol",
+          "level": 2
+        },
+        {
+          "id": "62-biometric-acceptance-harness",
+          "title": "6.2 Biyometrik kabul düzeneği",
+          "level": 2
+        },
+        {
+          "id": "63-net-test-suite",
+          "title": "6.3 .NET test takımı",
+          "level": 2
+        },
+        {
+          "id": "test-pyramid-and-verification-bridge",
+          "title": "Test piramidi ve doğrulama köprüsü",
+          "level": 2
+        }
+      ],
+      "searchText": "Test ve kabul araçları İlgili kaynak dosyaları docs/BIOMETRIC_ACCEPTANCE.md package.json scripts/aspnet-parity.mjs SecureKit test ve kabul araçları; yazılım doğruluğunu, eski/yeni sunucular arasındaki protokol eşdeğerliğini ve fiziksel/model düzeyinde biyometrik doğrulamayı sağlamak için çok katmanlı bir yapı sunar. Test piramidi; .NET (apps/securekit-api.tests) içindeki birim/entegrasyon testlerini, protokol ve aşama eşdeğerlik betiklerini, ortam doğrulamasını ve bağımsız biyometrik yürütme düzeneklerini (scripts/biometric-preflight.mjs, scripts/biometric-acceptance.mjs) kapsar. package.json 14-21 docs/BIOMETRIC_ACCEPTANCE.md 1-139 Kaynaklar: package.json 8-22 docs/BIometric_ACCEPTANCE.md 1-139 Test mimarisi ve araç akışı Başlık: Test ve kabul araçlarının mimarisi Diyagramı büyütmek için seçin ↗ Kaynaklar: package.json 8-22 scripts/aspnet-parity.mjs 1-38 6.1 Biyometrik ön kontrol Biyometrik ön kontrol aracı (scripts/biometric-preflight.mjs), biyometrik işler yürütülmeden önce yerel ortamı değerlendirir. docs/BIOMETRIC_ACCEPTANCE.md 8-21 Model ağırlıklarını tamamen indirmeden Python bağımlılıklarını, yüz/ses işçilerinin CUDA erişimini ve ses işleme için FFmpeg’i doğrular. docs/BIOMETRIC_ACCEPTANCE.md 16-21 Yürütülebilir dosya seçiminde *_PYTHON_BIN gibi ortam değişkenleri, yerel sanal ortamlar (.venv-*) ve sistem yolları önceliklendirilir. docs/BIOMETRIC_ACCEPTANCE.md 23-26 Ayrıntılar için Biyometrik ön kontrol sayfasına bakın. Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md 8-39 6.2 Biyometrik kabul düzeneği Biyometrik kabul düzeneği (scripts/biometric-acceptance.mjs), bağımsız ve geçici ASP.NET Core API örneğine karşı uçtan uca kara kutu testleri yürütür. docs/BIOMETRIC_ACCEPTANCE.md 56-64 Yüz, ses ve kart hatlarını doğrulamak için manifest yapılandırmasına (prepare:biometric-acceptance, status:biometric-acceptance) dayanır; raporlamada mahremiyeti korur ve yerel biyometrik örnekleri Git geçmişine dahil etmez. docs/BIOMETRIC_ACCEPTANCE.md 65-140 Ayrıntılar için Biyometrik kabul düzeneği sayfasına bakın. Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md 56-140 6.3 .NET test takımı .NET test takımı (apps/securekit-api.tests); denetleyicileri, doğrulama hizmet mantığını, bağımlılık enjeksiyonunu ve sağlık uç noktalarını otomatik doğrular. Yeni ASP.NET Core sunucusunun, SDK ve doğrulama köprülerinin beklediği API sözleşmelerini ve iş mantığını korumasını sağlar. Ayrıntılar için .NET test takımı sayfasına bakın. Kaynaklar: package.json 19-21 Test piramidi ve doğrulama köprüsü Başlık: Test piramidi ve doğrulama köprüsü Diyagramı büyütmek için seçin ↗ Kaynaklar: package.json 14-22 docs/BIOMETRIC_ACCEPTANCE.md 1-139",
+      "diagrams": [
+        "6-testing-and-acceptance-tooling-1.svg",
+        "6-testing-and-acceptance-tooling-2.svg"
+      ],
+      "words": 275
+    },
+    {
+      "slug": "6.1-biometric-preflight",
+      "title": "Biyometrik ön kontrol",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.1-biometric-preflight",
+      "number": "6.1",
+      "headings": [
+        {
+          "id": "biometric-preflight",
+          "title": "Biyometrik ön kontrol",
+          "level": 1
+        },
+        {
+          "id": "overview-and-scope",
+          "title": "Genel bakış ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "binary-resolution-order",
+          "title": "Yürütülebilir dosya seçiminin öncelik sırası",
+          "level": 2
+        },
+        {
+          "id": "python-probe-implementation-and-checks",
+          "title": "Python denetim uygulaması ve kontroller",
+          "level": 2
+        },
+        {
+          "id": "run-log-output-and-acceptance-state",
+          "title": "Çalışma günlüğü çıktısı ve kabul durumu",
+          "level": 2
+        }
+      ],
+      "searchText": "Biyometrik ön kontrol İlgili kaynak dosyaları scripts/biometric-preflight.mjs scripts/biometric-preflight.py Genel bakış ve kapsam Biyometrik ön kontrol alt sistemi (scripts/biometric-preflight.mjs, scripts/biometric-preflight.py); SecureKit çok modlu biyometrik işçilerinin çalışma ortamlarını, üçüncü taraf Python bağımlılıklarını, CUDA hızlandırmasını ve ffmpeg gibi dış sistem dosyalarını otomatik doğrular. ASP.NET Core API veya eski Node sunucusu Python köprülerini başlatmadan önce betik, ağır model ağırlıklarını belleğe yüklemeden ya da indirmeden modüllerin içe aktarılabilirliğini güvenli denetimlerle kontrol eder. Kaynaklar: scripts/biometric-preflight.mjs 1-11 scripts/biometric-preflight.py 1-6 Yürütülebilir dosya seçiminin öncelik sırası Node.js koordinatörü (scripts/biometric-preflight.mjs), her biyometrik alan (face, voice, card) için uygun Python yorumlayıcısını kesin bir öncelik sırasıyla seçer. Seçim sırası: Açık ortam değişkenleri: ${PREFIX}_PYTHON_BIN, PYTHON_BIN ve yapılandırmaya eşlenmiş komut özellikleri kontrol edilir. scripts/biometric-preflight.mjs 41 Yerel sanal ortamlar: .venv-face, .venv-voice veya .venv-card konumunda çalışma alanı sanal ortamı olup olmadığı kontrol edilir. scripts/biometric-preflight.mjs 42 Sistem alternatifleri: Platforma özgü sistem Python’u kullanılır (Windows’ta py, POSIX sistemlerde python3). scripts/biometric-preflight.mjs 45 Diyagramı büyütmek için seçin ↗ Şekil 1: scripts/biometric-preflight.mjs içinde Python dosya seçimi ve alt süreç başlatma akışı. Kaynaklar: scripts/biometric-preflight.mjs 39-50 Python denetim uygulaması ve kontroller İşçi tarafındaki betik (scripts/biometric-preflight.py), üçüncü taraf başlatma çıktılarının JSON verisini bozmaması için içe aktarmaları contextlib.redirect_stdout, contextlib.redirect_stderr ile sarar. scripts/biometric-preflight.py 21-25 Betik, her alana özgü bağımlılık dizilerini doğrular: Yüz: numpy, PIL, torch, torchvision, facenet_pytorch. scripts/biometric-preflight.py 9 Ses: numpy, torch, torchaudio, whisper, speechbrain, imageio_ffmpeg. scripts/biometric-preflight.py 10 Kart: numpy, PIL, cv2, yaml, rapidfuzz, skimage, torch, open_clip, paddle, paddleocr. scripts/biometric-preflight.py 13 Diyagramı büyütmek için seçin ↗ Şekil 2: scripts/biometric-preflight.py içinde yürütülen modül doğrulama hattı. Kaynaklar: scripts/biometric-preflight.py 8-49 Çalışma günlüğü çıktısı ve kabul durumu Tüm modül denetimleri tamamlanınca scripts/biometric-preflight.mjs, birleşik tanılama raporunu .run-logs/biometric-preflight.json içine yazar. scripts/biometric-preflight.gjs 8-58 JSON rapor şeması şunları içerir: checkedAt: Çalışmanın ISO zaman damgası. scripts/biometric-preflight.mjs 9 dependenciesPassed: Tüm modüllerde zorunlu kontrollerin başarılı olup olmadığını gösteren mantıksal değer. scripts/biometric-preflight.mjs 9-56 modelAcceptance: Durum metni (\"pending\", \"passed\" veya \"failed\"). scripts/biometric-preflight.mjs 10 hardwareAcceptance: GPU/kamera/mikrofon kullanılabilirliğinin durum metni. scripts/biometric-preflight.mjs 10-59 modules: Tekil modül kontrol sonuçları, çalışma ortamı kaynakları ve hata üst verileri dizisi. scripts/biometric-preflight.mjs 10-50 Zorunlu kontrollerden biri başarısızsa ön kontrol betiği 1 çıkış koduyla sonlanır; geçersiz işçi ortamları başlatılmadan otomatik hatları durdurur. scripts/biometric-preflight.mjs 60 Kaynaklar: scripts/biometric-preflight.mjs 8-60",
+      "diagrams": [
+        "6.1-biometric-preflight-1.svg",
+        "6.1-biometric-preflight-2.svg"
+      ],
+      "words": 339
+    },
+    {
+      "slug": "6.2-biometric-acceptance-harness",
+      "title": "Biyometrik kabul düzeneği",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.2-biometric-acceptance-harness",
+      "number": "6.2",
+      "headings": [
+        {
+          "id": "biometric-acceptance-harness",
+          "title": "Biyometrik kabul düzeneği",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "preparation-workspace-and-status-tooling",
+          "title": "Hazırlık, çalışma alanı ve durum araçları",
+          "level": 2
+        },
+        {
+          "id": "preparation-flow-object-object",
+          "title": "Hazırlık akışı (scripts/biometric-acceptance-prepare.mjs)",
+          "level": 3
+        },
+        {
+          "id": "status-verification-object-object",
+          "title": "Durum doğrulaması (scripts/biometric-acceptance-status.mjs)",
+          "level": 3
+        },
+        {
+          "id": "manifest-schema-validation-and-distinct-sample-checks",
+          "title": "Manifest şeması, doğrulama ve farklı örnek kontrolleri",
+          "level": 2
+        },
+        {
+          "id": "validation-rules-and-constraints",
+          "title": "Doğrulama kuralları ve kısıtlar",
+          "level": 3
+        },
+        {
+          "id": "isolated-ephemeral-api-execution-and-worker-binding",
+          "title": "Bağımsız geçici API yürütme ve işçi bağlama",
+          "level": 2
+        },
+        {
+          "id": "process-isolation-and-storage-overrides",
+          "title": "Süreç izolasyonu ve depolama yollarını değiştirme",
+          "level": 3
+        },
+        {
+          "id": "pass-criteria-rules-object-object",
+          "title": "Başarı ölçütleri (accepted)",
+          "level": 3
+        },
+        {
+          "id": "privacy-safe-reporting-object-object",
+          "title": "Mahremiyeti koruyan raporlama (safeReason)",
+          "level": 3
+        }
+      ],
+      "searchText": "Biyometrik kabul düzeneği İlgili kaynak dosyaları docs/BIOMETRIC_ACCEPTANCE.md docs/biometric-acceptance.example.json docs/biometric-manual-acceptance.example.md scripts/biometric-acceptance-prepare.mjs scripts/biometric-acceptance-prepare.test.mjs scripts/biometric-acceptance-status.mjs scripts/biometric-acceptance-status.test.mjs scripts/biometric-acceptance.mjs scripts/biometric-acceptance.test.mjs Amaç ve kapsam Biyometrik kabul düzeneği, SecureKit çok modlu biyometrik kimlik doğrulama modelleri (yüz, ses, kart) için uçtan uca yerel doğrulama çerçevesi sağlar. Protokol ve HTTP uyumu otomatik test takımlarıyla kontrol edilirken gerçek donanım, model ağırlıkları ve çıkarım çıktıları scripts/ altındaki ve docs/BIOMETRIC_ACCEPTANCE.md belgesinde açıklanan kabul betikleriyle doğrulanır. docs/BIOMETRIC_ACCEPTANCE.md 1-7 Düzenek; geçici dosya depolarıyla bağımsız C# ASP.NET Core API örneği başlatır, rızayla sağlanan yerel örnekleri içeren kullanıcı JSON manifestini okur, üretim Python işçilerini (face_verification.py, voice_worker.py, main.py) çalıştırır ve kesin başarı/başarısızlık ölçütlerini uygular. Hassas yolları, vektörleri veya konuşma metinlerini ortak Git geçmişine ya da günlüklere sızdırmaz. docs/BIOMETRIC_ACCEPTANCE.md 56-64 Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md 1-139 scripts/biometric-acceptance.mjs 1-110 Hazırlık, çalışma alanı ve durum araçları Biyometrik kabul testlerinden önce, şablon dosyalarını kopyalayan ve Git tarafından dışlanan yerel dizinleri oluşturan hazırlık betikleriyle çalışma alanı başlatılmalıdır. Hazırlık akışı (scripts/biometric-acceptance-prepare.mjs) Hazırlık betiği, örnek manifestleri ve manuel günlükleri .run-logs/acceptance/ içine kopyalar. Özel oluşturma kuralı (COPYFILE_EXCL), sonraki çalıştırmalarda mevcut kullanıcı kayıtlarının ve gözlemlerinin üzerine yazılmasını önler. scripts/biometric-acceptance-prepare.mjs 8-26 Şekil 1: CLI komutlarını scripts/biometric-acceptance-prepare.mjs içindeki prepareAcceptance işlevine bağlayan hazırlık akışı. Kaynaklar: scripts/biometric-acceptance-prepare.mjs 1-48 scripts/biometric-acceptance-prepare.test.mjs 1-48 Durum doğrulaması (scripts/biometric-acceptance-status.mjs) Durum aracı; modelleri, API’leri veya donanımı başlatmadan yerel manifest geçerliliğini ve örneklerin hazır oluşunu değerlendirir. docs/BIOMETRIC_ACCEPTANCE.md 104-108 Manifesti ayrıştırıp modüle özgü doğrulamayı yapar; açık durum token’ları (ready, blocked, not-selected) döndürür. scripts/biometric-acceptance-status.mjs 20-51 Kaynaklar: scripts/biometric-acceptance-status.mjs 1-78 scripts/biometric-acceptance-status.test.mjs 1-105 Manifest şeması, doğrulama ve farklı örnek kontrolleri Kabul manifesti (manifest.json), yüz, ses ve kart değerlendirme modülleri için dosya referanslarını ve konuşma metinlerini tanımlar. docs/BIOMETRIC_ACCEPTANCE.md 65-73 Doğrulama mantığı, scripts/biometric-acceptance.mjs içindeki validateManifest() işlevindedir. scripts/biometric-acceptance.mjs 21-58 Şekil 2: Manifest yapılandırmasını validateManifest, requireDistinct işlevlerine bağlayan ayrıştırma ve doğrulama hattı. Doğrulama kuralları ve kısıtlar Dosya türleri: Ses dosyaları .wav, .webm, .mp3, .m4a veya .ogg; görüntüler .jpg, .jpeg, .png veya .webp uzantısını kullanmalıdır. docs/BIOMETRIC_ACCEPTANCE.md 124 Boyut sınırları: Ses örnekleri 12 MiB, görüntü örnekleri 5 MiB ile sınırlıdır. docs/BIOMETRIC_ACCEPTANCE.md 125 Farklılık: Olumlu ve olumsuz örneklerde aynı dosya yolu ya da SHA-256 özetleriyle doğrulanan aynı dosya içeriği kullanılırsa FACE_DISTINCT_SAMPLES_REQUIRED, VOICE_DISTINCT_SAMPLES_REQUIRED, CARD_DISTINCT_SAMPLES_REQUIRED gibi doğrulama hataları oluşur. scripts/biometric-acceptance.mjs 34-38 scripts/biometric-acceptance.test.mjs 98-110 Ses gereksinimleri: Ses manifesti tam üç kayıt örneği, bir sameSpeaker örneği, bir differentSpeaker örneği ve farklı bir wrongText metni gerektirir. scripts/biometric-acceptance.mjs 46-51 Kaynaklar: scripts/biometric-acceptance.mjs 16-58 docs/BIOMETRIC_ACCEPTANCE.md 122-139 docs/biometric-acceptance.example.json 1-22 Bağımsız geçici API yürütme ve işçi bağlama Mevcut profil depolarını etkilememek ve temiz durumla test yapmak için çalıştırıcı, rastgele geçici portta (http://127.0.0.1:0) bağımsız ASP.NET Core API (SecureKit.Api.dll) örneği başlatır. docs/BIOMETRIC_ACCEPTANCE.md 58-63 scripts/biometric-acceptance.mjs 84-110 Süreç izolasyonu ve depolama yollarını değiştirme startApi() işlevi; dosya kalıcılığını, kullanıcı veritabanlarını ve işçi geçici dizinlerini bağımsız geçici dizinin altındaki kısa ömürlü klasörlere yönlendiren ortam değişkenlerini ayarlar. scripts/biometric-acceptance.mjs 84-98 // Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98 ASPNETCORE_ENVIRONMENT = \"Testing\" MOCK_IP_CHECK = \"1\" SECUREKIT_PROFILE_STORE = \"<temp-dir>/profiles.json\" SECUREKIT_USERS_FILE = \"<temp-dir>/users.json\" SECUREKIT_KEYSTROKE_STORE = \"<temp-dir>/keystroke\" Face__TempRoot = \"<temp-dir>/face-temp\" Face__ReferenceDirectory = \"<temp-dir>/face-references\" Voice__TempRoot = \"<temp-dir>/voice-temp\" Card__TempRoot = \"<temp-dir>/card-temp\" FACE_PYTHON_SCRIPT_PATH = \"python/face_verification/face_verification.py\" VOICE_PYTHON_SCRIPT_PATH = \"python/voice_verification/voice_worker.py\" CARD_PYTHON_SCRIPT_PATH = \"python/card_verification/main.py\" Çalışma tamamlandığında başarılı veya başarısız olmasına bakılmaksızın alt süreç, sinyal ya da süreç ağacı temizliğiyle kapatılır ve geçici dizin silinir. docs/BIOMETRIC_ACCEPTANCE.md 61 scripts/biometric-acceptance.mjs 101 Kaynaklar: scripts/biometric-acceptance.mjs 84-110 docs/BIOMETRIC_ACCEPTANCE.md 58-64 Başlık: Kabul başarı ölçütleri ve mahremiyeti koruyan raporlama mimarisi Şekil 3: scripts/biometric-acceptance.mjs içindeki accepted işlevini gösteren kabul kararı ve mahremiyeti koruyan raporlama akışı. Başarı ölçütleri (accepted) accepted(name, result) işlevi, API yanıtlarını her kontrol türü için kesin başarı tanımlarıyla değerlendirir. scripts/biometric-acceptance.mjs 61-77 Kontrol adıGerekli API yanıt koşuluKod referansıface-enrollmentbody.reference mevcut ve doğru değerindedirscripts/biometric-acceptance.mjs 65face-same-personbody.matched === true, sonlu score, failureCode yokscripts/biometric-acceptance.mjs 66face-different-personbody.matched === false, sonlu score, failureCode yokscripts/biometric-acceptance.mjs 67voice-enrollmentbody.enrollmentProgress.complete === true, örnek sayısı $\\ge 3$scripts/biometric-acceptance.mjs 68voice-same-speakermatched === true, decision === \"allow\", konuşma metni eşleştiscripts/biometric-acceptance.mjs 69voice-different-speakermatched === false, decision === \"deny\", konuşma metni eşleştiscripts/biometric-acceptance.mjs 70voice-wrong-textmatched === false, decision === \"deny\", konuşma metni eşleşmediscripts/biometric-acceptance.mjs 71card-samematched === true, karar \"same\", OCR/CLIP altyapıları geçerliscripts/biometric-acceptance.mjs 73card-differentmatched === false, karar \"different\", OCR/CLIP altyapıları geçerliscripts/biometric-acceptance.mjs 74 Mahremiyeti koruyan raporlama (safeReason) Yerel veri mahremiyetini korumak için dosya sistemi hata işleyicileri (safeReason), ham Node hata kodlarını ve istisna mesajlarını sabit, bilgi açığa çıkarmayan hata metinlerine (örneğin SAMPLE_FILE_MISSING, SAMPLE_UNREADABLE) eşler. scripts/biometric-acceptance-status.mjs 14-18 Mutlak dosya yolları, kullanıcı kimlikleri, konuşulan ifadeler, OCR metin alanları ve vektörler otomatik günlüklerden ve CI raporlarından kesin olarak dışlanır. docs/BIOMETRIC_ACCEPTANCE.md 5-7 scripts/biometric-acceptance-status.mjs 13 Kaynaklar: scripts/biometric-acceptance.mjs 60-82 scripts/biometric-acceptance-status.mjs 13-18 docs/BIOMETRIC_ACCEPTANCE.md 5-7",
+      "diagrams": [],
+      "words": 684
+    },
+    {
+      "slug": "6.3-.net-test-suite",
+      "title": ".NET test takımı",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/6.3-.net-test-suite",
+      "number": "6.3",
+      "headings": [
+        {
+          "id": "net-test-suite",
+          "title": ".NET test takımı",
+          "level": 1
+        },
+        {
+          "id": "test-architecture-and-support-infrastructure",
+          "title": "Test mimarisi ve destek altyapısı",
+          "level": 2
+        },
+        {
+          "id": "stage-seven-and-card-verification-tests",
+          "title": "Yedinci aşama ve kart doğrulama testleri",
+          "level": 2
+        },
+        {
+          "id": "health-and-basic-contract-tests",
+          "title": "Sağlık ve temel sözleşme testleri",
+          "level": 2
+        }
+      ],
+      "searchText": ".NET test takımı İlgili kaynak dosyaları apps/securekit-api.tests/HealthTests.cs apps/securekit-api.tests/StageSevenTests.cs .NET Test Suite (apps/securekit-api.tests), SecureKit ASP.NET Core API’sinin (apps/securekit-api) entegrasyon ve birim test çerçevesidir. Denetleyici uç noktalarını, hizmet katmanlarını, biyometrik Python süreç köprülerini, hata dönüştürme sözleşmelerini ve sağlık izleyicilerini beklenen davranışa ve eski Node.js API eşdeğerliğine göre doğrular. Test mimarisi ve destek altyapısı Test takımı, WebApplicationFactory<TEntryPoint> kullanarak bellekte API örnekleri başlatmak için ağırlıklı olarak Microsoft.AspNetCore.Mvc.Testing aracına dayanır. ContractAssert gibi özel test düzenekleri ve yardımcılar JSON yanıt yapılarını, HTTP durumlarını ve hata biçimlerini doğrular. Kart doğrulama entegrasyonu (StageSevenTests) gibi aşamaya özgü testler; dosya işlemlerini ayıran, Python yürütme yollarını taklit eden ve SECUREKIT_PROFILE_STORE, Card:ReferenceDirectory, Card:ScriptPath gibi anahtarları değiştiren özel web uygulaması fabrikaları oluşturur. Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api.tests/StageSevenTests.cs 13-37 Yedinci aşama ve kart doğrulama testleri StageSevenTests; kart kaydı, referans listeleme, eşik doğrulama ve Python köprü hata eşlemelerini kapsamlı test eder. Test fabrikası geçici depolama kökleri kurar ve farklı başarı/hata koşullarını taklit etmek için Python test betiklerini (card-stage7.py) eşler. StageSevenTests içindeki temel test davranışları: Referans listeleme ve okunabilirlik: Yalnızca geçerli görüntü biçimlerinin listelendiğini ve etiketlerin düzgün biçimlendirildiğini doğrular [apps/securekit-api.tests/StageSevenTests.cs:58-65]. Protokol ve karar akışı: Eşleşmeleri, en iyi eşleşme kararlarını ve otomatik geçici dosya temizliğini test eder [apps/securekit-api.tests/StageSevenTests.cs:66-74]. Kayıt normalleştirme: Kullanıcı kimliği temizleme, referans dosyası değiştirme ve saklanmış referans kullanımını test eder [apps/securekit-api.tests/StageSevenTests.cs:75-85]. İşçi hata eşleme: Geçersiz çıktıları, şema hatalarını, zaman aşımını ve süreç hatalarını standart HTTP durumlarına (502, 504, 404) ve hata kodlarına (PYTHON_OUTPUT_INVALID, PYTHON_TIMEOUT, REFERENCE_NOT_FOUND) dönüştürür [apps/securekit-api.tests/StageSevenTests.cs:86-100]. Girdi doğrulama: Aralık dışı eşikleri (NaN, Infinity, -1, 2) ve hatalı dosya yüklemelerini reddeder [apps/securekit-api.tests/StageSevenTests.cs:101-112]. Diyagramı büyütmek için seçin ↗ Kaynaklar: apps/securekit-api.tests/StageSevenTests.cs 86-100 Sağlık ve temel sözleşme testleri HealthTests; temel hizmet erişimini, eski Node API sözleşme eşdeğerliğini ve iç test uç noktalarının üretimde gizlenmesi gibi sınır korumalarını doğrular. Test sınıfı, şu kontroller için ApiFactory enjekte eder: Sağlık uç noktası sözleşmesi: GET /health çağrısının eski sözleşmeyle aynı {\"ok\":true} gövdesini HTTP 200 OK ile döndürdüğünü doğrular [apps/securekit-api.tests/HealthTests.cs:8-15]. Rota doğrulama: referenceImage gibi zorunlu çok parçalı alanlar eksik olduğunda yapılandırılmış hata ayrıntılarıyla 400 Bad Request üretildiğini doğrular [apps/securekit-api.tests/HealthTests.cs:17-24]. Güvenlik izolasyonu: /__test/throw gibi iç altyapı denetim rotalarının dışa açılmadığını ve 404 Not Found döndürdüğünü doğrular [apps/securekit-api.tests/HealthTests.cs:27-32]. Kaynaklar: apps/securekit-api.tests/HealthTests.cs 8-15",
+      "diagrams": [
+        "6.3-.net-test-suite-1.svg",
+        "6.3-.net-test-suite-2.svg"
+      ],
+      "words": 348
+    },
+    {
+      "slug": "7-glossary",
+      "title": "Sözlük",
+      "source": "https://deepwiki.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/7-glossary",
+      "number": "7",
+      "headings": [
+        {
+          "id": "glossary",
+          "title": "Sözlük",
+          "level": 1
+        },
+        {
+          "id": "purpose-and-scope",
+          "title": "Amaç ve kapsam",
+          "level": 2
+        },
+        {
+          "id": "1-parity-stage-and-parity-harness",
+          "title": "1. Eşdeğerlik aşaması ve eşdeğerlik düzeneği",
+          "level": 2
+        },
+        {
+          "id": "2-biometric-manifest",
+          "title": "2. Biyometrik manifest",
+          "level": 2
+        },
+        {
+          "id": "3-biometric-preflight",
+          "title": "3. Biyometrik ön kontrol",
+          "level": 2
+        },
+        {
+          "id": "4-model-and-hardware-acceptance",
+          "title": "4. Model ve donanım kabulü",
+          "level": 2
+        },
+        {
+          "id": "5-challenge-ttl-and-challenge-store",
+          "title": "5. Doğrulama isteği TTL’i ve istek deposu",
+          "level": 2
+        },
+        {
+          "id": "6-step-up-authentication-object-object",
+          "title": "6. Ek kimlik doğrulama (step_up)",
+          "level": 2
+        },
+        {
+          "id": "7-sliding-window-face-reference-management",
+          "title": "7. Kayan pencere yüz referansı yönetimi",
+          "level": 2
+        },
+        {
+          "id": "8-exponential-moving-average-ema-keystroke-profile",
+          "title": "8. Üstel hareketli ortalama (EMA) yazım ritmi profili",
+          "level": 2
+        },
+        {
+          "id": "9-reference-roots",
+          "title": "9. Referans kökleri",
+          "level": 2
+        },
+        {
+          "id": "10-worker-bridge",
+          "title": "10. İşçi köprüsü",
+          "level": 2
+        }
+      ],
+      "searchText": "Sözlük İlgili kaynak dosyaları README.md docs/ASPNET_CUTOVER.md docs/BIOMETRIC_ACCEPTANCE.md Amaç ve kapsam Bu sayfa, SecureKit çok modlu biyometrik kimlik doğrulama araç setinin temel terimlerini tanımlar. Her kavramın teknik uygulamasını, veri akışını, yapılandırma parametrelerini ve mimari düzenini açıklayarak monorepodaki kod öğeleriyle doğrudan ilişkilendirir. Kaynaklar: README.md 1-145 docs/BIOMETRIC_ACCEPTANCE.md 1-139 docs/ASPNET_CUTOVER.md 1-110 1. Eşdeğerlik aşaması ve eşdeğerlik düzeneği Eşdeğerlik aşamaları (stage-one ile stage-seven), eski Node/Express API’si (packages/node-auth) ile varsayılan ASP.NET Core 10 API’si (apps/securekit-api) arasında geçiş ve sözleşme doğrulaması için kullanılan aşamalı kilometre taşlarıdır. Eşdeğerlik düzeneği (aspnet-parity.mjs ve ilgili betikler), otomatik test verileriyle iki sunucunun HTTP sözleşmelerini sırayla karşılaştırır. Veri akışı: Çalıştırıcı iki sunucu uç noktasına aynı HTTP verilerini gönderir; yanıt yapılarını, durumlarını ve başlıklarını .run-logs/aspnet-parity.json içine kaydeder. Temel işlevler/sınıflar: packages/node-auth/scripts/ içindeki eşdeğerlik çalıştırma betikleri ve apps/securekit-api.tests altındaki C# entegrasyon testleri. Diyagramı büyütmek için seçin ↗ Kaynaklar: docs/ASPNET_CUTOVER.md 76-102 2. Biyometrik manifest Manifest, biyometrik kabul testlerinin yüz, ses ve kart hatları için dosya yollarını, örnek üst verilerini ve doğrulama parametrelerini tanımladığı JSON yapılandırmasıdır (manifest.json). Ham kişisel bilgileri (PII) veya vektörleri Git deposuna açığa çıkarmaz. Uygulama: Hazırlık betikleriyle (scripts/biometric-acceptance-prepare.mjs) yönetilir ve kabul motoruyla (scripts/biometric-acceptance.mjs) doğrulanır. Veri akışı: Manifest, .run-logs/acceptance/samples altındaki dosya konumlarını belirtir. Çalıştırıcı örnekleri yükler, bağımsız geçici C# API’sini başlatır ve HTTP yanıtlarını tanımlı başarı ölçütleriyle doğrular. Diyagramı büyütmek için seçin ↗ Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md 56-128 3. Biyometrik ön kontrol Ön kontrol, gerçek biyometrik kabul testlerinden önce yürütülen ortam doğrulama aşamasıdır (scripts/biometric-preflight.mjs, .py). Bağımlılıkları, CUDA erişimini, yürütülebilir dosya yollarını ve FFmpeg entegrasyonunu kontrol eder. Uygulama: Model ağırlıklarını indirmeden veya ham kullanıcı görüntülerini ayrıştırmadan, FaceNet, Whisper, SpeechBrain ve PaddleOCR içe aktarmalarını doğrulama gibi bağımlılık kontrolleri yapar. Temel dosyalar: scripts/biometric-preflight.mjs; çıktı günlüklerini .run-logs/biometric-preflight.json içine üretir. Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md 8-39 4. Model ve donanım kabulü Model ve donanım kabulü; gerçek derin öğrenme modellerinin (MTCNN, FaceNet, Whisper, SpeechBrain, OpenCLIP, PaddleOCR) ve sistem hızlandırıcılarının (CPU, CUDA GPU’ları) gerçek çıkarım hatlarını çalıştırdığı doğrulama aşamasıdır. Ayrım: JSON serileştirme ve yönlendirme sözleşmelerini doğrulayan protokol testlerinden (apps/securekit-api.tests) farklı olarak model kabulü; vektör benzerliğini, canlılık tespitini, OCR doğruluğunu ve donanım kapasitesini FACE_DEVICE, VOICE_DEVICE ve zaman aşımı kuralları altında değerlendirir. Kaynaklar: docs/BIOMETRIC_ACCEPTANCE.md NaN-NaN 5. Doğrulama isteği TTL’i ve istek deposu Doğrulama isteği TTL’i (geçerlilik süresi) ve istek deposu; konuşma doğrulama ifadeleri veya kriptografik nonce değerleri gibi süreli, tek kullanımlık kimlik doğrulama isteklerini yönetir. Uygulama: İstekler sunucuda üretilir, süre sonu (TTL) atanır, bellek veya oturum tabanlı depoda (ChallengeStore) saklanır ve doğrulama denemesinde ya da zaman aşımında hemen geçersiz kılınır. Kaynaklar: README.md NaN-NaN 6. Ek kimlik doğrulama (step_up) step_up, temel çok faktörlü sinyaller yetersiz, belirsiz veya yüksek riskli olduğunda risk motorunun ürettiği ara kimlik doğrulama kararıdır. Karar modeli: Risk motoru, birleşik sinyalleri (yazım ritmi, yüz eşleşme puanı, IP/ağ itibarı) değerlendirerek allow, step_up veya deny üretir. step_up sonucu, oturum yetkisi yükseltilmeden önce istemci SDK’sının ses veya kart gibi ek biyometrik doğrulama istemesini zorunlu kılar. Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md 13-14 7. Kayan pencere yüz referansı yönetimi Kayan pencere yüz yönetimi, geçmiş vektörlerin hareketli pencere mekanizmasıyla (FACE_SLIDING_REFERENCES_ROOT) dinamik güncellendiği veya döndürüldüğü yüz profili referans stratejisidir. Uygulama: Tek sabit kayıt görüntüsüne dayanmak yerine sınırlı sayıda referans vektörü tutar; depolama büyümesini sınırlarken zaman içindeki görünüm, ışık ve açı değişikliklerine uyum sağlar. Kaynaklar: docs/ASPNET_CUTOVER.md 46-47 8. Üstel hareketli ortalama (EMA) yazım ritmi profili EMA yazım ritmi profili, kullanıcının yazım temelini (keydown / keyup basılı tutma ve geçiş süreleri) doğrulama oturumları boyunca uyarlamak ve güncellemek için üstel hareketli ortalama algoritması kullanır. Veri akışı: Her başarılı doğrulama, geçmiş profil ağırlıklarıyla gelen örnek ölçümlerini üstel ağırlıklandırmayla birleştirerek yazım özellik vektörünü günceller; sistemin doğal yazım değişimlerine zamanla uyumunu sağlar. Kaynaklar: README.md 9-10 9. Referans kökleri Referans kökleri (Face__AllowedReferenceRoots__0, Card__AllowedReferenceRoots__0), ASP.NET Core’da (appsettings.json veya ortam değişkenleri) yapılandırılan, API’nin biyometrik görüntüleri ve OCR şablonlarını okuyup yazabileceği yerleri sınırlayan izinli dizin listeleridir. Güvenlik görevi: Kesin dosya sistemi sınırları uygular; istek verileri üzerinden dizin aşımı saldırılarıyla biyometrik depolama yollarının değiştirilmesini önler. Kaynaklar: docs/ASPNET_CUTOVER.md 57-59 10. İşçi köprüsü İşçi köprüsü, C# doğrulama hizmetlerinin bağımsız Python işçilerini (CardPython, FacePython, VoicePython, KeystrokePython) standart girdi/çıktı (stdin/stdout) CLI sözleşmeleri ve geçici dosya alışverişiyle çağırdığı süreçler arası iletişim katmanıdır. Veri akışı: C# hizmetleri girdileri serileştirir veya geçici dosya yollarını özel Python betiklerine aktarır; kesin zaman aşımı (VOICE_PYTHON_TIMEOUT_MS, CARD_PYTHON_TIMEOUT_MS) uygular, süreç ağacını sonlandırır ve stdout’tan dönen JSON yanıtlarını ayrıştırır. Diyagramı büyütmek için seçin ↗ Kaynaklar: README.md NaN-NaN",
+      "diagrams": [
+        "7-glossary-1.svg",
+        "7-glossary-2.svg",
+        "7-glossary-3.svg",
+        "7-glossary-4.svg"
+      ],
+      "words": 689
+    }
+  ]
+}

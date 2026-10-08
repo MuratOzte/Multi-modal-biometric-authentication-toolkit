@@ -1,0 +1,129 @@
+<h1 id="biometric-acceptance-harness">Biyometrik kabul düzeneği</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-acceptance.example.json" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-acceptance.example.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-manual-acceptance.example.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-manual-acceptance.example.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.test.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.test.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.test.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.test.mjs</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Biyometrik kabul düzeneği, SecureKit çok modlu biyometrik kimlik doğrulama modelleri (yüz, ses, kart) için uçtan uca yerel doğrulama çerçevesi sağlar. Protokol ve HTTP uyumu otomatik test takımlarıyla kontrol edilirken gerçek donanım, model ağırlıkları ve çıkarım çıktıları <code>scripts/</code> altındaki ve <code>docs/BIOMETRIC_ACCEPTANCE.md</code> belgesinde açıklanan kabul betikleriyle doğrulanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-7</a></p>
+<p>Düzenek; geçici dosya depolarıyla bağımsız C# ASP.NET Core API örneği başlatır, rızayla sağlanan yerel örnekleri içeren kullanıcı JSON manifestini okur, üretim Python işçilerini (<code>face_verification.py</code>, <code>voice_worker.py</code>, <code>main.py</code>) çalıştırır ve kesin başarı/başarısızlık ölçütlerini uygular. Hassas yolları, vektörleri veya konuşma metinlerini ortak Git geçmişine ya da günlüklere sızdırmaz. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L56-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 56-64</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L1-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 1-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L1-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 1-110</a></p>
+<hr>
+<h2 id="preparation-workspace-and-status-tooling">Hazırlık, çalışma alanı ve durum araçları</h2>
+<p>Biyometrik kabul testlerinden önce, şablon dosyalarını kopyalayan ve Git tarafından dışlanan yerel dizinleri oluşturan hazırlık betikleriyle çalışma alanı başlatılmalıdır.</p>
+<h3 id="preparation-flow-object-object">Hazırlık akışı (<code>scripts/biometric-acceptance-prepare.mjs</code>)</h3>
+<p>Hazırlık betiği, örnek manifestleri ve manuel günlükleri <code>.run-logs/acceptance/</code> içine kopyalar. Özel oluşturma kuralı (<code>COPYFILE_EXCL</code>), sonraki çalıştırmalarda mevcut kullanıcı kayıtlarının ve gözlemlerinin üzerine yazılmasını önler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L8-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 8-26</a></p>
+
+<p><em>Şekil 1: CLI komutlarını <code>scripts/biometric-acceptance-prepare.mjs</code> içindeki <code>prepareAcceptance</code> işlevine bağlayan hazırlık akışı.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.mjs 1-48</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-prepare.test.mjs#L1-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-prepare.test.mjs 1-48</a></p>
+<h3 id="status-verification-object-object">Durum doğrulaması (<code>scripts/biometric-acceptance-status.mjs</code>)</h3>
+<p>Durum aracı; modelleri, API’leri veya donanımı başlatmadan yerel manifest geçerliliğini ve örneklerin hazır oluşunu değerlendirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L104-L108" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 104-108</a> Manifesti ayrıştırıp modüle özgü doğrulamayı yapar; açık durum token’ları (<code>ready</code>, <code>blocked</code>, <code>not-selected</code>) döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L20-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 20-51</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L1-L78" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 1-78</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.test.mjs#L1-L105" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.test.mjs 1-105</a></p>
+<hr>
+<h2 id="manifest-schema-validation-and-distinct-sample-checks">Manifest şeması, doğrulama ve farklı örnek kontrolleri</h2>
+<p>Kabul manifesti (<code>manifest.json</code>), yüz, ses ve kart değerlendirme modülleri için dosya referanslarını ve konuşma metinlerini tanımlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L65-L73" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 65-73</a> Doğrulama mantığı, <code>scripts/biometric-acceptance.mjs</code> içindeki <code>validateManifest()</code> işlevindedir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L21-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 21-58</a></p>
+
+<p><em>Şekil 2: Manifest yapılandırmasını <code>validateManifest</code>, <code>requireDistinct</code> işlevlerine bağlayan ayrıştırma ve doğrulama hattı.</em></p>
+<h3 id="validation-rules-and-constraints">Doğrulama kuralları ve kısıtlar</h3>
+<ul>
+<li><strong>Dosya türleri</strong>: Ses dosyaları <code>.wav</code>, <code>.webm</code>, <code>.mp3</code>, <code>.m4a</code> veya <code>.ogg</code>; görüntüler <code>.jpg</code>, <code>.jpeg</code>, <code>.png</code> veya <code>.webp</code> uzantısını kullanmalıdır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L124-L124" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 124</a></li>
+<li><strong>Boyut sınırları</strong>: Ses örnekleri <code>12 MiB</code>, görüntü örnekleri <code>5 MiB</code> ile sınırlıdır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L125-L125" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 125</a></li>
+<li><strong>Farklılık</strong>: Olumlu ve olumsuz örneklerde aynı dosya yolu ya da SHA-256 özetleriyle doğrulanan aynı dosya içeriği kullanılırsa <code>FACE_DISTINCT_SAMPLES_REQUIRED</code>, <code>VOICE_DISTINCT_SAMPLES_REQUIRED</code>, <code>CARD_DISTINCT_SAMPLES_REQUIRED</code> gibi doğrulama hataları oluşur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L34-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 34-38</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.test.mjs#L98-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.test.mjs 98-110</a></li>
+<li><strong>Ses gereksinimleri</strong>: Ses manifesti tam üç kayıt örneği, bir <code>sameSpeaker</code> örneği, bir <code>differentSpeaker</code> örneği ve farklı bir <code>wrongText</code> metni gerektirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L46-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 46-51</a></li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L16-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 16-58</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L122-L139" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 122-139</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/biometric-acceptance.example.json#L1-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/biometric-acceptance.example.json 1-22</a></p>
+<hr>
+<h2 id="isolated-ephemeral-api-execution-and-worker-binding">Bağımsız geçici API yürütme ve işçi bağlama</h2>
+<p>Mevcut profil depolarını etkilememek ve temiz durumla test yapmak için çalıştırıcı, rastgele geçici portta (<code>http://127.0.0.1:0</code>) bağımsız ASP.NET Core API (<code>SecureKit.Api.dll</code>) örneği başlatır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L63" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-63</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a></p>
+<h3 id="process-isolation-and-storage-overrides">Süreç izolasyonu ve depolama yollarını değiştirme</h3>
+<p><code>startApi()</code> işlevi; dosya kalıcılığını, kullanıcı veritabanlarını ve işçi geçici dizinlerini bağımsız geçici dizinin altındaki kısa ömürlü klasörlere yönlendiren ortam değişkenlerini ayarlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L98" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-98</a></p>
+<pre><code>// Environment variables injected during ephemeral API spawn in scripts/biometric-acceptance.mjs:84-98
+ASPNETCORE_ENVIRONMENT = &quot;Testing&quot;
+MOCK_IP_CHECK = &quot;1&quot;
+SECUREKIT_PROFILE_STORE = &quot;&lt;temp-dir&gt;/profiles.json&quot;
+SECUREKIT_USERS_FILE = &quot;&lt;temp-dir&gt;/users.json&quot;
+SECUREKIT_KEYSTROKE_STORE = &quot;&lt;temp-dir&gt;/keystroke&quot;
+Face__TempRoot = &quot;&lt;temp-dir&gt;/face-temp&quot;
+Face__ReferenceDirectory = &quot;&lt;temp-dir&gt;/face-references&quot;
+Voice__TempRoot = &quot;&lt;temp-dir&gt;/voice-temp&quot;
+Card__TempRoot = &quot;&lt;temp-dir&gt;/card-temp&quot;
+FACE_PYTHON_SCRIPT_PATH = &quot;python/face_verification/face_verification.py&quot;
+VOICE_PYTHON_SCRIPT_PATH = &quot;python/voice_verification/voice_worker.py&quot;
+CARD_PYTHON_SCRIPT_PATH = &quot;python/card_verification/main.py&quot;
+</code></pre>
+<p>Çalışma tamamlandığında başarılı veya başarısız olmasına bakılmaksızın alt süreç, sinyal ya da süreç ağacı temizliğiyle kapatılır ve geçici dizin silinir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L61-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 61</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L101-L101" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 101</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L84-L110" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 84-110</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L58-L64" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 58-64</a></p>
+<hr>
+<p>Başlık: Kabul başarı ölçütleri ve mahremiyeti koruyan raporlama mimarisi</p>
+
+<p><em>Şekil 3: <code>scripts/biometric-acceptance.mjs</code> içindeki <code>accepted</code> işlevini gösteren kabul kararı ve mahremiyeti koruyan raporlama akışı.</em></p>
+<h3 id="pass-criteria-rules-object-object">Başarı ölçütleri (<code>accepted</code>)</h3>
+<p><code>accepted(name, result)</code> işlevi, API yanıtlarını her kontrol türü için kesin başarı tanımlarıyla değerlendirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L61-L77" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 61-77</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Belge tablosu"><table><thead><tr><th>Kontrol adı</th><th>Gerekli API yanıt koşulu</th><th>Kod referansı</th></tr></thead><tbody><tr><td><code>face-enrollment</code></td><td><code>body.reference</code> mevcut ve doğru değerindedir</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L65-L65" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 65</a></td></tr><tr><td><code>face-same-person</code></td><td><code>body.matched === true</code>, sonlu <code>score</code>, <code>failureCode</code> yok</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L66-L66" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 66</a></td></tr><tr><td><code>face-different-person</code></td><td><code>body.matched === false</code>, sonlu <code>score</code>, <code>failureCode</code> yok</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L67-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 67</a></td></tr><tr><td><code>voice-enrollment</code></td><td><code>body.enrollmentProgress.complete === true</code>, örnek sayısı $\ge 3$</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L68-L68" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 68</a></td></tr><tr><td><code>voice-same-speaker</code></td><td><code>matched === true</code>, <code>decision === &quot;allow&quot;</code>, konuşma metni eşleşti</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L69-L69" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 69</a></td></tr><tr><td><code>voice-different-speaker</code></td><td><code>matched === false</code>, <code>decision === &quot;deny&quot;</code>, konuşma metni eşleşti</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L70-L70" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 70</a></td></tr><tr><td><code>voice-wrong-text</code></td><td><code>matched === false</code>, <code>decision === &quot;deny&quot;</code>, konuşma metni eşleşmedi</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L71-L71" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 71</a></td></tr><tr><td><code>card-same</code></td><td><code>matched === true</code>, karar <code>&quot;same&quot;</code>, OCR/CLIP altyapıları geçerli</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L73-L73" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 73</a></td></tr><tr><td><code>card-different</code></td><td><code>matched === false</code>, karar <code>&quot;different&quot;</code>, OCR/CLIP altyapıları geçerli</td><td><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L74-L74" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 74</a></td></tr></tbody></table></div>
+<h3 id="privacy-safe-reporting-object-object">Mahremiyeti koruyan raporlama (<code>safeReason</code>)</h3>
+<p>Yerel veri mahremiyetini korumak için dosya sistemi hata işleyicileri (<code>safeReason</code>), ham Node hata kodlarını ve istisna mesajlarını sabit, bilgi açığa çıkarmayan hata metinlerine (örneğin <code>SAMPLE_FILE_MISSING</code>, <code>SAMPLE_UNREADABLE</code>) eşler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L14-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 14-18</a> Mutlak dosya yolları, kullanıcı kimlikleri, konuşulan ifadeler, OCR metin alanları ve vektörler otomatik günlüklerden ve CI raporlarından kesin olarak dışlanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L5-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 5-7</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 13</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance.mjs#L60-L82" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance.mjs 60-82</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-acceptance-status.mjs#L13-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-acceptance-status.mjs 13-18</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/BIOMETRIC_ACCEPTANCE.md?plain=1#L5-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/BIOMETRIC_ACCEPTANCE.md 5-7</a></p>

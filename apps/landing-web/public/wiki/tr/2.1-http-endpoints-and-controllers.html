@@ -1,0 +1,62 @@
+<h1 id="http-endpoints-and-controllers">HTTP uç noktaları ve denetleyiciler</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs</a></li>
+</ul>
+</details>
+<p>Bu sayfa, ASP.NET Core API’deki (<code>apps/securekit-api</code>) HTTP uç noktalarını, denetleyici sınıflarını, yönlendirmeyi ve istek/yanıt sözleşmelerini açıklar. Denetleyiciler; gelen HTTP trafiğini (JSON verileri ve çok parçalı form yüklemeleri) alır, girdileri doğrular, doğrulama/depolama hizmetlerine erişir ve yanıtları standart JSON zarflarına veya hata verilerine dönüştürür.</p>
+<hr>
+<h2 id="1-controller-architecture-and-routing-overview">1. Denetleyici mimarisi ve yönlendirmeye genel bakış</h2>
+<p>API, ASP.NET Core 10 üzerinde <code>[ApiController]</code> ile işaretlenmiş ve özniteliklerle yönlendirilmiş denetleyiciler kullanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L11-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 11-13</a></p>
+<p>Uç noktalar, <code>@securekit/web-sdk</code> ve <code>apps/demo-web</code> ile sorunsuz uyum için eski Node/Express rotalarıyla kesin eşdeğerliği korur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L5-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 5-14</a></p>
+<p>Denetleyiciler aşağıdaki işlev alanlarını kapsar:</p>
+<ul>
+<li><strong>Sağlık</strong>: Sistem durumu kontrolleri (<code>/health</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs#L9-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs 9-15</a></li>
+<li><strong>Kimlik doğrulama</strong>: Kullanıcı kaydı, giriş ve listeleme (<code>/auth/register</code>, <code>/auth/login</code>, <code>/auth/users</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L150-L152" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 150-152</a></li>
+<li><strong>Doğrulama isteği</strong>: Biyometrik ve metin doğrulama isteği üretimi ve tek kullanımlık tüketim (<code>/challenge/text</code>, <code>/challenge/text/consume</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L99-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 99-100</a></li>
+<li><strong>Oturum ve profiller</strong>: Oturum başlatma, kayan pencerede risk değerlendirme, profil sorgulama ve kullanıcının biyometrik verilerini silme (<code>/session/start</code>, <code>/verify/session</code>, <code>/user/{userId}/profiles</code>, <code>/user/biometrics</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L101-L154" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 101-154</a></li>
+<li><strong>Biyometrik doğrulama (kart, yüz, ses, yazım ritmi, sabit yazım ritmi)</strong>: Çok parçalı görüntü/ses yüklemelerini ve biyometrik telemetriyi işleyen kayıt ve doğrulama uç noktaları.</li>
+<li><strong>Ağ</strong>: IP ve VPN doğrulama kontrolleri (<code>/verify/network</code>).</li>
+</ul>
+<p>Kaynaklar: <code>[apps/securekit-api/Controllers/CardController.cs:11-13]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:9-15]</code>, <code>[MIGRATION_TO_ASPNET10_PLAN.md:5-14]</code></p>
+<hr>
+<h2 id="2-requestresponse-contracts-and-error-envelopes">2. İstek/yanıt sözleşmeleri ve hata zarfları</h2>
+<p>Uç noktalar JSON (<code>application/json</code>) veya dosya yüklemeleri (kimlik kartı, yüz görüntüsü, ses örneği) için çok parçalı form verileri (<code>multipart/form-data</code>) kullanır.</p>
+<p>Standart hatalar; hata kodu, mesaj ve isteğe bağlı ayrıntıları içeren tutarlı bir JSON zarfına alınır:</p>
+<pre><code>{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;INVALID_REQUEST&quot;,
+    &quot;message&quot;: &quot;referenceImage is required.&quot;,
+    &quot;details&quot;: null
+  }
+}
+</code></pre>
+<p>Yükleme verisi yapılandırılmış azami gövde boyutunu (<code>CardOptions.MaxUploadBytes</code>) aşarsa denetleyiciler <code>BadHttpRequestException</code> veya <code>InvalidDataException</code> hatasını yakalar ve <code>IMAGE_TOO_LARGE</code> koduyla <code>413 Payload Too Large</code> durumunu döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L36-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 36-88</a></p>
+<p>Kaynaklar: <code>[apps/securekit-api/Controllers/CardController.cs:25-89]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:18-24]</code></p>
+<hr>
+<h2 id="3-detailed-controller-breakdown">3. Denetleyicilerin ayrıntıları</h2>
+<h3 id="health-controller">Sağlık denetleyicisi</h3>
+<ul>
+<li><code>GET /health</code>: Sistemin çalışır durumda olduğunu bildirir.
+<ul>
+<li>Yanıt (<code>200 OK</code>): <code>{&quot;ok&quot;:true}</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs#L12-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs 12-14</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="card-controller-object-object">Kart denetleyicisi (<code>CardController.cs</code>)</h3>
+<p><code>CardController</code>, OCR ve vektör karşılaştırma işçileriyle kimlik kartı referans görüntülerini ve doğrulama örneklerini yönetir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L12-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 12-13</a></p>
+<ul>
+<li><code>GET /card/references</code>: Saklanan kart referans kayıtlarını listeler. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L14-L19" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 14-19</a></li>
+<li><code>POST /enroll/card/reference</code>: <code>userId</code> metni ve <code>referenceImage</code> dosyası (<code>image/jpeg</code>, <code>image/png</code>, <code>image/webp</code>) içeren <code>multipart/form-data</code> verisini kabul eder. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L20-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 20-61</a></li>
+<li><code>POST /verify/card</code>: Örnek görüntüyü (<code>probeImage</code>) ve isteğe bağlı <code>referenceId</code>, <code>userId</code>, <code>threshold</code> alanlarını kabul ederek eşleşme puanlarını ve doğrulama sonuçlarını döndürür. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Controllers/CardController.cs#L22-L80" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Controllers/CardController.cs 22-80</a></li>
+</ul>
+
+<p>Kaynaklar: <code>[apps/securekit-api/Controllers/CardController.cs:11-89]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:18-24]</code></p>
+<hr>
+<h2 id="4-api-request-pipeline-and-flow-diagram">4. API istek hattı ve akış diyagramı</h2>
+<p>Aşağıdaki diyagram, gelen HTTP isteklerinin ASP.NET Core ara katman hattından ilgili denetleyicilere ve hizmet katmanlarına akışını gösterir.</p>
+
+<p>Kaynaklar: <code>[apps/securekit-api/Controllers/CardController.cs:1-90]</code>, <code>[apps/securekit-api.tests/HealthTests.cs:1-34]</code>, <code>[MIGRATION_TO_ASPNET10_PLAN.md:43-125]</code></p>

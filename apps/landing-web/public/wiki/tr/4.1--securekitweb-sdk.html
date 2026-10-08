@@ -1,0 +1,33 @@
+<h1 id="securekitweb-sdk">@securekit/web-sdk</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+</ul>
+</details>
+<p><code>@securekit/web-sdk</code> paketi (<code>packages/web-sdk</code>), SecureKit’in temel tarayıcı istemci kütüphanesidir. Biyometrik yazım ritmi yakalama, tarayıcı ve konum sinyallerini toplama, SecureKit API aktarım katmanıyla iletişim ve eski istemci arayüzleri üzerinden geriye dönük uyumluluk için modüler araçlar sağlar.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<h2 id="client-initialization-and-core-architecture-object-object">İstemci başlatma ve temel mimari (<code>client.ts</code>)</h2>
+<p><code>@securekit/web-sdk</code> giriş noktası; kimlik doğrulama istemcisini başlatır, API temel URL’si, zaman aşımı ve başlıklar gibi seçenekleri yönetir ve biyometrik toplayıcıların kaydını koordine eder. İstemci örneği, aktarım mekanizmalarını, yazım ritmi izleme bağlarını ve ortam sinyali toplayıcılarını ortak arayüzde birleştirir.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/4.1--securekitweb-sdk-1.svg" alt="@securekit/web-sdk — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 1: Tarayıcı olaylarını aktarıma bağlayan istemci başlatma ve bileşen bağlantı akışı.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L86-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 86-88</a></p>
+<h2 id="transport-layer-and-adapters">Aktarım katmanı ve adaptörler</h2>
+<p>Aktarım katmanı, tarayıcı SDK’sı ile sunucu API’si (<code>apps/securekit-api</code> veya eski <code>packages/node-auth</code>) arasında HTTP iletişimini yönetir. İstek serileştirme, kimlik doğrulama başlıkları, hata yönetimi ve <code>VITE_SECUREKIT_BASE_URL</code>, <code>VITE_SECUREKIT_API_BACKEND</code> gibi ortam değişkenlerine göre uç nokta seçimini soyutlar.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/4.1--securekitweb-sdk-2.svg" alt="@securekit/web-sdk — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 2: Hedef sunucu API’leri için aktarım yönlendirmesi ve adaptör seçimi.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L75-L88" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 75-88</a></p>
+<h2 id="keystroke-collectors">Yazım ritmi toplayıcıları</h2>
+<p>Yazım ritmi toplayıcısı, belirli girdi alanları veya formlardaki <code>keydown</code> ve <code>keyup</code> DOM olaylarını dinleyerek gerçek zamanlı yazım ritmini yakalar. Biyometrik profil oluşturmak için basılı tutma sürelerini ve ardışık tuşlar arasındaki geçiş sürelerini kaydeder.</p>
+<ul>
+<li><strong>Basılı tutma süresi:</strong> Tek bir tuşun <code>keydown</code> olayı ile ona karşılık gelen <code>keyup</code> olayı arasındaki süre.</li>
+<li><strong>Geçiş süresi:</strong> Önceki tuşun <code>keyup</code> olayı ile sonraki tuşun <code>keydown</code> olayı arasındaki süre.</li>
+<li><strong>Dinamik/sabit puanlama:</strong> Ham olay akışlarını hem serbest metin yazım modelleri hem sabit metin biyometrik şablonlarıyla doğrulamaya hazırlar.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 9</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<h2 id="location-and-context-signals">Konum ve bağlam sinyalleri</h2>
+<p>Web SDK’sı, risk değerlendirme ve cihaz parmak izi için konum ve ortam toplayıcıları içerir. Saat dilimi farkı, ekran çözünürlüğü, tarayıcı dili ve kullanıcı iznine bağlı isteğe bağlı konum koordinatları gibi sinyalleri toplar; bunları kimlik doğrulama isteği verilerine ekler.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L13-L14" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 13-14</a></p>
+<h2 id="legacy-client-surface">Eski istemci arayüzü</h2>
+<p>Eski uygulamalarla veya Express uç noktalarından (<code>packages/node-auth</code>) ASP.NET Core denetleyicilerine (<code>apps/securekit-api</code>) geçiş sırasında uyumu korumak için SDK eski istemci arayüzü sağlar. Bu adaptör katmanı, istemci kodunu yeniden yazmadan eski istek verilerini güncel API sözleşmelerine eşleyen geriye uyumlu yöntem imzaları sunar.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L22-L22" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 22</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L57-L61" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 57-61</a></p>

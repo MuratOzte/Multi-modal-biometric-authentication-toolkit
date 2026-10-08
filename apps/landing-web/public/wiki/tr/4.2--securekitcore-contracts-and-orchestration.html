@@ -1,0 +1,55 @@
+<h1 id="securekitcore-contracts-and-orchestration">@securekit/core sözleşmeleri ve koordinasyon</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/NODE_API_CONTRACT_INVENTORY.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/NODE_API_CONTRACT_INVENTORY.md</a></li>
+</ul>
+</details>
+<p><code>@securekit/core</code> paketi, SecureKit monoreposunun ortak temel TypeScript kütüphanesidir. Sunucu uygulamalarının (<code>packages/node-auth</code>, <code>apps/securekit-api</code>) ve istemci SDK’larının (<code>packages/web-sdk</code>) kullandığı alan modellerini, istek/yanıt sözleşmelerini, biyometrik sinyal arayüzlerini, risk politikalarını ve koordinasyon mantığını tanımlar.</p>
+<hr>
+<h2 id="1-shared-request-and-response-contracts">1. Ortak istek ve yanıt sözleşmeleri</h2>
+<p>Core paketi; kullanıcı yaşam döngüsü, doğrulama isteği üretimi, rıza doğrulaması ve çok modlu profil depolaması için standart veri aktarım nesneleri (DTO) ve durum arayüzleri tanımlar.</p>
+<p>Temel yapısal tanımlar:</p>
+<ul>
+<li><strong>Kullanıcı kayıtları ve profiller</strong>: <code>userId</code>, kayıt zamanları, rıza sürümleri ve profil ilişkileri (yazım ritmi modelleri, yüz vektörleri, ses referansları, kart üst verileri) için standart şemalar. Kimlikler, kimlik doğrulama sınırları boyunca tutarlı biçimde normalleştirilir (uygun yerlerde kırpılır ve küçük harfe çevrilir).</li>
+<li><strong>Doğrulama istekleri</strong>: Dil parametreleri (<code>lang</code>), metin uzunlukları (<code>length</code>), dinamik sözcük sayıları (<code>wordCount</code>) ve kesin geçerlilik süresi (<code>CHALLENGE_TTL_SECONDS</code>) kuralları dahil istek üretimini yöneten yapılar.</li>
+<li><strong>Oturum yaşam döngüsü</strong>: Süre sonu pencerelerini (<code>SESSION_TTL_SECONDS</code>), birikmiş sinyalleri ve değerlendirme sonuçlarını izleyen süreli oturum tanıtıcıları (<code>sessionId</code>).</li>
+</ul>
+
+<p><em>Şekil 1: Sözleşme doğrulama ve koordinasyon akışı</em></p>
+<p>Kaynaklar: <code>README.md:19-21</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:30-52</code></p>
+<hr>
+<h2 id="2-biometrics-modules-and-signal-models">2. Biyometri modülleri ve sinyal modelleri</h2>
+<p>Biyometrik ve bağlamsal veriler, doğrulama hizmetlerine veya risk değerlendiricilerine aktarılmadan önce yapılandırılmış sinyal verilerine dönüştürülür. Core sözleşmeleri şu alanlarda ortak şemalar tanımlar:</p>
+<ul>
+<li><strong>Yazım ritmi</strong>: EMA kullanıcı profilleri veya sabit metin şablonlarıyla eşleştirmek için basılı tutma sürelerini ve geçiş gecikmelerini ölçen <code>keydown</code>, <code>keyup</code> olay zamanları.</li>
+<li><strong>Yüz ve ses sinyalleri</strong>: Dış Python alt süreçleriyle değerlendirilen vektörler, referans görüntü yolları, canlılık göstergeleri ve konuşmadan metne doğrulama verileri.</li>
+<li><strong>Ağ ve konum sinyalleri</strong>: VPN, proxy, Tor veya relay kullanım işaretleri, coğrafi sapma hesapları ve izin verilen ülke kodları (<code>allowedCountries</code>) içeren IP üst veri yapıları.</li>
+</ul>
+
+<p><em>Sinyal işleme ve modüllerin kod öğelerine eşleştirilmesi</em></p>
+<p>Kaynaklar: <code>README.md:9-14</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:69-76</code></p>
+<hr>
+<h2 id="3-risk-policies-and-default-configuration-object-object">3. Risk politikaları ve varsayılan yapılandırma (<code>defaultPolicy</code>)</h2>
+<p>Risk motoru oturum güven puanlarını hesaplar; doğrulama denemesine izin verilip verilmeyeceğini veya ek doğrulama gerekip gerekmediğini belirler. <code>defaultPolicy</code> yapılandırması eşik kurallarını ve güvenlik kısıtlarını belirler:</p>
+<ul>
+<li><strong>Risk puanı sınırları</strong>: Birleşik sinyal puanlarını sınıflandırmak için <code>allowMaxRisk</code>, <code>denyMinRisk</code> gibi sayısal sınırlar tanımlar.</li>
+<li><strong>Ağ kuralları</strong>: <code>treatVpnAsFailure</code>, <code>minNetworkScore</code> gibi parametreler, konut dışı veya proxy IP işaretlerinde doğrudan ret ya da puan cezasını belirler.</li>
+<li><strong>Ek doğrulama gereksinimleri</strong>: Orta düzey riskte gerekli ikincil doğrulama türlerini (ses isteği, yüzün yeniden doğrulanması gibi) gösteren <code>stepUpSteps</code> dizi eşlemelerini belirtir.</li>
+<li><strong>Karar sonuçları</strong>: Dinamik değerlendirmede <code>allow</code>, <code>step_up</code>, <code>deny</code>; sabit metin doğrulamasında <code>accept</code>, <code>reject</code> ayrık sonuçlarını üretir.</li>
+</ul>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md:27-29</code>, <code>docs/NODE_API_CONTRACT_INVENTORY.md:69-76</code></p>
+<hr>
+<h2 id="4-the-orchestration-engine">4. Koordinasyon motoru</h2>
+<p>Koordinatör, etkin kimlik doğrulama oturumunda durumun kalıcılığını, sinyallerin aşamalı birikimini ve politika uygulamasını yönetir.</p>
+<p>Doğrulama isteği gönderildiğinde koordinatör şu sırayı izler:</p>
+<ol>
+<li>Etkin oturum durumunu alttaki depolama katmanından (<code>SessionStore</code>) alır.</li>
+<li>Gelen telemetri sinyallerini (<code>signalsUsed</code>) geçmiş oturum verilerine ekler veya birleştirir.</li>
+<li>Etkin politika profili (<code>defaultPolicy</code>) için risk değerlendirme hizmetini (<code>SessionRiskEvaluator</code>) çağırır.</li>
+<li>Ortak kararı (<code>decision</code>) üretir, sonuç <code>riskScore</code> değerini hesaplar; gerekli ek doğrulama işlemlerini (<code>requiredSteps</code>) ve tanılama nedenlerini (<code>reasons</code>) derler.</li>
+</ol>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/4.2--securekitcore-contracts-and-orchestration-1.svg" alt="@securekit/core sözleşmeleri ve koordinasyon — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Koordinasyon ve politika değerlendirme hattı</em></p>
+<p>Kaynaklar: <code>docs/NODE_API_CONTRACT_INVENTORY.md:59-76</code></p>

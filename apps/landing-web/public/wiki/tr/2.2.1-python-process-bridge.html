@@ -1,0 +1,40 @@
+<h1 id="python-process-bridge">Python süreç köprüsü</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardOptions.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardOptions.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs</a></li>
+</ul>
+</details>
+<p>Python süreç köprüsü; ASP.NET Core sunucusundan dış Python biyometrik doğrulama işçilerinin (<code>CardPython</code>, <code>FacePython</code>, <code>VoicePython</code>, <code>KeystrokePython</code>) yaşam döngüsünü, girdi/çıktı akışlarını ve hatalarını yönetir. Sanal ortamlarda süreç keşfi yapar, standart girdi/çıktı üzerinden JSON satırlarıyla iletişim kurar, kesin yürütme zaman aşımı uygular ve sahipsiz işçi süreçlerini önlemek için tüm süreç ağacını sonlandırır.</p>
+<hr>
+<h2 id="1-worker-discovery-and-environment-resolution">1. İşçi keşfi ve ortam seçimi</h2>
+<p>C# koordinasyon katmanı, yapılandırma parametrelerine ve yerel çalışma alanı düzenine göre Python çalışma ortamlarını dinamik olarak bulur ve başlatır. <code>CardOptions</code> sınıfı; betik, geçici dizinler ve alternatif arama yollarını belirler [apps/securekit-api/Services/CardOptions.cs:12-25].</p>
+<p><code>CardPython</code> uygulaması, öncelik sırasına göre aday çalışma ortamlarını (<code>Candidates()</code>) inceler; sistem yorumlayıcılarına (<code>py -3</code>, <code>python3</code>, <code>python</code>) geçmeden önce sanal ortamları (<code>.venv-card</code>, <code>.venv</code>) değerlendirir [apps/securekit-api/Services/CardPython.cs:22-43]. Eksik Python paketi gibi bir bağımlılık hatasında köprü standart hata çıktısını toplar ve istisnayı HTTP yanıtına eşlenen yapılandırılmış hataya dönüştürür [apps/securekit-api/Services/CardPython.cs:27-31, 80-87].</p>
+
+<p><em>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L18-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 18-43</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardOptions.cs#L12-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardOptions.cs 12-25</a></em></p>
+<hr>
+<h2 id="2-cli-contracts-and-stdinstdout-json-lines-protocol">2. CLI sözleşmeleri ve stdin/stdout JSON satırı protokolü</h2>
+<p>İşçi süreci başlatıldıktan sonra standart girdi ve çıktı akışları üzerinde eşzamanlı, satır tabanlı bir JSON protokolüyle iletişim kurulur.</p>
+<p><code>CardPython.Converse</code> uygulamasında işçi, <code>--worker</code> bayrağıyla başlar ve yeni satırlarla ayrılmış JSON nesneleri üretir [apps/securekit-api/Services/CardPython.cs:57-58, 99-128]. Protokol iki aşamalı bir el sıkışma gerektirir:</p>
+<ol>
+<li><strong>Hazır olma aşaması</strong>: C# süreci, <code>event</code> alanı <code>ready</code> ve <code>ok</code> alanı <code>true</code> olan bir olay gelene kadar stdout’u okur [apps/securekit-api/Services/CardPython.cs:115-120].</li>
+<li><strong>İletişim aşaması</strong>: Hazır olma bildirimi gelince C# süreci, <code>id: &quot;1&quot;</code> atanmış istek nesnesini standart girdiye (<code>process.StandardInput</code>) yazar ve standart çıktıda eşleşen yanıt satırını bekler [apps/securekit-api/Services/CardPython.cs:102-127].</li>
+</ol>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/2.2.1-python-process-bridge-1.svg" alt="Python süreç köprüsü — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L45-L76" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 45-76</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/Services/CardPython.cs#L99-L128" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/Services/CardPython.cs 99-128</a></em></p>
+<hr>
+<h2 id="3-timeouts-error-handling-and-process-tree-termination">3. Zaman aşımı, hata yönetimi ve süreç ağacının sonlandırılması</h2>
+<p>Yoğun görüntü işleme sırasında takılan iş parçacıklarını ve işletim sistemi kaynak sızıntılarını önlemek için <code>CardPython</code>, yürütmeyi bağlantılı iptal token’ları ve süreç iş kapsayıcılarıyla sınırlar.</p>
+<ul>
+<li><strong>Zaman aşımı</strong>: <code>CancellationTokenSource</code>, varsayılan 300.000 ms / 5 dakika olan <code>options.TimeoutMs</code> değerine bağlanır [apps/securekit-api/Services/CardPython.cs:60-61]. Süre aşılırsa <code>OperationCanceledException</code> yakalanır ve <code>PYTHON_TIMEOUT</code> hata koduna (<code>504 Gateway Timeout</code>) dönüştürülür [apps/securekit-api/Services/CardPython.cs:77-78].</li>
+<li><strong>Süreç ağacını kapatma</strong>: <code>ProcessJob.Attach(process)</code>, alt süreci bir iş nesnesine kaydeder [apps/securekit-api/Services/CardPython.cs:68]. <code>finally</code> temizleme bloğunda süreç hâlâ çalışıyorsa <code>process.Kill(true)</code> özyinelemeli çağrılarak tüm ağaç sonlandırılır; sahipsiz Python alt süreçleri önlenir [apps/securekit-api/Services/CardPython.cs:88-96].</li>
+<li><strong>Stderr boşaltma</strong>: Hata veya uyarılarda stderr tamponu dolduğunda boru kilitlenmesini önlemek için standart hata akışı <code>DrainError</code> ile asenkron boşaltılır [apps/securekit-api/Services/CardPython.cs:69].</li>
+</ul>
+
+<p><em>Kaynaklar: [apps/securekit-api/Services/CardPython.cs:60-96]</em></p>
+<hr>
+<h2 id="4-temporary-files-and-data-flow">4. Geçici dosyalar ve veri akışı</h2>
+<p>Biyometrik doğrulama hatları genellikle yüksek çözünürlüklü görüntü veya ses verileri alır. Köprü, girdileri doğrudan akıtarak veya <code>CardOptions.Allowed</code> ile doğrulanmış yolları kullanarak veri aktarımını koordine eder [apps/securekit-api/Services/CardOptions.cs:28-41].</p>
+<p>Yol güvenliği kuralları, referans görüntülerinin ve geçici yüklemelerin yalnızca izin verilen köklerde (<code>ReferenceDirectory</code>, <code>UserReferenceDirectory</code>) bulunmasını zorunlu kılar. Böylece işçi CLI argümanları oluşturulmadan önce dizin aşımı açıkları önlenir [apps/securekit-api/Services/CardOptions.cs:15-16, 24-41].</p>
+<p><em>Kaynaklar: [apps/securekit-api/Services/CardOptions.cs:12-42]</em></p>

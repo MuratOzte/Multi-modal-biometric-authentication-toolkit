@@ -1,0 +1,42 @@
+<h1 id="client-side-sdk-core-and-demo-app">İstemci tarafı: SDK, Core ve demo uygulaması</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json</a></li>
+</ul>
+</details>
+<p>Bu bölüm, SecureKit istemci mimarisine genel bakış sunar: tarayıcıya yönelik TypeScript SDK’sı (<code>@securekit/web-sdk</code>), ortak sözleşme ve mantık paketi (<code>@securekit/core</code>) ve React demo ortamı (<code>apps/demo-web</code>).</p>
+<p>Teknik ayrıntılar, uygulama özellikleri ve modül iç yapıları için ilgili alt sayfalara bakın:</p>
+<ul>
+<li><code>@securekit/web-sdk</code>: <a href="#/wiki/4.1--securekitweb-sdk">@securekit/web-sdk</a> sayfasına bakın.</li>
+<li><code>@securekit/core Contracts and Orchestration</code>: <a href="#/wiki/4.2--securekitcore-contracts-and-orchestration">@securekit/core sözleşmeleri ve koordinasyon</a> sayfasına bakın.</li>
+<li><code>demo-web Application</code>: <a href="#/wiki/4.3-demo-web-application">demo-web uygulaması</a> sayfasına bakın.</li>
+</ul>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a></p>
+<hr>
+<h2 id="41-object-object-overview">4.1. <code>@securekit/web-sdk</code> genel bakış</h2>
+<p><code>@securekit/web-sdk</code> paketi; kimlik doğrulama uç noktalarına erişmek, kullanıcı biyometrisini toplamak ve bağlamsal sinyalleri takip etmek için tarayıcı arayüzü sağlar. Aktarım mantığını, yazım ritmi olay toplayıcılarını, konum/ağ bağlamı işleyicilerini ve eski istemci uyumluluk adaptörlerini kapsar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<p><code>client.ts</code>, aktarım katmanları, yazım ritmi toplayıcıları, adaptörler ve eski istemci desteği için <a href="#/wiki/4.1--securekitweb-sdk">@securekit/web-sdk</a> sayfasına bakın.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L23-L23" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 23</a></p>
+<hr>
+<h2 id="42-object-object-contracts-and-orchestration">4.2. <code>@securekit/core</code> sözleşmeleri ve koordinasyon</h2>
+<p><code>@securekit/core</code> paketi, monoreponun ortak temel katmanıdır. Çok modlu sinyalleri değerlendirmek için istek/yanıt sözleşmelerini, biyometrik işleme modüllerini, risk politikalarını ve istemci koordinasyon mantığını tanımlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21</a></p>
+<p>Ortak sözleşmeler, biyometri modülleri, risk politikaları, koordinatör ve varsayılan politikalar için <a href="#/wiki/4.2--securekitcore-contracts-and-orchestration">@securekit/core sözleşmeleri ve koordinasyon</a> sayfasına bakın.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L21" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21</a></p>
+<hr>
+<h2 id="43-object-object-application">4.3. <code>demo-web</code> uygulaması</h2>
+<p><code>demo-web</code>, kayıt, giriş, rıza akışları ve çok modlu biyometrik profil doğrulamasını test etmek için tasarlanmış React ve Vite tabanlı demo ortamıdır (<code>apps/demo-web</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 15</a> Hem <code>@securekit/web-sdk</code> hem <code>@securekit/core</code> paketleriyle entegre çalışır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<p>Vite geliştirme proxy’si, sunucu hedefinin belirlenmesi (<code>api-target.ts</code>), <code>AuthApp</code> arayüzü, kimlik doğrulama akışları (<code>auth.html</code>) ve kabul smoke testleri için <a href="#/wiki/4.3-demo-web-application">demo-web uygulaması</a> sayfasına bakın.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 15</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<hr>
+<h2 id="client-side-architecture-and-code-entity-mapping">İstemci mimarisi ve kod öğeleriyle eşleştirme</h2>
+<p>Aşağıdaki diyagram; tarayıcı istemci bileşenlerini, ortak çekirdek sözleşmelerini ve demo uygulamasını ilişkilendirir.</p>
+<p>Başlık: İstemci bileşen yapısı</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/4-client-side--sdk-core-and-demo-app-1.svg" alt="İstemci tarafı: SDK, Core ve demo uygulaması — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/demo-web/package.json#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/demo-web/package.json 16-17</a></p>
+<hr>
+<p>Kimlik doğrulama veya kayıt denemesinde veri, React arayüzünden (<code>demo-web</code>) SDK aktarım katmanına akar ve <code>@securekit/core</code> ortak yapılarını kullanır.</p>
+<p>Başlık: İstemci istek akışı</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/4-client-side--sdk-core-and-demo-app-2.svg" alt="İstemci tarafı: SDK, Core ve demo uygulaması — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L21-L24" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 21-24</a></p>

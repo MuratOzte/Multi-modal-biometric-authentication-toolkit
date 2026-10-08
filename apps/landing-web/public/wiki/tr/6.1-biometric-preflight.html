@@ -1,0 +1,48 @@
+<h1 id="biometric-preflight">Biyometrik ön kontrol</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py</a></li>
+</ul>
+</details>
+<h2 id="overview-and-scope">Genel bakış ve kapsam</h2>
+<p>Biyometrik ön kontrol alt sistemi (<code>scripts/biometric-preflight.mjs</code>, <code>scripts/biometric-preflight.py</code>); SecureKit çok modlu biyometrik işçilerinin çalışma ortamlarını, üçüncü taraf Python bağımlılıklarını, CUDA hızlandırmasını ve <code>ffmpeg</code> gibi dış sistem dosyalarını otomatik doğrular. ASP.NET Core API veya eski Node sunucusu Python köprülerini başlatmadan önce betik, ağır model ağırlıklarını belleğe yüklemeden ya da indirmeden modüllerin içe aktarılabilirliğini güvenli denetimlerle kontrol eder.</p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L1-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 1-11</a> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 1-6</a></p>
+<hr>
+<h2 id="binary-resolution-order">Yürütülebilir dosya seçiminin öncelik sırası</h2>
+<p>Node.js koordinatörü (<code>scripts/biometric-preflight.mjs</code>), her biyometrik alan (<code>face</code>, <code>voice</code>, <code>card</code>) için uygun Python yorumlayıcısını kesin bir öncelik sırasıyla seçer.</p>
+<p>Seçim sırası:</p>
+<ol>
+<li><strong>Açık ortam değişkenleri</strong>: <code>${PREFIX}_PYTHON_BIN</code>, <code>PYTHON_BIN</code> ve yapılandırmaya eşlenmiş komut özellikleri kontrol edilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L41-L41" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 41</a></li>
+<li><strong>Yerel sanal ortamlar</strong>: <code>.venv-face</code>, <code>.venv-voice</code> veya <code>.venv-card</code> konumunda çalışma alanı sanal ortamı olup olmadığı kontrol edilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L42-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 42</a></li>
+<li><strong>Sistem alternatifleri</strong>: Platforma özgü sistem Python’u kullanılır (Windows’ta <code>py</code>, POSIX sistemlerde <code>python3</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 45</a></li>
+</ol>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/6.1-biometric-preflight-1.svg" alt="Biyometrik ön kontrol — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 1: <code>scripts/biometric-preflight.mjs</code> içinde Python dosya seçimi ve alt süreç başlatma akışı.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L39-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 39-50</a></p>
+<hr>
+<h2 id="python-probe-implementation-and-checks">Python denetim uygulaması ve kontroller</h2>
+<p>İşçi tarafındaki betik (<code>scripts/biometric-preflight.py</code>), üçüncü taraf başlatma çıktılarının JSON verisini bozmaması için içe aktarmaları <code>contextlib.redirect_stdout</code>, <code>contextlib.redirect_stderr</code> ile sarar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L21-L25" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 21-25</a></p>
+<p>Betik, her alana özgü bağımlılık dizilerini doğrular:</p>
+<ul>
+<li><strong>Yüz</strong>: <code>numpy</code>, <code>PIL</code>, <code>torch</code>, <code>torchvision</code>, <code>facenet_pytorch</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 9</a></li>
+<li><strong>Ses</strong>: <code>numpy</code>, <code>torch</code>, <code>torchaudio</code>, <code>whisper</code>, <code>speechbrain</code>, <code>imageio_ffmpeg</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 10</a></li>
+<li><strong>Kart</strong>: <code>numpy</code>, <code>PIL</code>, <code>cv2</code>, <code>yaml</code>, <code>rapidfuzz</code>, <code>skimage</code>, <code>torch</code>, <code>open_clip</code>, <code>paddle</code>, <code>paddleocr</code>. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L13-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 13</a></li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/6.1-biometric-preflight-2.svg" alt="Biyometrik ön kontrol — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 2: <code>scripts/biometric-preflight.py</code> içinde yürütülen modül doğrulama hattı.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.py#L8-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.py 8-49</a></p>
+<hr>
+<h2 id="run-log-output-and-acceptance-state">Çalışma günlüğü çıktısı ve kabul durumu</h2>
+<p>Tüm modül denetimleri tamamlanınca <code>scripts/biometric-preflight.mjs</code>, birleşik tanılama raporunu <code>.run-logs/biometric-preflight.json</code> içine yazar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.gjs#L8-L58" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.gjs 8-58</a></p>
+<p>JSON rapor şeması şunları içerir:</p>
+<ul>
+<li><code>checkedAt</code>: Çalışmanın ISO zaman damgası. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L9-L9" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 9</a></li>
+<li><code>dependenciesPassed</code>: Tüm modüllerde zorunlu kontrollerin başarılı olup olmadığını gösteren mantıksal değer. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L9-L56" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 9-56</a></li>
+<li><code>modelAcceptance</code>: Durum metni (<code>&quot;pending&quot;</code>, <code>&quot;passed&quot;</code> veya <code>&quot;failed&quot;</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10</a></li>
+<li><code>hardwareAcceptance</code>: GPU/kamera/mikrofon kullanılabilirliğinin durum metni. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10-59</a></li>
+<li><code>modules</code>: Tekil modül kontrol sonuçları, çalışma ortamı kaynakları ve hata üst verileri dizisi. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L10-L50" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 10-50</a></li>
+</ul>
+<p>Zorunlu kontrollerden biri başarısızsa ön kontrol betiği <code>1</code> çıkış koduyla sonlanır; geçersiz işçi ortamları başlatılmadan otomatik hatları durdurur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L60-L60" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 60</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/scripts/biometric-preflight.mjs#L8-L60" target="_blank" rel="noopener noreferrer" class="wiki-source">scripts/biometric-preflight.mjs 8-60</a></p>

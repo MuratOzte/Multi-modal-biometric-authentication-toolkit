@@ -1,0 +1,39 @@
+<h1 id="net-test-suite">.NET test takımı</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs</a></li>
+</ul>
+</details>
+<p><code>.NET Test Suite</code> (<code>apps/securekit-api.tests</code>), SecureKit ASP.NET Core API’sinin (<code>apps/securekit-api</code>) entegrasyon ve birim test çerçevesidir. Denetleyici uç noktalarını, hizmet katmanlarını, biyometrik Python süreç köprülerini, hata dönüştürme sözleşmelerini ve sağlık izleyicilerini beklenen davranışa ve eski Node.js API eşdeğerliğine göre doğrular.</p>
+<hr>
+<h2 id="test-architecture-and-support-infrastructure">Test mimarisi ve destek altyapısı</h2>
+<p>Test takımı, <code>WebApplicationFactory&lt;TEntryPoint&gt;</code> kullanarak bellekte API örnekleri başlatmak için ağırlıklı olarak <code>Microsoft.AspNetCore.Mvc.Testing</code> aracına dayanır. <code>ContractAssert</code> gibi özel test düzenekleri ve yardımcılar JSON yanıt yapılarını, HTTP durumlarını ve hata biçimlerini doğrular.</p>
+<p>Kart doğrulama entegrasyonu (<code>StageSevenTests</code>) gibi aşamaya özgü testler; dosya işlemlerini ayıran, Python yürütme yollarını taklit eden ve <code>SECUREKIT_PROFILE_STORE</code>, <code>Card:ReferenceDirectory</code>, <code>Card:ScriptPath</code> gibi anahtarları değiştiren özel web uygulaması fabrikaları oluşturur.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/6.3-.net-test-suite-1.svg" alt=".NET test takımı — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs#L13-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs 13-37</a></p>
+<hr>
+<h2 id="stage-seven-and-card-verification-tests">Yedinci aşama ve kart doğrulama testleri</h2>
+<p><code>StageSevenTests</code>; kart kaydı, referans listeleme, eşik doğrulama ve Python köprü hata eşlemelerini kapsamlı test eder. Test fabrikası geçici depolama kökleri kurar ve farklı başarı/hata koşullarını taklit etmek için Python test betiklerini (<code>card-stage7.py</code>) eşler.</p>
+<p><code>StageSevenTests</code> içindeki temel test davranışları:</p>
+<ul>
+<li><strong>Referans listeleme ve okunabilirlik</strong>: Yalnızca geçerli görüntü biçimlerinin listelendiğini ve etiketlerin düzgün biçimlendirildiğini doğrular [apps/securekit-api.tests/StageSevenTests.cs:58-65].</li>
+<li><strong>Protokol ve karar akışı</strong>: Eşleşmeleri, en iyi eşleşme kararlarını ve otomatik geçici dosya temizliğini test eder [apps/securekit-api.tests/StageSevenTests.cs:66-74].</li>
+<li><strong>Kayıt normalleştirme</strong>: Kullanıcı kimliği temizleme, referans dosyası değiştirme ve saklanmış referans kullanımını test eder [apps/securekit-api.tests/StageSevenTests.cs:75-85].</li>
+<li><strong>İşçi hata eşleme</strong>: Geçersiz çıktıları, şema hatalarını, zaman aşımını ve süreç hatalarını standart HTTP durumlarına (<code>502</code>, <code>504</code>, <code>404</code>) ve hata kodlarına (<code>PYTHON_OUTPUT_INVALID</code>, <code>PYTHON_TIMEOUT</code>, <code>REFERENCE_NOT_FOUND</code>) dönüştürür [apps/securekit-api.tests/StageSevenTests.cs:86-100].</li>
+<li><strong>Girdi doğrulama</strong>: Aralık dışı eşikleri (<code>NaN</code>, <code>Infinity</code>, <code>-1</code>, <code>2</code>) ve hatalı dosya yüklemelerini reddeder [apps/securekit-api.tests/StageSevenTests.cs:101-112].</li>
+</ul>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/6.3-.net-test-suite-2.svg" alt=".NET test takımı — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/StageSevenTests.cs#L86-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/StageSevenTests.cs 86-100</a></p>
+<hr>
+<h2 id="health-and-basic-contract-tests">Sağlık ve temel sözleşme testleri</h2>
+<p><code>HealthTests</code>; temel hizmet erişimini, eski Node API sözleşme eşdeğerliğini ve iç test uç noktalarının üretimde gizlenmesi gibi sınır korumalarını doğrular.</p>
+<p>Test sınıfı, şu kontroller için <code>ApiFactory</code> enjekte eder:</p>
+<ul>
+<li><strong>Sağlık uç noktası sözleşmesi</strong>: GET <code>/health</code> çağrısının eski sözleşmeyle aynı <code>{&quot;ok&quot;:true}</code> gövdesini HTTP <code>200 OK</code> ile döndürdüğünü doğrular [apps/securekit-api.tests/HealthTests.cs:8-15].</li>
+<li><strong>Rota doğrulama</strong>: <code>referenceImage</code> gibi zorunlu çok parçalı alanlar eksik olduğunda yapılandırılmış hata ayrıntılarıyla <code>400 Bad Request</code> üretildiğini doğrular [apps/securekit-api.tests/HealthTests.cs:17-24].</li>
+<li><strong>Güvenlik izolasyonu</strong>: <code>/__test/throw</code> gibi iç altyapı denetim rotalarının dışa açılmadığını ve <code>404 Not Found</code> döndürdüğünü doğrular [apps/securekit-api.tests/HealthTests.cs:27-32].</li>
+</ul>
+
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api.tests/HealthTests.cs#L8-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api.tests/HealthTests.cs 8-15</a></p>

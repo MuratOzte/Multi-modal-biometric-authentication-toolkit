@@ -656,11 +656,16 @@
     font-size: 11px;
   }
   .wiki-header nav {
-    gap: 0;
+    gap: 12px;
     font-size: 11px;
   }
-  .wiki-header nav a:first-child {
+  .wiki-header nav > a {
     display: none;
+  }
+  .wiki-header .language-switcher a {
+    min-width: 30px;
+    min-height: 32px;
+    font-size: 11px;
   }
   .wiki-header-divider {
     height: 18px;
@@ -785,6 +790,22 @@
   }
   .wiki-dialog-canvas {
     padding: 14px;
+  }
+}
+
+@media (max-width: 420px) {
+  .wiki-header {
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .wiki-header .brand {
+    font-size: 17px;
+  }
+  .wiki-header-label {
+    font-size: 10px;
+  }
+  .wiki-header-divider {
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {

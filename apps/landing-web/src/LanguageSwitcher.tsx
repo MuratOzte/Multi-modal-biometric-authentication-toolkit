@@ -1,6 +1,12 @@
 import { preferenceKey, translator, type Locale } from "./locale";
 
-export default function LanguageSwitcher({ locale }: { locale: Locale }) {
+export default function LanguageSwitcher({
+  locale,
+  hash = "",
+}: {
+  locale: Locale;
+  hash?: string;
+}) {
   const t = translator(locale);
   return (
     <div
@@ -11,7 +17,7 @@ export default function LanguageSwitcher({ locale }: { locale: Locale }) {
       {(["tr", "en"] as const).map((language) => (
         <a
           key={language}
-          href={`/${language}/`}
+          href={`/${language}/${hash}`}
           hrefLang={language}
           lang={language}
           aria-label={language === "tr" ? "Türkçe" : "English"}

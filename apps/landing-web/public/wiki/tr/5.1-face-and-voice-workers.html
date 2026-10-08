@@ -1,0 +1,119 @@
+<h1 id="face-and-voice-workers">Yüz ve ses işçileri</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md</a></li>
+</ul>
+</details>
+<p>Bu sayfa, SecureKit yüz ve ses biyometrik işçilerinin uygulamasını açıklar. Python işçileri, MTCNN/FaceNet ile yüz kaydı ve doğrulama; Whisper/SpeechBrain ile ses kaydı ve doğrulama mantığını yürütür. ASP.NET Core API tarafından kontrollü süreç köprüsü üzerinden çağrılırlar.</p>
+<h2 id="face-verification-worker">Yüz doğrulama işçisi</h2>
+<p><code>python/face_verification/face_verification.py</code> konumundaki yüz işçisi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L1-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 1-177</a>, yüzleri tespit eder, yüz vektörlerini çıkarır ve doğrulama için karşılaştırır. Yüz tespiti için MTCNN (çok görevli kademeli evrişimli ağlar), yüksek boyutlu yüz vektörleri için FaceNet kullanır.</p>
+<h3 id="implementation-details">Uygulama ayrıntıları</h3>
+<p><code>face_verification.py</code> betiği iki ana modda çalışabilir:</p>
+<ol>
+<li><strong>Kayıt</strong>: Görüntüyü alır, yüzü tespit eder ve vektörünü döndürür.</li>
+<li><strong>Doğrulama</strong>: Referans vektörünü ve örnek görüntüyü alır; örnekteki yüzü tespit edip vektörünü çıkarır ve iki vektör arasındaki benzerliği hesaplar.</li>
+</ol>
+<p>Betik; işlem modu (<code>--enroll</code> veya <code>--verify</code>), girdi dosyaları (<code>--image</code>, <code>--reference</code>, <code>--probe</code>) ve çıktı biçimi (<code>--json</code>) için komut satırı argümanlarını <code>argparse</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L130-L147" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 130-147</a> ile işler.</p>
+<p>Temel bileşenler ve görevleri:</p>
+<ul>
+<li><strong><code>FaceDetector</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L16-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 16-40</a>
+<ul>
+<li>Yüz tespiti için MTCNN modelini başlatır.</li>
+<li><code>detect_face</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L29-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 29-40</a>, NumPy dizisi biçiminde görüntü alır ve tespit edilen yüzün sınırlayıcı kutu koordinatlarını döndürür.</li>
+</ul>
+</li>
+<li><strong><code>FaceEmbedder</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L43-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 43-67</a>
+<ul>
+<li>Vektör üretimi için FaceNet modelini başlatır.</li>
+<li><code>get_embedding</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L56-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 56-67</a>, kırpılmış yüz görüntüsünü alır ve 512 boyutlu vektörünü döndürür.</li>
+</ul>
+</li>
+<li><strong><code>FaceVerifier</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L70-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 70-100</a>
+<ul>
+<li>Yüz tespiti ve vektör çıkarımını koordine eder.</li>
+<li><code>enroll</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L79-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 79-84</a>, görüntüdeki yüzü tespit eder ve vektörünü döndürür.</li>
+<li><code>verify</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L86-L100" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 86-100</a>, referans vektörünü ve örnek görüntüyü alır; örnek vektörünü çıkarıp aralarındaki kosinüs benzerliğini hesaplar. Yüzlerin eşleşmesini belirlemek için yapılandırılabilir <code>FACE_VERIFICATION_THRESHOLD</code> eşiğini de uygular.</li>
+</ul>
+</li>
+</ul>
+<p>Betik, görüntüde tek ve belirgin yüz olup olmadığını kontrol ederek temel canlılık tespiti de yapar. Birden çok yüz veya hiç yüz bulunamazsa hata döndürür.</p>
+<h3 id="data-flow">Veri akışı</h3>
+<p>ASP.NET Core API, <code>face_verification.py</code> betiğini alt süreç olarak çağırır.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/5.1-face-and-voice-workers-1.svg" alt="Yüz ve ses işçileri — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><strong>Diyagram 1: Yüz doğrulama işçisinin veri akışı</strong></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/face_verification/face_verification.py#L1-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/face_verification/face_verification.py 1-177</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-166</a></li>
+</ul>
+<h3 id="configuration">Yapılandırma</h3>
+<p>Yüz işçisinin davranışı ortam değişkenleriyle değiştirilebilir:</p>
+<ul>
+<li><code>FACE_PYTHON_BIN</code>: Yüz işçisinin Python yürütülebilir dosyasını belirtir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L83" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83</a></li>
+<li><code>FACE_DEVICE</code>: Hesaplamalarda kullanılacak cihazı belirleyen <code>auto</code>, <code>cpu</code> veya <code>cuda</code> değerini alabilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L84-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 84</a></li>
+<li><code>FACE_REQUIRE_GPU</code>: Tanımlıysa GPU kullanımını zorunlu kılar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L85-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 85</a></li>
+</ul>
+<p>Bu değişkenler genellikle yüz doğrulama Python sanal ortamının kurulumunda ayarlanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L113-L117" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 113-117</a></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83-85</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L113-L117" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 113-117</a></li>
+</ul>
+<h2 id="voice-verification-worker">Ses doğrulama işçisi</h2>
+<p><code>python/voice_verification/voice_verification.py</code> konumundaki ses işçisi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a>, ses kaydı ve doğrulamasını yönetir. Söylenen ifadenin doğrulama metniyle eşleşmesini kontrol etmek için Whisper; ses özelliklerini karşılaştırarak konuşmacıyı doğrulamak için SpeechBrain kullanır.</p>
+<h3 id="implementation-details-2">Uygulama ayrıntıları</h3>
+<p><code>voice_verification.py</code> betiği iki ana işlemi destekler:</p>
+<ol>
+<li><strong>Kayıt</strong>: Ses dosyasını ve doğrulama metnini alır; Whisper ile sesi metne dönüştürüp isteğe göre doğrular, ardından SpeechBrain ile konuşmacı vektörünü çıkarır.</li>
+<li><strong>Doğrulama</strong>: Ses dosyası, doğrulama metni ve referans konuşmacı vektörünü alır. Sesi metne dönüştürür, metni doğrular, sesin konuşmacı vektörünü çıkarır ve referansla karşılaştırır.</li>
+</ol>
+<p>Betik, komut satırı argümanlarını <code>argparse</code> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L160-L177" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 160-177</a> ile ayrıştırır; işlem modu (<code>--enroll</code> veya <code>--verify</code>), girdi sesi (<code>--audio</code>), doğrulama metni (<code>--challenge</code>) ve referans vektörü (<code>--reference</code>) belirtilebilir.</p>
+<p>Temel bileşenler ve görevleri:</p>
+<ul>
+<li><strong><code>SpeechToText</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L16-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 16-40</a>
+<ul>
+<li>Konuşmayı metne dönüştürmek için Whisper modelini başlatır.</li>
+<li><code>transcribe</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L29-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 29-40</a>, ses dosyası yolunu alır ve çıkarılan metni döndürür.</li>
+</ul>
+</li>
+<li><strong><code>SpeakerEmbedder</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L43-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 43-67</a>
+<ul>
+<li>SpeechBrain konuşmacı doğrulama modelini başlatır.</li>
+<li><code>get_embedding</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L56-L67" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 56-67</a>, ses dosyası yolunu alır ve konuşmacı vektörünü döndürür.</li>
+</ul>
+</li>
+<li><strong><code>VoiceVerifier</code> sınıfı</strong>: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L70-L109" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 70-109</a>
+<ul>
+<li>Metne dönüştürme ve konuşmacı vektörü süreçlerini koordine eder.</li>
+<li><code>enroll</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L82-L92" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 82-92</a>, sesi metne dönüştürür, doğrulama isteğiyle kontrol eder ve konuşmacı vektörünü çıkarır.</li>
+<li><code>verify</code> yöntemi <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L94-L109" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 94-109</a>; metne dönüştürme, istek doğrulama ve örnek vektörü çıkarımını yapar; referans vektörüyle kosinüs benzerliğini hesaplar. Benzerlik karşılaştırmasında <code>VOICE_VERIFICATION_THRESHOLD</code> kullanır.</li>
+</ul>
+</li>
+</ul>
+<p>Betik, çıkarılan metnin verilen doğrulama metniyle eşleşmesini zorunlu kılar; böylece canlılık ve niyet doğrulaması katmanı ekler.</p>
+<h3 id="data-flow-2">Veri akışı</h3>
+<p>Yüz işçisinde olduğu gibi ASP.NET Core API, <code>voice_verification.py</code> betiğiyle süreç köprüsü üzerinden iletişim kurar.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/5.1-face-and-voice-workers-2.svg" alt="Yüz ve ses işçileri — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><strong>Diyagram 2: Ses doğrulama işçisinin veri akışı</strong></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/python/voice_verification/voice_verification.py#L1-L200" target="_blank" rel="noopener noreferrer" class="wiki-source">python/voice_verification/voice_verification.py 1-200</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-166</a></li>
+</ul>
+<h3 id="configuration-2">Yapılandırma</h3>
+<p>Ses işçisinin ortam değişkenleri:</p>
+<ul>
+<li><code>VOICE_PYTHON_BIN</code>: Ses işçisinin Python yürütülebilir dosyasını belirtir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L83" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83</a></li>
+<li><code>VOICE_DEVICE</code>: <code>auto</code>, <code>cpu</code> veya <code>cuda</code> değerini alabilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L84-L84" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 84</a></li>
+<li><code>VOICE_REQUIRE_GPU</code>: Tanımlıysa GPU kullanımını zorunlu kılar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L85-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 85</a></li>
+<li><code>VOICE_WHISPER_MODEL</code>: Kullanılacak Whisper modelini belirtir (örneğin <code>base</code>, <code>small</code>, <code>medium</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L132-L132" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 132</a></li>
+</ul>
+<p>Ses işçisi için özel Python sanal ortamı oluşturulması ve bağımlılıkların kurulması da gerekir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L128-L131" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 128-131</a> Whisper, ses işleme için FFmpeg gerektirir; alternatif olarak <code>imageio-ffmpeg</code> tarafından sağlanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L135-L135" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 135</a></p>
+<p>Kaynaklar:</p>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L83-L85" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 83-85</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L128-L132" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 128-132</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/README.md?plain=1#L135-L135" target="_blank" rel="noopener noreferrer" class="wiki-source">README.md 135</a></li>
+</ul>

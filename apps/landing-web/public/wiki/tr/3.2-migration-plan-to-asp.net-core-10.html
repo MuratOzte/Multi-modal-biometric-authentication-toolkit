@@ -1,0 +1,80 @@
+<h1 id="migration-plan-to-aspnet-core-10">ASP.NET Core 10’a geçiş planı</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu belge, <code>packages/node-auth</code> içindeki eski Node.js Express API’sini, istemci uygulamalarını değiştirmeden tam sözleşme uyumuyla <code>apps/securekit-api</code> içindeki yeni ve yüksek performanslı ASP.NET Core 10 API’sine (<code>net10.0</code>) taşımanın mimari planını tanımlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L6" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-6</a></p>
+<p>İlk geçiş sırasında şu bileşenler korunur:</p>
+<ul>
+<li>React/Vite demo uygulaması (<code>apps/demo-web</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L10" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-10</a></li>
+<li>TypeScript web SDK’sı (<code>packages/web-sdk</code>). <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L11" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-11</a></li>
+<li>Yüz, ses, kart, IP ve sabit metin yazım ritmi doğrulaması için Python işçileri. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L12" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-12</a></li>
+<li>Mevcut HTTP rotaları, istek/yanıt veri şemaları ve hata yapıları. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L8-L13" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 8-13</a></li>
+</ul>
+<p>Python işçileri, C# hizmetlerinin doğrudan yönettiği kontrollü süreç köprüsüyle entegre edilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L15-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 15</a> Veritabanı geçişleri, parola güvenliği iyileştirmeleri ve gelişmiş kimlik doğrulama stratejisi değişiklikleri bu API uyumluluk geçişinden ayrı çalışmalar olarak ele alınır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L16-L17" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 16-17</a></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L1-L18" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 1-18</a></p>
+<hr>
+<h2 id="target-architecture-and-core-components">Hedef mimari ve temel bileşenler</h2>
+<p>Hedef sistem; ASP.NET Core denetleyicilerini, <code>WebApplicationFactory</code> ile xUnit testlerini ve eski Node.js davranış sözleşmelerine uyan sağlam JSON dosya depolama adaptörlerini kullanan modern .NET 10 düzenine dayanır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L19-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 19-33</a></p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3.2-migration-plan-to-asp.net-core-10-1.svg" alt="ASP.NET Core 10’a geçiş planı — diyagram 1" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 1: Geçiş mimarisinin kavramlardan monorepodaki somut kod öğelerine eşleştirilmesi.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L19-L33" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 19-33</a></p>
+<hr>
+<h2 id="migration-principles-and-methodology">Geçiş ilkeleri ve yöntem</h2>
+<p>Geçiş, gerileme olmaması kuralına bağlıdır; ilgili C# modülleri tüm doğrulama kontrollerinden geçene kadar eski Node API çalışır durumda tutulur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-42</a></p>
+<ol>
+<li><strong>Geri dönüşün korunması:</strong> Tüm C# modülleri bütün test düzeneklerini geçene kadar Node API (<code>packages/node-auth</code>) korunur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L36" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-36</a></li>
+<li><strong>Aşamalı commit’ler:</strong> Her geçiş adımı küçük, bağımsız ve geri alınabilir commit’lerden oluşur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L37-L37" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 37</a></li>
+<li><strong>Önce sözleşme:</strong> Şemalar ve testler uygulamadan önce oluşturulur. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L38-L38" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 38</a></li>
+<li><strong>Kesin eşdeğerlik:</strong> Rotalar, HTTP yöntemleri, durum kodları ve JSON alan tanımları değiştirilmez. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L39-L39" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 39</a></li>
+<li><strong>İki ortamda doğrulama:</strong> Aynı uç noktalar, yanıt eşdeğerliğini doğrulamak için hem Node hem C# ortamında çalıştırılır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L40-L40" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 40</a></li>
+<li><strong>Kontrolle ilerleme:</strong> Mevcut aşamanın testleri geçmeden sonraki aşamaya geçilemez. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L41-L41" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 41</a></li>
+</ol>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L34-L42" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 34-42</a></p>
+<hr>
+<h2 id="migration-stages-and-status">Geçiş aşamaları ve durum</h2>
+<p>Geçiş planı; temel iskeletten başlayıp alan hizmetleri, biyometrik doğrulama köprüleri ve kabul düzeneklerine ilerleyen sıralı aşamalara ayrılmıştır.</p>
+<pre><figure class="wiki-diagram" tabindex="0" role="button" aria-label="Diyagramı büyüt"><img src="/wiki/diagrams/3.2-migration-plan-to-asp.net-core-10-2.svg" alt="ASP.NET Core 10’a geçiş planı — diyagram 2" loading="lazy"><figcaption>Diyagramı büyütmek için seçin ↗</figcaption></figure></pre>
+<p><em>Şekil 2: Otomatik test kontrolleriyle yönetilen sıralı geçiş aşamaları.</em></p>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L43-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 43-166</a></p>
+<h3 id="stage-summary-and-implementation-status">Aşama özeti ve uygulama durumu</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="wiki-table-scroll" tabindex="0" role="region" aria-label="Belge tablosu"><table><thead><tr><th>Aşama</th><th>Odak alanları</th><th>Temel kod öğeleri ve çıktılar</th><th>Durum</th></tr></thead><tbody><tr><td><strong>Aşama 0</strong></td><td>İskelet, CORS, JSON, sağlık kontrolü</td><td><code>Program.cs</code>, <code>apps/securekit-api.tests</code>, <code>/health</code></td><td><strong>Tamamlandı</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L45-L51" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 45-51</a></td></tr><tr><td><strong>Aşama 1</strong></td><td>Doğrulama isteği, rıza, profiller</td><td><code>POST /challenge/text</code>, <code>POST /consent</code>, <code>GET /user/{userId}/profiles</code>, <code>DELETE /user/biometrics</code></td><td><strong>Tamamlandı</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L74-L81" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 74-81</a></td></tr><tr><td><strong>Aşama 2</strong></td><td>Kullanıcılar ve oturum akışı</td><td><code>GET /auth/users</code>, <code>POST /auth/register</code>, <code>POST /auth/login</code>, <code>POST /session/start</code>, <code>POST /verify/session</code></td><td><strong>Tamamlandı</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L113-L118" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 113-118</a></td></tr><tr><td><strong>Aşama 3</strong></td><td>Ağ, konum ve eski sistem</td><td>Ağ doğrulama, IP kontrolü, eski proxy rotaları</td><td><strong>Tamamlandı</strong> <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L164-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 164-166</a></td></tr></tbody></table></div>
+<p>Kaynaklar: <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/MIGRATION_TO_ASPNET10_PLAN.md?plain=1#L43-L166" target="_blank" rel="noopener noreferrer" class="wiki-source">MIGRATION_TO_ASPNET10_PLAN.md 43-166</a></p>

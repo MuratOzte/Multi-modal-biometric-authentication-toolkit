@@ -1,0 +1,50 @@
+<h1 id="storage-and-configuration">Depolama ve yapılandırma</h1>
+<details>
+<summary>İlgili kaynak dosyaları</summary>
+<ul>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json</a></li>
+<li><a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md</a></li>
+</ul>
+</details>
+<h2 id="purpose-and-scope">Amaç ve kapsam</h2>
+<p>Bu bölüm, SecureKit ASP.NET Core API’nin (<code>apps/securekit-api</code>) depolama mekanizmalarını ve yapılandırma altyapısını kapsar. SecureKit, haricî veritabanına gerek duymadan kullanıcı kayıtlarını, biyometrik profilleri ve yazım ritmi şablonlarını yönetmek için hafif dosya tabanlı JSON depoları (<code>FileUserStore</code>, <code>ProfileStorage</code>, <code>FixedKeystrokeStore</code>) kullanır. Yapılandırma <code>appsettings.json</code> ile yönetilir ve hiyerarşik ortam değişkenleriyle genişletilir; kesin referans kökü doğrulaması ve atomik yazım garantileri güvenlik sınırlarını uygular.</p>
+<p>Kaynaklar: <code>docs/ASPNET_CUTOVER.md:34-37</code>, <code>apps/securekit-api/appsettings.json:1-35</code></p>
+<hr>
+<h2 id="file-based-json-stores-and-concurrency">Dosya tabanlı JSON depoları ve eşzamanlılık</h2>
+<p>Depolama alt sistemi, yeniden başlatmalar arasında durumu korumak için yerel dosyalara dayanır. Depolar varsayılan olarak <code>apps/securekit-api/.securekit</code> dizininde başlatılır veya belirli ortam değişkenleriyle değiştirilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L34-L34" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 34</a></p>
+<p>Depolama katmanının temel bileşenleri:</p>
+<ul>
+<li><strong><code>FileUserStore</code></strong>: Kullanıcı kimlik bilgilerini, salt değerlerini ve kimlik özetlerini yönetir. Dosya yolu <code>SECUREKIT_USERS_FILE</code> ile yapılandırılır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L43-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 43</a></li>
+<li><strong><code>ProfileStorage</code></strong>: Çok modlu biyometrik profil eşlemelerini saklar; <code>SECUREKIT_PROFILE_STORE</code> üzerinden takip edilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L44-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 44</a></li>
+<li><strong><code>FixedKeystrokeStore</code></strong>: Sabit yazım ritmi şablonlarını ve referans girdilerini yönetir; <code>SECUREKIT_KEYSTROKE_STORE</code> üzerinden takip edilir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 45</a></li>
+</ul>
+<p>Eşzamanlı isteklerde yarış koşullarını ve kısmi yazımları önlemek için depolama katmanı atomik yazım ve süreç düzeyinde dosya kilitleme kullanır.</p>
+
+<p>Kaynaklar: <code>docs/ASPNET_CUTOVER.md:34-49</code></p>
+<hr>
+<h2 id="configuration-architecture-object-object">Yapılandırma mimarisi (<code>appsettings.json</code>)</h2>
+<p>API davranışını, <code>apps/securekit-api/appsettings.json</code> içinde tanımlı yapılandırılmış bölümler belirler. Yapılandırma şeması, hizmet katmanında kullanılan tür güvenli seçenek sınıflarıyla doğrudan eşleşir.</p>
+<p>Yapılandırma düzeninin ana blokları:</p>
+<ul>
+<li><strong><code>Logging</code></strong>: Microsoft ASP.NET ve varsayılan günlük düzeylerini tanımlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L2-L7" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 2-7</a></li>
+<li><strong><code>Face</code></strong>: Yüz doğrulama kurallarını, yükleme sınırlarını, zaman aşımı eşiklerini, cihaz seçimini (<code>auto</code>) ve GPU zorunluluğunu yönetir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L9-L15" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 9-15</a></li>
+<li><strong><code>Voice</code></strong>: Konuşmacı doğrulama parametrelerini, asgari kayıt örneklerini, Whisper model düzeylerini ve ECAPA-VoxCeleb vektörlerini yapılandırır. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L16-L26" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 16-26</a></li>
+<li><strong><code>Card</code></strong>: OCR zaman aşımını, yükleme sınırlarını ve varsayılan eşleşme eşiklerini tanımlar. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L27-L31" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 27-31</a></li>
+<li><strong><code>Cors</code></strong>: İzin verilen kaynaklar arası paylaşım politikalarını yönetir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/apps/securekit-api/appsettings.json#L32-L34" target="_blank" rel="noopener noreferrer" class="wiki-source">apps/securekit-api/appsettings.json 32-34</a></li>
+</ul>
+
+<p>Kaynaklar: <code>apps/securekit-api/appsettings.json:1-35</code></p>
+<hr>
+<h2 id="environment-variable-overrides-and-reference-roots">Ortam değişkenleriyle geçersiz kılma ve referans kökleri</h2>
+<p>ASP.NET Core, ortam değişkenlerinde çift alt çizgi (<code>__</code>) sözdizimiyle herhangi bir hiyerarşik yapılandırma anahtarının değiştirilmesine izin verir. Bu mekanizma dağıtım özelleştirmesi, dosya yolu yönlendirmesi ve biyometrik referans sınırlarının uygulanmasında yoğun kullanılır.</p>
+<p>Temel ortam değişkenleri ve yol eşlemeleri:</p>
+<ul>
+<li><code>SECUREKIT_USERS_FILE</code>: Kullanıcı deposunun mutlak yolunu değiştirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L43-L43" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 43</a></li>
+<li><code>SECUREKIT_PROFILE_STORE</code>: Kullanıcı profillerinin mutlak yolunu değiştirir. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L44-L44" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 44</a></li>
+<li><code>SECUREKIT_KEYSTROKE_STORE</code>: Sabit yazım ritmi modellerinin dizin yolu. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L45-L45" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 45</a></li>
+<li><code>Face__ReferenceDirectory</code> / <code>FACE_SLIDING_REFERENCES_ROOT</code>: Yüz vektörü referanslarının depolama kökleri. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L46-L47" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 46-47</a></li>
+<li><code>Card__UserReferenceDirectory</code>: Doğrulanmış kimlik kartı şablonlarının depolama kökü. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L48-L48" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 48</a></li>
+<li><code>Face__AllowedReferenceRoots__0</code> / <code>Card__AllowedReferenceRoots__0</code>: Dosya erişimini yetkili referans dizinleriyle sınırlayan açık güvenlik kuralları. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L58-L59" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 58-59</a></li>
+<li><code>MOCK_IP_CHECK</code>: Geliştirmede canlı IP/VPN konum kontrollerini atlama bayrağı. <a href="https://github.com/MuratOzte/Multi-modal-biometric-authentication-toolkit/blob/7b9cbda5/docs/ASPNET_CUTOVER.md?plain=1#L49-L49" target="_blank" rel="noopener noreferrer" class="wiki-source">docs/ASPNET_CUTOVER.md 49</a></li>
+</ul>
+<p>Kaynaklar: <code>docs/ASPNET_CUTOVER.md:43-60</code></p>

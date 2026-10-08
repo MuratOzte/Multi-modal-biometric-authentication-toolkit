@@ -26,8 +26,9 @@ Repo kökünden `pnpm dev:landing` ile başlatın (`http://localhost:5174`).
   geçersiz bir sitemap oluşturulmaz. Yayından önce gerçek alan adıyla derleyin.
 - Hosting, `dist/tr/index.html` ve `dist/en/index.html` dosyalarını ilgili
   dizin adreslerinde sunmalıdır. Site alan adının köküne kurulur.
-- Wiki arşivi İngilizcedir; tanıtım sayfasındaki bağlantı yanında belirtilir.
-  Wiki hash rotaları ana sayfanın SEO metadatasını kullanır ve açıkken
+- Wiki arşivi Türkçe ve İngilizce sunulur; seçilen dil makalelere, aramaya,
+  başlıklara ve wiki arayüzüne uygulanır. Wiki hash rotaları ana sayfanın
+  SEO metadatasını kullanır ve açıkken
   istemci tarafında `noindex` işaretlenir; sitemap'e eklenmez.
 
 `pnpm --filter landing-web test:i18n` dil seçimini, dil bağlantılarını ve
@@ -41,9 +42,10 @@ Repo kökünden `pnpm dev:landing` ile başlatın (`http://localhost:5174`).
 
 ## Resource Wiki
 
-Tanıtım sitesinin menüsünden veya `http://localhost:5174/#/wiki/1-overview`
+Tanıtım sitesinin menüsünden, `http://localhost:5174/tr/#/wiki/1-overview`
+veya `http://localhost:5174/en/#/wiki/1-overview`
 adresinden açılır. DeepWiki'nin 7 Ekim 2026 tarihli, `7b9cbda5` commitine
-dayanan 27 sayfalık İngilizce içeriği yerel HTML olarak sunulur. Kaynak dosya
+dayanan 27 sayfalık içeriği İngilizce ve Türkçe yerel HTML olarak sunulur. Kaynak dosya
 ve satır bağlantıları korunur. Sayfalar ve 43 görünür SVG diyagramı dış
 servise ihtiyaç duymadan yüklenir. Kaynak DeepWiki'de çizilemeyen diyagramlar
 aktarılmaz; bu arşiv otomatik olarak güncellenmez.
@@ -53,6 +55,10 @@ aktarılmaz; bu arşiv otomatik olarak güncellenmez.
 - Diyagramlar tıklama veya klavye ile açılır; yakınlaştırma ve Escape ile kapatma.
 - Wiki kodu ayrı yüklenir; ana sayfanın ilk yüklemesine içerik arşivi eklenmez.
 - Hash rotaları statik hosting üzerinde ayrıca sunucu yönlendirmesi gerektirmez.
+- Wiki üst menüsündeki TR/EN seçimi mevcut makaleyi ve bölüm bağlantısını korur.
+- Türkçe makaleler `public/wiki/tr/`, Türkçe arama ve başlık dizini
+  `src/wiki-index-tr.json` içindedir. Kod örnekleri, uç nokta adları ve özgün
+  SVG diyagramları teknik doğruluğu korumak için kaynak biçiminde tutulur.
 
 `pnpm --filter landing-web test:wiki` sayfa bütünlüğünü, iç bağlantıları,
 bölüm hedeflerini, diyagramları ve kod örneklerinin satırlarını denetler.
@@ -60,5 +66,10 @@ Arşiv yenilemek için tarayıcıdan alınan `{title,url,html,text,headings}`
 alanlarına sahip sayfa dizisini `python scripts/import-resource-wiki.py capture.json`
 ile işleyin. Script yalnızca izin verilen HTML/SVG öğelerini aktarır;
 DeepWiki arayüz kodunu, sohbet alanını veya üçüncü taraf scriptlerini içermez.
+Ardından `src/wiki-translations-tr.json` içindeki ilgili çevirileri güncelleyip
+`python scripts/localize-resource-wiki.py` çalıştırın. Her kayıt kaynak metin
+ve çeviri çiftidir; `{0}` gibi yer tutucular kod ve kaynak bağlantılarını korur.
+Üretici, değişmiş kaynak metinlerini ve eksik yer tutucuları hata olarak bildirir;
+eksik çevirilerle sessizce İngilizceye dönmez.
 
 Yayınlama ayrı bir çalışmadır.
